@@ -1,0 +1,1872 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Register | LibTrack</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        :root {
+
+            --navy: #0b2d52;
+            --navy-dark: #071f39;
+
+            --blue: #1769e0;
+            --blue-dark: #1057bd;
+
+            --text: #18324d;
+            --muted: #71839a;
+
+            --border: #dce5ef;
+
+            --background: #f5f8fc;
+
+            --white: #ffffff;
+
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                var(--background);
+
+            color: var(--text);
+
+        }
+
+
+        .auth-page {
+
+            min-height: 100vh;
+
+            display: grid;
+
+            grid-template-columns:
+                1.05fr
+                0.95fr;
+
+        }
+
+
+        /* =================================
+           LEFT PANEL
+        ================================= */
+
+        .library-panel {
+
+            position: relative;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #092744 0%,
+                    #0b3157 55%,
+                    #103f6d 100%
+                );
+
+            color: white;
+
+            padding:
+                55px
+                7vw;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: space-between;
+
+        }
+
+
+        .library-panel::before {
+
+            content: "";
+
+            position: absolute;
+
+            left: -130px;
+
+            top: 40%;
+
+            width: 300px;
+
+            height: 300px;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.07);
+
+            border-radius: 50%;
+
+        }
+
+
+        .brand {
+
+            position: relative;
+
+            z-index: 2;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+        }
+
+
+        .brand-mark {
+
+            width: 43px;
+            height: 43px;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.25);
+
+            border-radius: 10px;
+
+            background:
+                rgba(255,255,255,0.07);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 20px;
+
+        }
+
+
+        .brand-name {
+
+            font-size: 23px;
+
+            font-weight: 700;
+
+        }
+
+
+        /* =================================
+           REGISTER STORY
+        ================================= */
+
+        .library-content {
+
+            position: relative;
+
+            z-index: 2;
+
+            max-width: 510px;
+
+        }
+
+
+        .eyebrow {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            color: #bcd6f7;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            letter-spacing: 1.5px;
+
+            margin-bottom: 18px;
+
+        }
+
+
+        .eyebrow-dot {
+
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: #7db5ff;
+
+        }
+
+
+        .library-content h1 {
+
+            font-size:
+                clamp(38px, 4vw, 56px);
+
+            line-height: 1.06;
+
+            letter-spacing: -2px;
+
+            margin-bottom: 22px;
+
+        }
+
+
+        .library-content h1 span {
+
+            color: #8ebeff;
+
+        }
+
+
+        .description {
+
+            color: #c4d4e6;
+
+            font-size: 16px;
+
+            line-height: 1.75;
+
+            max-width: 460px;
+
+        }
+
+
+        /* =================================
+           JOURNEY
+        ================================= */
+
+        .journey {
+
+            margin-top: 48px;
+
+            max-width: 460px;
+
+        }
+
+
+        .journey-line {
+
+            height: 1px;
+
+            background:
+                rgba(255,255,255,0.15);
+
+            position: relative;
+
+            margin:
+                22px
+                0
+                25px;
+
+        }
+
+
+        .journey-line::after {
+
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+
+            top: -2px;
+
+            width: 32%;
+
+            height: 3px;
+
+            background: #75aaff;
+
+        }
+
+
+        .journey-steps {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 20px;
+
+        }
+
+
+        .journey-step {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 9px;
+
+        }
+
+
+        .step-icon {
+
+            width: 38px;
+            height: 38px;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.18);
+
+            border-radius: 9px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #bcd6f7;
+
+            background:
+                rgba(255,255,255,0.05);
+
+            font-size: 15px;
+
+        }
+
+
+        .journey-step.active .step-icon {
+
+            background: #1769e0;
+
+            border-color: #6da6ef;
+
+            color: white;
+
+        }
+
+
+        .step-title {
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            color: #dce9f7;
+
+        }
+
+
+        .step-description {
+
+            font-size: 10px;
+
+            color: #8ea8c2;
+
+            line-height: 1.4;
+
+        }
+
+
+        .library-footer {
+
+            position: relative;
+
+            z-index: 2;
+
+            color: #89a4c1;
+
+            font-size: 12px;
+
+        }
+
+
+        /* =================================
+           RIGHT PANEL
+        ================================= */
+
+        .auth-panel {
+
+            min-height: 100vh;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 35px 45px;
+
+        }
+
+
+        .auth-container {
+
+            width: 100%;
+
+            max-width: 460px;
+
+        }
+
+
+        .mobile-brand {
+
+            display: none;
+
+        }
+
+
+        .auth-heading {
+
+            margin-bottom: 22px;
+
+        }
+
+
+        .auth-heading h2 {
+
+            color: var(--navy);
+
+            font-size: 31px;
+
+            letter-spacing: -0.8px;
+
+            margin-bottom: 9px;
+
+        }
+
+
+        .auth-heading p {
+
+            color: var(--muted);
+
+            font-size: 15px;
+
+            line-height: 1.6;
+
+        }
+
+
+        /* =================================
+           CARD
+        ================================= */
+
+        .auth-card {
+
+            background: white;
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 18px;
+
+            padding: 30px 32px;
+
+            box-shadow:
+                0 18px 45px
+                rgba(16,42,67,0.07);
+
+        }
+
+
+        /* =================================
+           FORM
+        ================================= */
+
+        .form-group {
+
+            margin-bottom: 16px;
+
+        }
+
+
+        .two-column {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr
+                1fr;
+
+            gap: 14px;
+
+        }
+
+
+        label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            color: #29445e;
+
+        }
+
+
+        .input-wrapper {
+
+            position: relative;
+
+        }
+
+
+        .input-icon {
+
+            position: absolute;
+
+            left: 16px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            color: #7e93aa;
+
+            font-size: 15px;
+
+            pointer-events: none;
+
+        }
+
+
+        input,
+        select {
+
+            width: 100%;
+
+            height: 50px;
+
+            padding:
+                0
+                15px
+                0
+                45px;
+
+            border:
+                1px solid
+                #ccd9e7;
+
+            border-radius: 10px;
+
+            background: #fbfdff;
+
+            color: var(--text);
+
+            font-size: 14px;
+
+            outline: none;
+
+            transition: 0.2s ease;
+
+        }
+
+
+        select {
+
+            cursor: pointer;
+
+        }
+
+
+        input:focus,
+        select:focus {
+
+            border-color: var(--blue);
+
+            background: white;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(23,105,224,0.09);
+
+        }
+
+
+        input::placeholder {
+
+            color: #9aabbd;
+
+        }
+
+
+        /* =================================
+           PASSWORD
+        ================================= */
+
+        .password-toggle {
+
+            position: absolute;
+
+            right: 14px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            border: none;
+
+            background: transparent;
+
+            color: #6e8298;
+
+            cursor: pointer;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+        }
+
+
+        .password-toggle:hover {
+
+            color: var(--blue);
+
+        }
+
+
+        /* =================================
+           PASSWORD STRENGTH
+        ================================= */
+
+        .password-strength {
+
+            margin-top: 8px;
+
+            display: none;
+
+        }
+
+
+        .strength-track {
+
+            height: 4px;
+
+            background: #e6edf5;
+
+            border-radius: 10px;
+
+            overflow: hidden;
+
+        }
+
+
+        .strength-bar {
+
+            height: 100%;
+
+            width: 0%;
+
+            background: #1769e0;
+
+            transition: 0.25s ease;
+
+        }
+
+
+        .strength-text {
+
+            margin-top: 5px;
+
+            color: #8395a8;
+
+            font-size: 10px;
+
+        }
+
+
+        /* =================================
+           BUTTON
+        ================================= */
+
+        .register-button {
+
+            width: 100%;
+
+            height: 55px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: var(--blue);
+
+            color: white;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+
+            margin-top: 5px;
+
+        }
+
+
+        .register-button:hover {
+
+            background: var(--blue-dark);
+
+            transform: translateY(-1px);
+
+        }
+
+
+        .register-button:disabled {
+
+            opacity: 0.7;
+
+            cursor: not-allowed;
+
+            transform: none;
+
+        }
+
+
+        /* =================================
+           MESSAGE
+        ================================= */
+
+        .message {
+
+            display: none;
+
+            margin-top: 17px;
+
+            padding: 13px 15px;
+
+            border-radius: 9px;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+
+        }
+
+
+        .message.error {
+
+            display: block;
+
+            background: #fff1f2;
+
+            border:
+                1px solid
+                #fecdd3;
+
+            color: #be123c;
+
+        }
+
+
+        .message.success {
+
+            display: block;
+
+            background: #ecfdf5;
+
+            border:
+                1px solid
+                #a7f3d0;
+
+            color: #087443;
+
+        }
+
+
+        /* =================================
+           LOGIN
+        ================================= */
+
+        .login-link {
+
+            text-align: center;
+
+            margin-top: 23px;
+
+            color: var(--muted);
+
+            font-size: 13px;
+
+        }
+
+
+        .login-link a {
+
+            color: var(--blue);
+
+            font-weight: 700;
+
+            text-decoration: none;
+
+        }
+
+
+        .login-link a:hover {
+
+            text-decoration: underline;
+
+        }
+
+
+        .terms {
+
+            margin-top: 18px;
+
+            color: #96a6b7;
+
+            text-align: center;
+
+            font-size: 10px;
+
+            line-height: 1.5;
+
+        }
+
+
+        /* =================================
+           RESPONSIVE
+        ================================= */
+
+        @media (max-width: 900px) {
+
+            .auth-page {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .library-panel {
+
+                display: none;
+
+            }
+
+
+            .auth-panel {
+
+                min-height: 100vh;
+
+                padding: 30px 20px;
+
+            }
+
+
+            .mobile-brand {
+
+                display: flex;
+
+                align-items: center;
+
+                justify-content: center;
+
+                gap: 10px;
+
+                margin-bottom: 30px;
+
+            }
+
+
+            .mobile-brand-mark {
+
+                width: 40px;
+                height: 40px;
+
+                background:
+                    var(--navy);
+
+                color: white;
+
+                border-radius: 9px;
+
+                display: flex;
+
+                align-items: center;
+
+                justify-content: center;
+
+            }
+
+
+            .mobile-brand-name {
+
+                font-size: 23px;
+
+                font-weight: 700;
+
+                color: var(--navy);
+
+            }
+
+        }
+
+
+        @media (max-width: 560px) {
+
+            .two-column {
+
+                grid-template-columns: 1fr;
+
+                gap: 0;
+
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .auth-panel {
+
+                padding: 25px 15px;
+
+            }
+
+
+            .auth-card {
+
+                padding: 25px 21px;
+
+            }
+
+
+            .auth-heading h2 {
+
+                font-size: 27px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="auth-page">
+
+
+    <!-- ======================================
+         LEFT PANEL
+    ======================================= -->
+
+    <section class="library-panel">
+
+
+        <div class="brand">
+
+            <div class="brand-mark">
+                ▤
+            </div>
+
+            <div class="brand-name">
+                LibTrack
+            </div>
+
+        </div>
+
+
+        <div class="library-content">
+
+
+            <div class="eyebrow">
+
+                <span class="eyebrow-dot"></span>
+
+                JOIN THE DIGITAL LIBRARY
+
+            </div>
+
+
+            <h1>
+
+                Your library,<br>
+
+                <span>one identity.</span>
+
+            </h1>
+
+
+            <p class="description">
+
+                Create your LibTrack account and connect
+                your student identity with your college's
+                digital library collection.
+
+            </p>
+
+
+            <div class="journey">
+
+
+                <div class="journey-line"></div>
+
+
+                <div class="journey-steps">
+
+
+                    <div class="journey-step active">
+
+                        <div class="step-icon">
+                            ◉
+                        </div>
+
+                        <div class="step-title">
+                            Identity
+                        </div>
+
+                        <div class="step-description">
+                            Create your student account
+                        </div>
+
+                    </div>
+
+
+                    <div class="journey-step">
+
+                        <div class="step-icon">
+                            ▣
+                        </div>
+
+                        <div class="step-title">
+                            Access
+                        </div>
+
+                        <div class="step-description">
+                            Secure library access
+                        </div>
+
+                    </div>
+
+
+                    <div class="journey-step">
+
+                        <div class="step-icon">
+                            ▤
+                        </div>
+
+                        <div class="step-title">
+                            Library
+                        </div>
+
+                        <div class="step-description">
+                            Search and borrow books
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <div class="library-footer">
+
+            College Library Management System
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ======================================
+         RIGHT PANEL
+    ======================================= -->
+
+    <main class="auth-panel">
+
+
+        <div class="auth-container">
+
+
+            <div class="mobile-brand">
+
+                <div class="mobile-brand-mark">
+                    ▤
+                </div>
+
+                <div class="mobile-brand-name">
+                    LibTrack
+                </div>
+
+            </div>
+
+
+            <div class="auth-heading">
+
+                <h2>
+                    Create your library identity
+                </h2>
+
+                <p>
+                    Register once to search books,
+                    track borrowing activity and manage
+                    your library account.
+                </p>
+
+            </div>
+
+
+            <div class="auth-card">
+
+
+                <form id="registerForm">
+
+
+                    <!-- NAME -->
+
+                    <div class="form-group">
+
+                        <label for="name">
+                            Full name
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                ◉
+                            </span>
+
+                            <input
+                                type="text"
+                                id="name"
+                                placeholder="Enter your full name"
+                                autocomplete="name"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- STUDENT ID + COURSE -->
+
+                    <div class="two-column">
+
+
+                        <div class="form-group">
+
+                            <label for="studentId">
+                                Student ID
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <span class="input-icon">
+                                    ID
+                                </span>
+
+                                <input
+                                    type="text"
+                                    id="studentId"
+                                    placeholder="e.g. BCA001"
+                                    autocomplete="off"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="course">
+                                Course
+                            </label>
+
+                            <div class="input-wrapper">
+
+                                <span class="input-icon">
+                                    ▣
+                                </span>
+
+                                <input
+                                    type="text"
+                                    id="course"
+                                    placeholder="e.g. BCA"
+                                    autocomplete="organization-title"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- EMAIL -->
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email address
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                @
+                            </span>
+
+                            <input
+                                type="email"
+                                id="email"
+                                placeholder="Enter your college email"
+                                autocomplete="email"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- USERNAME -->
+
+                    <div class="form-group">
+
+                        <label for="username">
+                            Username
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                ◉
+                            </span>
+
+                            <input
+                                type="text"
+                                id="username"
+                                placeholder="Choose your username"
+                                autocomplete="username"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- PASSWORD -->
+
+                    <div class="form-group">
+
+                        <label for="password">
+                            Password
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                ▣
+                            </span>
+
+                            <input
+                                type="password"
+                                id="password"
+                                placeholder="Create a secure password"
+                                autocomplete="new-password"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                id="passwordToggle"
+                            >
+                                SHOW
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            class="password-strength"
+                            id="passwordStrength"
+                        >
+
+                            <div class="strength-track">
+
+                                <div
+                                    class="strength-bar"
+                                    id="strengthBar"
+                                ></div>
+
+                            </div>
+
+                            <div
+                                class="strength-text"
+                                id="strengthText"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- CONFIRM -->
+
+                    <div class="form-group">
+
+                        <label for="confirmPassword">
+                            Confirm password
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                ✓
+                            </span>
+
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                placeholder="Enter your password again"
+                                autocomplete="new-password"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+
+                    <button
+                        type="submit"
+                        class="register-button"
+                        id="registerBtn"
+                    >
+
+                        Create Library Account
+                        →
+
+                    </button>
+
+
+                </form>
+
+
+
+                <div
+                    id="message"
+                    class="message"
+                ></div>
+
+
+
+                <div class="login-link">
+
+                    Already have an account?
+
+                    <a href="login.html">
+                        Sign in to LibTrack
+                    </a>
+
+                </div>
+
+
+                <div class="terms">
+
+                    Your account is used only to provide
+                    access to the LibTrack library system.
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+</div>
+
+
+
+<script>
+
+    const API_URL =
+        "http://127.0.0.1:5000";
+
+
+    const form =
+        document.getElementById(
+            "registerForm"
+        );
+
+
+    const message =
+        document.getElementById(
+            "message"
+        );
+
+
+    const registerBtn =
+        document.getElementById(
+            "registerBtn"
+        );
+
+
+    const password =
+        document.getElementById(
+            "password"
+        );
+
+
+    const confirmPassword =
+        document.getElementById(
+            "confirmPassword"
+        );
+
+
+    const passwordToggle =
+        document.getElementById(
+            "passwordToggle"
+        );
+
+
+    const strength =
+        document.getElementById(
+            "passwordStrength"
+        );
+
+
+    const strengthBar =
+        document.getElementById(
+            "strengthBar"
+        );
+
+
+    const strengthText =
+        document.getElementById(
+            "strengthText"
+        );
+
+
+    /* ================================
+       PASSWORD SHOW / HIDE
+    ================================= */
+
+    passwordToggle.addEventListener(
+        "click",
+        function () {
+
+            if (
+                password.type ===
+                "password"
+            ) {
+
+                password.type =
+                    "text";
+
+                passwordToggle.textContent =
+                    "HIDE";
+
+            } else {
+
+                password.type =
+                    "password";
+
+                passwordToggle.textContent =
+                    "SHOW";
+
+            }
+
+        }
+    );
+
+
+    /* ================================
+       PASSWORD STRENGTH
+    ================================= */
+
+    password.addEventListener(
+        "input",
+        function () {
+
+            const value =
+                password.value;
+
+
+            if (!value) {
+
+                strength.style.display =
+                    "none";
+
+                return;
+
+            }
+
+
+            strength.style.display =
+                "block";
+
+
+            let score = 0;
+
+
+            if (value.length >= 6)
+                score++;
+
+
+            if (value.length >= 10)
+                score++;
+
+
+            if (/[A-Z]/.test(value))
+                score++;
+
+
+            if (/[0-9]/.test(value))
+                score++;
+
+
+            if (/[^A-Za-z0-9]/.test(value))
+                score++;
+
+
+            const percentage =
+                Math.min(
+                    score * 20,
+                    100
+                );
+
+
+            strengthBar.style.width =
+                percentage + "%";
+
+
+            if (score <= 1) {
+
+                strengthText.textContent =
+                    "Weak password";
+
+            } else if (score <= 3) {
+
+                strengthText.textContent =
+                    "Moderate password";
+
+            } else {
+
+                strengthText.textContent =
+                    "Strong password";
+
+            }
+
+        }
+    );
+
+
+    /* ================================
+       REGISTER
+    ================================= */
+
+    form.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            const name =
+                document
+                    .getElementById("name")
+                    .value
+                    .trim();
+
+
+            const studentId =
+                document
+                    .getElementById("studentId")
+                    .value
+                    .trim();
+
+
+            const course =
+                document
+                    .getElementById("course")
+                    .value
+                    .trim();
+
+
+            const email =
+                document
+                    .getElementById("email")
+                    .value
+                    .trim();
+
+
+            const username =
+                document
+                    .getElementById("username")
+                    .value
+                    .trim();
+
+
+            const passwordValue =
+                password.value;
+
+
+            const confirmValue =
+                confirmPassword.value;
+
+
+            message.className =
+                "message";
+
+            message.textContent =
+                "";
+
+
+            if (!name) {
+
+                message.className =
+                    "message error";
+
+                message.textContent =
+                    "Please enter your full name.";
+
+                return;
+
+            }
+
+
+            if (!studentId) {
+
+                message.className =
+                    "message error";
+
+                message.textContent =
+                    "Please enter your Student ID.";
+
+                return;
+
+            }
+
+
+            if (!course) {
+
+                message.className =
+                    "message error";
+
+                message.textContent =
+                    "Please enter your course.";
+
+                return;
+
+            }
+
+
+            if (
+                passwordValue !==
+                confirmValue
+            ) {
+
+                message.className =
+                    "message error";
+
+                message.textContent =
+                    "Passwords do not match.";
+
+                return;
+
+            }
+
+
+            if (
+                passwordValue.length < 6
+            ) {
+
+                message.className =
+                    "message error";
+
+                message.textContent =
+                    "Password must contain at least 6 characters.";
+
+                return;
+
+            }
+
+
+            registerBtn.disabled =
+                true;
+
+            registerBtn.textContent =
+                "Creating your library account...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${API_URL}/register`,
+                        {
+
+                            method: "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json"
+
+                            },
+
+                            body: JSON.stringify({
+
+                                name:
+                                    name,
+
+                                studentId:
+                                    studentId,
+
+                                course:
+                                    course,
+
+                                email:
+                                    email,
+
+                                username:
+                                    username,
+
+                                password:
+                                    passwordValue,
+
+                                role:
+                                    "student"
+
+                            })
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+
+                        data.message ||
+                        data.error ||
+                        "Registration failed."
+
+                    );
+
+                }
+
+
+                message.className =
+                    "message success";
+
+
+                message.textContent =
+                    "Your student account has been created and linked to LibTrack. Taking you to login...";
+
+
+                setTimeout(
+                    function () {
+
+                        window.location.href =
+                            "login.html";
+
+                    },
+                    1500
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Registration error:",
+                    error
+                );
+
+
+                message.className =
+                    "message error";
+
+
+                message.textContent =
+                    error.message ||
+                    "Unable to create your account.";
+
+            } finally {
+
+                registerBtn.disabled =
+                    false;
+
+                registerBtn.textContent =
+                    "Create Library Account →";
+
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>

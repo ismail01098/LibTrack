@@ -1,0 +1,1900 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Browse Books | LibTrack</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body class="browse-page">
+
+
+<!-- =========================================================
+     APP
+========================================================= -->
+
+<div class="app">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                📖
+            </div>
+
+            <div class="brand-text">
+
+                <h2>LibTrack</h2>
+
+                <span>College Library</span>
+
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-menu">
+
+            <div class="menu-label">
+                MAIN
+            </div>
+
+
+            <a
+                href="index.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ⌂
+                </span>
+
+                <span class="menu-text">
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <a
+                href="browse.html"
+                class="menu-item active"
+            >
+
+                <span class="menu-icon">
+                    ▣
+                </span>
+
+                <span class="menu-text">
+                    Browse Books
+                </span>
+
+            </a>
+
+
+            <a
+                href="my-library.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ▤
+                </span>
+
+                <span class="menu-text">
+                    My Library
+                </span>
+
+            </a>
+
+
+            <div class="menu-label browse-account-label">
+                ACCOUNT
+            </div>
+
+
+            <a
+                href="profile.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ♙
+                </span>
+
+                <span class="menu-text">
+                    Profile
+                </span>
+
+            </a>
+
+
+            <a
+                href="#"
+                class="menu-item logout"
+                id="logoutLink"
+            >
+
+                <span class="menu-icon">
+                    ↪
+                </span>
+
+                <span class="menu-text">
+                    Logout
+                </span>
+
+            </a>
+
+        </nav>
+
+
+        <!-- SIDEBAR USER -->
+
+        <div class="sidebar-user">
+
+            <div class="sidebar-user-box">
+
+                <div
+                    class="user-avatar"
+                    id="sidebarAvatar"
+                >
+                    S
+                </div>
+
+                <div class="user-info">
+
+                    <strong id="sidebarUserName">
+                        Student
+                    </strong>
+
+                    <span>
+                        Student Account
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    class="sidebar-toggle"
+                    id="sidebarToggle"
+                    type="button"
+                    aria-label="Toggle sidebar"
+                >
+                    ☰
+                </button>
+
+
+                <div class="topbar-title">
+
+                    <h1>
+                        Browse Books
+                    </h1>
+
+                    <p>
+                        Discover, check availability and locate books.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="topbar-user">
+
+                <div
+                    class="topbar-avatar"
+                    id="topbarAvatar"
+                >
+                    S
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             PAGE
+        ================================================== -->
+
+        <div class="page-container browse-container">
+
+
+            <!-- =================================================
+                 BROWSE INTRO
+            ================================================== -->
+
+            <section class="browse-intro">
+
+                <div class="browse-intro-copy">
+
+                    <span class="browse-eyebrow">
+                        LIBRARY CATALOG
+                    </span>
+
+                    <h2>
+                        Find the right book.
+                    </h2>
+
+                    <p>
+                        Search the library collection, check whether a
+                        copy is available, and know exactly where to find it.
+                    </p>
+
+                </div>
+
+
+                <div class="browse-intro-route">
+
+                    <div class="route-step">
+
+                        <span>
+                            01
+                        </span>
+
+                        <strong>
+                            Search
+                        </strong>
+
+                    </div>
+
+
+                    <div class="route-line"></div>
+
+
+                    <div class="route-step">
+
+                        <span>
+                            02
+                        </span>
+
+                        <strong>
+                            Check
+                        </strong>
+
+                    </div>
+
+
+                    <div class="route-line"></div>
+
+
+                    <div class="route-step">
+
+                        <span>
+                            03
+                        </span>
+
+                        <strong>
+                            Locate
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 SEARCH + FILTERS
+            ================================================== -->
+
+            <section class="browse-search-card">
+
+
+                <div class="browse-search-heading">
+
+                    <div>
+
+                        <span class="browse-section-label">
+                            CATALOG SEARCH
+                        </span>
+
+                        <h3>
+                            What are you looking for?
+                        </h3>
+
+                    </div>
+
+
+                    <div
+                        class="browse-result-count"
+                        id="resultCount"
+                    >
+                        Loading books...
+                    </div>
+
+                </div>
+
+
+                <div class="browse-search-controls">
+
+
+                    <div class="browse-search-input">
+
+                        <span>
+                            🔎
+                        </span>
+
+                        <input
+                            type="text"
+                            id="bookSearch"
+                            placeholder="Search by title, author, ISBN or category..."
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+                    <select
+                        id="categoryFilter"
+                        class="browse-filter"
+                    >
+
+                        <option value="all">
+                            All categories
+                        </option>
+
+                    </select>
+
+
+                    <select
+                        id="availabilityFilter"
+                        class="browse-filter"
+                    >
+
+                        <option value="all">
+                            All books
+                        </option>
+
+                        <option value="available">
+                            Available
+                        </option>
+
+                        <option value="unavailable">
+                            Currently issued
+                        </option>
+
+                    </select>
+
+
+                    <button
+                        type="button"
+                        id="clearFilters"
+                        class="browse-clear-btn"
+                    >
+                        Clear
+                    </button>
+
+                </div>
+
+
+                <div
+                    class="browse-search-status"
+                    id="searchStatus"
+                >
+                    Showing the complete library collection.
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 BOOK COLLECTION
+            ================================================== -->
+
+            <section class="browse-collection">
+
+
+                <div class="browse-collection-heading">
+
+                    <div>
+
+                        <span class="browse-section-label">
+                            COLLECTION
+                        </span>
+
+                        <h3>
+                            Library Books
+                        </h3>
+
+                    </div>
+
+
+                    <span
+                        class="browse-live-label"
+                    >
+                        ● Live catalog
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="browse-book-grid"
+                    id="bookGrid"
+                >
+
+                    <div class="browse-loading">
+
+                        <div class="browse-loading-icon">
+                            📚
+                        </div>
+
+                        <h3>
+                            Loading library...
+                        </h3>
+
+                        <p>
+                            Fetching the latest books from LibTrack.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+        </div>
+
+    </main>
+
+</div>
+
+
+
+<!-- =========================================================
+     BOOK DETAILS MODAL
+========================================================= -->
+
+<div
+    class="browse-modal"
+    id="bookModal"
+    aria-hidden="true"
+>
+
+    <div class="browse-modal-overlay"></div>
+
+
+    <div
+        class="browse-modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalBookTitle"
+    >
+
+        <button
+            type="button"
+            class="browse-modal-close"
+            id="closeModal"
+            aria-label="Close"
+        >
+            ×
+        </button>
+
+
+        <div
+            class="browse-modal-cover"
+            id="modalCover"
+        >
+            📖
+        </div>
+
+
+        <div class="browse-modal-content">
+
+            <span
+                class="browse-modal-category"
+                id="modalCategory"
+            >
+                CATEGORY
+            </span>
+
+
+            <h2 id="modalBookTitle">
+                Book title
+            </h2>
+
+
+            <p
+                class="browse-modal-author"
+                id="modalAuthor"
+            >
+                Author
+            </p>
+
+
+            <div class="browse-modal-divider"></div>
+
+
+            <div class="browse-detail-grid">
+
+
+                <div class="browse-detail-item">
+
+                    <span>
+                        ISBN
+                    </span>
+
+                    <strong id="modalISBN">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="browse-detail-item">
+
+                    <span>
+                        Availability
+                    </span>
+
+                    <strong id="modalAvailability">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="browse-detail-item">
+
+                    <span>
+                        Rack
+                    </span>
+
+                    <strong id="modalRack">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="browse-detail-item">
+
+                    <span>
+                        Shelf
+                    </span>
+
+                    <strong id="modalShelf">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="browse-detail-item">
+
+                    <span>
+                        Total Copies
+                    </span>
+
+                    <strong id="modalTotal">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="browse-detail-item">
+
+                    <span>
+                        Available Copies
+                    </span>
+
+                    <strong id="modalAvailable">
+                        —
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="browse-location-box"
+                id="modalLocationBox"
+            >
+
+                <div class="browse-location-icon">
+                    📍
+                </div>
+
+                <div>
+
+                    <span>
+                        FIND IT IN THE LIBRARY
+                    </span>
+
+                    <strong id="modalLocation">
+                        Rack — · Shelf —
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     AUTH
+========================================================= -->
+
+<script src="auth.js"></script>
+
+
+<script>
+
+"use strict";
+
+
+/* =========================================================
+   AUTHENTICATION
+========================================================= */
+
+if (!requireStudent()) {
+
+    throw new Error(
+        "Student authentication required."
+    );
+
+}
+
+
+const currentUser =
+    getCurrentUser();
+
+
+/* =========================================================
+   API
+========================================================= */
+
+const browseApiUrl =
+    typeof API_URL !== "undefined"
+        ? API_URL
+        : "http://127.0.0.1:5000";
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let allBooks = [];
+
+let filteredBooks = [];
+
+let selectedBook = null;
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const bookGrid =
+    document.getElementById(
+        "bookGrid"
+    );
+
+const bookSearch =
+    document.getElementById(
+        "bookSearch"
+    );
+
+const categoryFilter =
+    document.getElementById(
+        "categoryFilter"
+    );
+
+const availabilityFilter =
+    document.getElementById(
+        "availabilityFilter"
+    );
+
+const resultCount =
+    document.getElementById(
+        "resultCount"
+    );
+
+const searchStatus =
+    document.getElementById(
+        "searchStatus"
+    );
+
+
+/* =========================================================
+   USER HELPERS
+========================================================= */
+
+function getUserName() {
+
+    if (!currentUser) {
+        return "Student";
+    }
+
+    return (
+        currentUser.name ||
+        currentUser.username ||
+        currentUser.email ||
+        "Student"
+    );
+
+}
+
+
+function getInitials(name) {
+
+    if (!name) {
+        return "S";
+    }
+
+
+    const parts =
+        String(name)
+            .trim()
+            .split(/\s+/);
+
+
+    if (parts.length === 1) {
+
+        return parts[0]
+            .charAt(0)
+            .toUpperCase();
+
+    }
+
+
+    return (
+        parts[0].charAt(0) +
+        parts[parts.length - 1].charAt(0)
+    ).toUpperCase();
+
+}
+
+
+const userName =
+    getUserName();
+
+
+const userInitials =
+    getInitials(userName);
+
+
+document.getElementById(
+    "sidebarUserName"
+).textContent = userName;
+
+
+document.getElementById(
+    "sidebarAvatar"
+).textContent = userInitials;
+
+
+document.getElementById(
+    "topbarAvatar"
+).textContent = userInitials;
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================================================
+   BOOK VALUES
+========================================================= */
+
+function getTitle(book) {
+
+    return (
+        book.title ||
+        "Untitled Book"
+    );
+
+}
+
+
+function getAuthor(book) {
+
+    return (
+        book.author ||
+        "Unknown author"
+    );
+
+}
+
+
+function getCategory(book) {
+
+    return (
+        book.category ||
+        "General"
+    );
+
+}
+
+
+function getISBN(book) {
+
+    return (
+        book.isbn ||
+        book.bookId ||
+        "—"
+    );
+
+}
+
+
+function getRack(book) {
+
+    return (
+        book.rack ||
+        book.rackNumber ||
+        "—"
+    );
+
+}
+
+
+function getShelf(book) {
+
+    return (
+        book.shelf ||
+        book.shelfNumber ||
+        "—"
+    );
+
+}
+
+
+function getTotalCopies(book) {
+
+    const value =
+        Number(book.totalCopies);
+
+
+    return Number.isFinite(value)
+        ? value
+        : 0;
+
+}
+
+
+function getAvailableCopies(book) {
+
+    const value =
+        Number(book.availableCopies);
+
+
+    return Number.isFinite(value)
+        ? value
+        : 0;
+
+}
+
+
+/* =========================================================
+   COVER
+========================================================= */
+
+function getCoverUrl(book) {
+
+    const cover =
+        book &&
+        typeof book.coverImage === "string"
+            ? book.coverImage.trim()
+            : "";
+
+
+    if (!cover) {
+        return "";
+    }
+
+
+    if (
+        cover.startsWith("http://") ||
+        cover.startsWith("https://")
+    ) {
+
+        return cover;
+
+    }
+
+
+    return `${browseApiUrl}${cover}`;
+
+}
+
+
+function createCover(book) {
+
+    const coverUrl =
+        getCoverUrl(book);
+
+
+    if (!coverUrl) {
+
+        return `
+            <div class="browse-cover-fallback">
+                <span>📖</span>
+                <small>LIBTRACK</small>
+            </div>
+        `;
+
+    }
+
+
+    return `
+        <img
+            src="${escapeHTML(coverUrl)}"
+            alt="${escapeHTML(getTitle(book))}"
+            loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        >
+
+        <div
+            class="browse-cover-fallback"
+            style="display:none;"
+        >
+            <span>📖</span>
+            <small>LIBTRACK</small>
+        </div>
+    `;
+
+}
+
+
+/* =========================================================
+   AVAILABILITY
+========================================================= */
+
+function isAvailable(book) {
+
+    return getAvailableCopies(book) > 0;
+
+}
+
+
+function getAvailabilityText(book) {
+
+    const available =
+        getAvailableCopies(book);
+
+
+    if (available > 0) {
+
+        return available === 1
+            ? "1 copy available"
+            : `${available} copies available`;
+
+    }
+
+
+    return "Currently issued";
+
+}
+
+
+function getAvailabilityClass(book) {
+
+    return isAvailable(book)
+        ? "available"
+        : "issued";
+
+}
+
+
+/* =========================================================
+   LOAD BOOKS
+========================================================= */
+
+async function loadBooks() {
+
+    try {
+
+        bookGrid.innerHTML = `
+            <div class="browse-loading">
+                <div class="browse-loading-icon">
+                    📚
+                </div>
+                <h3>
+                    Loading library...
+                </h3>
+                <p>
+                    Fetching the latest books from LibTrack.
+                </p>
+            </div>
+        `;
+
+
+        const response =
+            await fetch(
+                `${browseApiUrl}/books`
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `Books request failed: ${response.status}`
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        allBooks =
+            Array.isArray(data)
+                ? data
+                : [];
+
+
+        populateCategories();
+
+
+        applyFilters();
+
+
+    } catch (error) {
+
+        console.error(
+            "Browse books error:",
+            error
+        );
+
+
+        resultCount.textContent =
+            "Unable to load";
+
+
+        searchStatus.textContent =
+            "The library catalog could not be loaded.";
+
+
+        bookGrid.innerHTML = `
+            <div class="browse-error">
+
+                <div class="browse-error-icon">
+                    ⚠️
+                </div>
+
+                <h3>
+                    Unable to load the library
+                </h3>
+
+                <p>
+                    Please make sure the LibTrack backend is running
+                    and try refreshing the page.
+                </p>
+
+                <button
+                    type="button"
+                    class="browse-retry-btn"
+                    onclick="loadBooks()"
+                >
+                    Try Again
+                </button>
+
+            </div>
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   CATEGORY FILTER
+========================================================= */
+
+function populateCategories() {
+
+    const categories =
+        [
+            ...new Set(
+                allBooks
+                    .map(book => getCategory(book).trim())
+                    .filter(Boolean)
+            )
+        ]
+        .sort(
+            (a, b) =>
+                a.localeCompare(b)
+        );
+
+
+    categoryFilter.innerHTML = `
+        <option value="all">
+            All categories
+        </option>
+    `;
+
+
+    categories.forEach(
+        category => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                category.toLowerCase();
+
+
+            option.textContent =
+                category;
+
+
+            categoryFilter.appendChild(
+                option
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   FILTERING
+========================================================= */
+
+function applyFilters() {
+
+    const search =
+        bookSearch.value
+            .trim()
+            .toLowerCase();
+
+
+    const category =
+        categoryFilter.value;
+
+
+    const availability =
+        availabilityFilter.value;
+
+
+    filteredBooks =
+        allBooks.filter(
+            book => {
+
+                const searchableText = [
+
+                    getTitle(book),
+
+                    getAuthor(book),
+
+                    getISBN(book),
+
+                    getCategory(book)
+
+                ]
+                .join(" ")
+                .toLowerCase();
+
+
+                const matchesSearch =
+                    !search ||
+                    searchableText.includes(
+                        search
+                    );
+
+
+                const matchesCategory =
+                    category === "all" ||
+                    getCategory(book)
+                        .toLowerCase() ===
+                    category;
+
+
+                const matchesAvailability =
+                    availability === "all" ||
+                    (
+                        availability === "available" &&
+                        isAvailable(book)
+                    ) ||
+                    (
+                        availability === "unavailable" &&
+                        !isAvailable(book)
+                    );
+
+
+                return (
+                    matchesSearch &&
+                    matchesCategory &&
+                    matchesAvailability
+                );
+
+            }
+        );
+
+
+    renderBooks();
+
+}
+
+
+/* =========================================================
+   RENDER BOOKS
+========================================================= */
+
+function renderBooks() {
+
+    const total =
+        filteredBooks.length;
+
+
+    resultCount.textContent =
+        `${total} ${total === 1 ? "book" : "books"}`;
+
+
+    if (!bookSearch.value.trim() &&
+        categoryFilter.value === "all" &&
+        availabilityFilter.value === "all") {
+
+        searchStatus.textContent =
+            `Showing all ${allBooks.length} books in the library collection.`;
+
+    } else {
+
+        searchStatus.textContent =
+            total === 0
+                ? "No books match your current search."
+                : `Showing ${total} matching ${total === 1 ? "book" : "books"}.`;
+
+    }
+
+
+    if (!total) {
+
+        bookGrid.innerHTML = `
+            <div class="browse-empty">
+
+                <div class="browse-empty-icon">
+                    🔎
+                </div>
+
+                <h3>
+                    No books found
+                </h3>
+
+                <p>
+                    Try another title, author, ISBN or category.
+                </p>
+
+                <button
+                    type="button"
+                    class="browse-retry-btn"
+                    id="emptyClearButton"
+                >
+                    Clear Search
+                </button>
+
+            </div>
+        `;
+
+
+        const emptyClear =
+            document.getElementById(
+                "emptyClearButton"
+            );
+
+
+        if (emptyClear) {
+
+            emptyClear.addEventListener(
+                "click",
+                clearFilters
+            );
+
+        }
+
+
+        return;
+
+    }
+
+
+    bookGrid.innerHTML =
+        filteredBooks
+            .map(
+                (book, index) =>
+                    createBookCard(
+                        book,
+                        index
+                    )
+            )
+            .join("");
+
+}
+
+
+/* =========================================================
+   BOOK CARD
+========================================================= */
+
+function createBookCard(book, index) {
+
+    const available =
+        getAvailableCopies(book);
+
+
+    const total =
+        getTotalCopies(book);
+
+
+    const availabilityClass =
+        getAvailabilityClass(book);
+
+
+    const availabilityText =
+        getAvailabilityText(book);
+
+
+    const rack =
+        getRack(book);
+
+
+    const shelf =
+        getShelf(book);
+
+
+    return `
+
+        <article
+            class="browse-book-card"
+            data-index="${index}"
+        >
+
+
+            <div class="browse-book-cover">
+
+                ${createCover(book)}
+
+
+                <span
+                    class="browse-status ${availabilityClass}"
+                >
+                    ${escapeHTML(availabilityText)}
+                </span>
+
+            </div>
+
+
+            <div class="browse-book-body">
+
+
+                <div class="browse-book-category">
+
+                    ${escapeHTML(getCategory(book))}
+
+                </div>
+
+
+                <h3 class="browse-book-title">
+
+                    ${escapeHTML(getTitle(book))}
+
+                </h3>
+
+
+                <p class="browse-book-author">
+
+                    ${escapeHTML(getAuthor(book))}
+
+                </p>
+
+
+                <div class="browse-book-location">
+
+
+                    <div>
+
+                        <span>
+                            RACK
+                        </span>
+
+                        <strong>
+                            ${escapeHTML(rack)}
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            SHELF
+                        </span>
+
+                        <strong>
+                            ${escapeHTML(shelf)}
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            COPIES
+                        </span>
+
+                        <strong>
+                            ${available}/${total}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="browse-book-footer">
+
+                    <span class="browse-isbn">
+
+                        ISBN:
+                        ${escapeHTML(getISBN(book))}
+
+                    </span>
+
+
+                    <button
+                        type="button"
+                        class="browse-view-btn"
+                        data-book-index="${index}"
+                    >
+                        View Details
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+    `;
+
+}
+
+
+/* =========================================================
+   DETAILS MODAL
+========================================================= */
+
+function openBookModal(book) {
+
+    selectedBook =
+        book;
+
+
+    const modal =
+        document.getElementById(
+            "bookModal"
+        );
+
+
+    document.getElementById(
+        "modalBookTitle"
+    ).textContent =
+        getTitle(book);
+
+
+    document.getElementById(
+        "modalAuthor"
+    ).textContent =
+        getAuthor(book);
+
+
+    document.getElementById(
+        "modalCategory"
+    ).textContent =
+        getCategory(book)
+            .toUpperCase();
+
+
+    document.getElementById(
+        "modalISBN"
+    ).textContent =
+        getISBN(book);
+
+
+    document.getElementById(
+        "modalAvailability"
+    ).textContent =
+        getAvailabilityText(book);
+
+
+    document.getElementById(
+        "modalRack"
+    ).textContent =
+        getRack(book);
+
+
+    document.getElementById(
+        "modalShelf"
+    ).textContent =
+        getShelf(book);
+
+
+    document.getElementById(
+        "modalTotal"
+    ).textContent =
+        getTotalCopies(book);
+
+
+    document.getElementById(
+        "modalAvailable"
+    ).textContent =
+        getAvailableCopies(book);
+
+
+    document.getElementById(
+        "modalLocation"
+    ).textContent =
+        `Rack ${getRack(book)} · Shelf ${getShelf(book)}`;
+
+
+    const modalCover =
+        document.getElementById(
+            "modalCover"
+        );
+
+
+    modalCover.innerHTML =
+        createCover(book);
+
+
+    modalCover
+        .querySelectorAll("img")
+        .forEach(
+            image => {
+
+                image.style.maxWidth =
+                    "100%";
+
+            }
+        );
+
+
+    modal.classList.add(
+        "show"
+    );
+
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    document.body.classList.add(
+        "modal-open"
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
+
+function closeBookModal() {
+
+    const modal =
+        document.getElementById(
+            "bookModal"
+        );
+
+
+    modal.classList.remove(
+        "show"
+    );
+
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    document.body.classList.remove(
+        "modal-open"
+    );
+
+
+    selectedBook =
+        null;
+
+}
+
+
+/* =========================================================
+   CLEAR FILTERS
+========================================================= */
+
+function clearFilters() {
+
+    bookSearch.value =
+        "";
+
+
+    categoryFilter.value =
+        "all";
+
+
+    availabilityFilter.value =
+        "all";
+
+
+    applyFilters();
+
+
+    bookSearch.focus();
+
+}
+
+
+/* =========================================================
+   SEARCH EVENTS
+========================================================= */
+
+bookSearch.addEventListener(
+    "input",
+    applyFilters
+);
+
+
+categoryFilter.addEventListener(
+    "change",
+    applyFilters
+);
+
+
+availabilityFilter.addEventListener(
+    "change",
+    applyFilters
+);
+
+
+document.getElementById(
+    "clearFilters"
+).addEventListener(
+    "click",
+    clearFilters
+);
+
+
+/* =========================================================
+   BOOK CARD EVENTS
+========================================================= */
+
+bookGrid.addEventListener(
+    "click",
+    function(event) {
+
+        const button =
+            event.target.closest(
+                "[data-book-index]"
+            );
+
+
+        if (!button) {
+            return;
+        }
+
+
+        const index =
+            Number(
+                button.dataset.bookIndex
+            );
+
+
+        if (
+            Number.isInteger(index) &&
+            filteredBooks[index]
+        ) {
+
+            openBookModal(
+                filteredBooks[index]
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   MODAL EVENTS
+========================================================= */
+
+document.getElementById(
+    "closeModal"
+).addEventListener(
+    "click",
+    closeBookModal
+);
+
+
+document.querySelector(
+    ".browse-modal-overlay"
+).addEventListener(
+    "click",
+    closeBookModal
+);
+
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            closeBookModal();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+document.getElementById(
+    "sidebarToggle"
+).addEventListener(
+    "click",
+    function() {
+
+        if (
+            window.innerWidth <= 800
+        ) {
+
+            document.body.classList.toggle(
+                "sidebar-open"
+            );
+
+        } else {
+
+            document.body.classList.toggle(
+                "sidebar-collapsed"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   MOBILE SIDEBAR CLOSE
+========================================================= */
+
+document.querySelectorAll(
+    ".sidebar .menu-item"
+).forEach(
+    item => {
+
+        item.addEventListener(
+            "click",
+            function() {
+
+                if (
+                    window.innerWidth <= 800
+                ) {
+
+                    document.body.classList.remove(
+                        "sidebar-open"
+                    );
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+document.getElementById(
+    "logoutLink"
+).addEventListener(
+    "click",
+    function(event) {
+
+        event.preventDefault();
+
+        logout();
+
+    }
+);
+
+
+/* =========================================================
+   START
+========================================================= */
+
+loadBooks();
+
+</script>
+
+
+</body>
+
+</html>

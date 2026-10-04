@@ -1,0 +1,2970 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Admin Dashboard - LibTrack</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+
+    <style>
+
+        /* =========================================================
+           LIBTRACK ADMIN DASHBOARD
+           Page-specific styles
+           ========================================================= */
+
+        .admin-page {
+            max-width: 1450px;
+            margin: 0 auto;
+        }
+
+
+        /* =========================================================
+           HEADER
+           ========================================================= */
+
+        .admin-heading {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 25px;
+
+            margin-bottom: 25px;
+        }
+
+        .admin-heading-text h2 {
+            margin: 0 0 6px;
+
+            color: #102a43;
+
+            font-size: 27px;
+            font-weight: 750;
+        }
+
+        .admin-heading-text p {
+            margin: 0;
+
+            color: #66788a;
+
+            font-size: 14px;
+        }
+
+        .admin-date {
+            color: #8a9bb0;
+
+            font-size: 12px;
+
+            white-space: nowrap;
+        }
+
+
+        /* =========================================================
+           OPERATION SUMMARY
+           ========================================================= */
+
+        .admin-summary {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap: 15px;
+
+            margin-bottom: 22px;
+        }
+
+        .admin-summary-card {
+            min-height: 112px;
+
+            padding: 19px;
+
+            background: #ffffff;
+
+            border: 1px solid #dce5ef;
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 7px 22px
+                rgba(16, 42, 67, 0.045);
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+        }
+
+        .admin-summary-icon {
+            width: 46px;
+            height: 46px;
+
+            min-width: 46px;
+
+            border-radius: 12px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 20px;
+
+            background: #eaf2ff;
+        }
+
+        .admin-summary-icon.green {
+            background: #ecfdf3;
+        }
+
+        .admin-summary-icon.orange {
+            background: #fff7ed;
+        }
+
+        .admin-summary-icon.red {
+            background: #fff1f2;
+        }
+
+        .admin-summary-content {
+            min-width: 0;
+        }
+
+        .admin-summary-content span {
+            display: block;
+
+            margin-bottom: 4px;
+
+            color: #66788a;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.04em;
+        }
+
+        .admin-summary-content strong {
+            display: block;
+
+            color: #102a43;
+
+            font-size: 25px;
+
+            line-height: 1;
+        }
+
+        .admin-summary-content small {
+            display: block;
+
+            margin-top: 5px;
+
+            color: #8a9bb0;
+
+            font-size: 10px;
+        }
+
+
+        /* =========================================================
+           MAIN OPERATIONS GRID
+           ========================================================= */
+
+        .admin-main-grid {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1.55fr)
+                minmax(300px, 0.75fr);
+
+            gap: 20px;
+
+            align-items: start;
+        }
+
+
+        /* =========================================================
+           ADMIN PANEL
+           ========================================================= */
+
+        .admin-panel {
+            background: #ffffff;
+
+            border: 1px solid #dce5ef;
+
+            border-radius: 15px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 7px 22px
+                rgba(16, 42, 67, 0.045);
+        }
+
+        .admin-panel-header {
+            padding: 19px 21px;
+
+            border-bottom:
+                1px solid #e7edf4;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+        }
+
+        .admin-panel-title h3 {
+            margin: 0 0 4px;
+
+            color: #102a43;
+
+            font-size: 16px;
+        }
+
+        .admin-panel-title p {
+            margin: 0;
+
+            color: #8a9bb0;
+
+            font-size: 11px;
+        }
+
+        .admin-panel-link {
+            color: #1769e0;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            text-decoration: none;
+
+            white-space: nowrap;
+        }
+
+        .admin-panel-link:hover {
+            color: #1258be;
+        }
+
+
+        /* =========================================================
+           RECENT ACTIVITY TABLE
+           ========================================================= */
+
+        .admin-table-wrap {
+            width: 100%;
+
+            overflow-x: auto;
+        }
+
+        .admin-table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 620px;
+        }
+
+        .admin-table th {
+            padding: 12px 18px;
+
+            background: #f8fafc;
+
+            border-bottom:
+                1px solid #e7edf4;
+
+            color: #8a9bb0;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            text-align: left;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.04em;
+        }
+
+        .admin-table td {
+            padding: 14px 18px;
+
+            border-bottom:
+                1px solid #edf1f5;
+
+            color: #52677e;
+
+            font-size: 12px;
+
+            vertical-align: middle;
+        }
+
+        .admin-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .admin-table tbody tr:hover {
+            background: #fbfdff;
+        }
+
+        .admin-book-cell {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            min-width: 190px;
+        }
+
+        .admin-book-mini {
+            width: 34px;
+            height: 42px;
+
+            min-width: 34px;
+
+            border-radius: 6px;
+
+            background: #eaf2ff;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 17px;
+
+            overflow: hidden;
+        }
+
+        .admin-book-mini img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: contain;
+
+            padding: 3px;
+
+            display: block;
+        }
+
+        .admin-book-name strong {
+            display: block;
+
+            max-width: 210px;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            white-space: nowrap;
+
+            color: #102a43;
+
+            font-size: 12px;
+        }
+
+        .admin-book-name span {
+            display: block;
+
+            margin-top: 3px;
+
+            color: #8a9bb0;
+
+            font-size: 10px;
+        }
+
+
+        /* =========================================================
+           STATUS BADGES
+           ========================================================= */
+
+        .admin-status {
+            display: inline-flex;
+
+            align-items: center;
+
+            padding: 5px 8px;
+
+            border-radius: 20px;
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+        .admin-status.borrowed {
+            background: #eaf2ff;
+
+            color: #1769e0;
+        }
+
+        .admin-status.returned {
+            background: #ecfdf3;
+
+            color: #15803d;
+        }
+
+        .admin-status.overdue {
+            background: #fff1f2;
+
+            color: #be123c;
+        }
+
+
+        /* =========================================================
+           INVENTORY PANEL
+           ========================================================= */
+
+        .inventory-body {
+            padding: 21px;
+        }
+
+        .inventory-number {
+            margin-bottom: 5px;
+
+            color: #102a43;
+
+            font-size: 30px;
+
+            font-weight: 750;
+        }
+
+        .inventory-description {
+            margin-bottom: 18px;
+
+            color: #66788a;
+
+            font-size: 11px;
+        }
+
+        .inventory-bar {
+            width: 100%;
+            height: 9px;
+
+            margin-bottom: 17px;
+
+            overflow: hidden;
+
+            background: #edf1f5;
+
+            border-radius: 20px;
+
+            display: flex;
+        }
+
+        .inventory-available {
+            width: 0%;
+
+            background: #15803d;
+
+            transition:
+                width 0.4s ease;
+        }
+
+        .inventory-issued {
+            width: 0%;
+
+            background: #1769e0;
+
+            transition:
+                width 0.4s ease;
+        }
+
+        .inventory-legend {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 10px;
+        }
+
+        .inventory-legend-item {
+            padding: 11px;
+
+            border: 1px solid #edf1f5;
+
+            border-radius: 10px;
+        }
+
+        .inventory-legend-top {
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            margin-bottom: 4px;
+        }
+
+        .inventory-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #15803d;
+        }
+
+        .inventory-dot.blue {
+            background: #1769e0;
+        }
+
+        .inventory-legend-top span {
+            color: #66788a;
+
+            font-size: 10px;
+        }
+
+        .inventory-legend-item strong {
+            color: #102a43;
+
+            font-size: 17px;
+        }
+
+
+        /* =========================================================
+           ATTENTION PANEL
+           ========================================================= */
+
+        .attention-list {
+            padding: 6px 20px 15px;
+        }
+
+        .attention-item {
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            padding: 13px 0;
+
+            border-bottom:
+                1px solid #edf1f5;
+        }
+
+        .attention-item:last-child {
+            border-bottom: none;
+        }
+
+        .attention-icon {
+            width: 38px;
+            height: 38px;
+
+            min-width: 38px;
+
+            border-radius: 10px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            background: #fff7ed;
+
+            font-size: 17px;
+        }
+
+        .attention-icon.red {
+            background: #fff1f2;
+        }
+
+        .attention-icon.blue {
+            background: #eaf2ff;
+        }
+
+        .attention-text {
+            min-width: 0;
+        }
+
+        .attention-text strong {
+            display: block;
+
+            margin-bottom: 3px;
+
+            color: #102a43;
+
+            font-size: 12px;
+        }
+
+        .attention-text span {
+            display: block;
+
+            color: #8a9bb0;
+
+            font-size: 10px;
+        }
+
+        .attention-number {
+            margin-left: auto;
+
+            color: #102a43;
+
+            font-size: 19px;
+
+            font-weight: 750;
+        }
+
+
+        /* =========================================================
+           QUICK OPERATIONS
+           ========================================================= */
+
+        .admin-actions {
+            margin-top: 20px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 15px;
+        }
+
+        .admin-action {
+            min-height: 105px;
+
+            padding: 18px;
+
+            background: #ffffff;
+
+            border: 1px solid #dce5ef;
+
+            border-radius: 14px;
+
+            text-decoration: none;
+
+            box-shadow:
+                0 7px 22px
+                rgba(16, 42, 67, 0.04);
+
+            transition:
+                transform 0.2s ease,
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .admin-action:hover {
+            transform: translateY(-2px);
+
+            border-color: #bcd1eb;
+
+            box-shadow:
+                0 10px 25px
+                rgba(16, 42, 67, 0.07);
+        }
+
+        .admin-action-icon {
+            width: 38px;
+            height: 38px;
+
+            margin-bottom: 11px;
+
+            border-radius: 10px;
+
+            background: #eaf2ff;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 17px;
+        }
+
+        .admin-action h4 {
+            margin: 0 0 4px;
+
+            color: #102a43;
+
+            font-size: 13px;
+        }
+
+        .admin-action p {
+            margin: 0;
+
+            color: #8a9bb0;
+
+            font-size: 10px;
+
+            line-height: 1.45;
+        }
+
+
+        /* =========================================================
+           EMPTY / LOADING
+           ========================================================= */
+
+        .admin-empty {
+            padding: 32px 20px;
+
+            text-align: center;
+
+            color: #8a9bb0;
+
+            font-size: 12px;
+        }
+
+        .admin-empty-icon {
+            margin-bottom: 8px;
+
+            font-size: 24px;
+        }
+
+
+        /* =========================================================
+           ERROR
+           ========================================================= */
+
+        .admin-error {
+            padding: 18px;
+
+            background: #fff7ed;
+
+            border:
+                1px solid #fed7aa;
+
+            border-radius: 12px;
+
+            color: #9a3412;
+
+            font-size: 12px;
+
+            margin-bottom: 20px;
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+        @media (max-width: 1100px) {
+
+            .admin-summary {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .admin-main-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 800px) {
+
+            .admin-heading {
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+            .admin-actions {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .admin-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-summary-card {
+                min-height: 95px;
+            }
+
+            .admin-heading-text h2 {
+                font-size: 23px;
+            }
+
+            .inventory-legend {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-panel-header {
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+            .admin-panel-link {
+                align-self: flex-start;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <aside class="sidebar">
+
+
+        <!-- BRAND -->
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                📖
+            </div>
+
+            <div class="brand-text">
+
+                <strong>
+                    LibTrack
+                </strong>
+
+                <span>
+                    College Library
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="sidebar-menu">
+
+
+            <div class="menu-label">
+                ADMIN
+            </div>
+
+
+            <a
+                href="admin.html"
+                class="menu-item active"
+            >
+
+                <span class="menu-icon">
+                    ⌂
+                </span>
+
+                <span class="menu-text">
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <a
+                href="admin-books.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ▣
+                </span>
+
+                <span class="menu-text">
+                    Manage Books
+                </span>
+
+            </a>
+
+
+            <a
+                href="admin-borrow.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ↔
+                </span>
+
+                <span class="menu-text">
+                    Borrow & Return
+                </span>
+
+            </a>
+
+
+            <a
+                href="admin-students.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ♙
+                </span>
+
+                <span class="menu-text">
+                    Students
+                </span>
+
+            </a>
+
+
+            <div class="menu-label">
+                ACCOUNT
+            </div>
+
+
+            <a
+                href="profile.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ⚙
+                </span>
+
+                <span class="menu-text">
+                    Account
+                </span>
+
+            </a>
+
+
+            <a
+                href="#"
+                class="menu-item"
+                id="logoutLink"
+            >
+
+                <span class="menu-icon">
+                    ↪
+                </span>
+
+                <span class="menu-text">
+                    Logout
+                </span>
+
+            </a>
+
+
+        </nav>
+
+
+        <!-- ADMIN USER -->
+
+        <div class="sidebar-user">
+
+            <div class="sidebar-user-box">
+
+                <div
+                    class="user-avatar"
+                    id="sidebarAvatar"
+                >
+                    A
+                </div>
+
+                <div class="user-info">
+
+                    <strong id="sidebarUserName">
+                        Admin
+                    </strong>
+
+                    <span>
+                        Administrator
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    type="button"
+                    class="sidebar-toggle"
+                    id="sidebarToggle"
+                    aria-label="Toggle sidebar"
+                >
+                    ☰
+                </button>
+
+
+                <div class="topbar-title">
+
+                    <h1>
+                        Admin Dashboard
+                    </h1>
+
+                    <p>
+                        Library operations overview
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="topbar-user">
+
+                <div
+                    class="topbar-avatar"
+                    id="topbarAvatar"
+                >
+                    A
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =====================================================
+             PAGE
+             ===================================================== -->
+
+        <div class="page-container admin-page">
+
+
+            <!-- PAGE HEADING -->
+
+            <div class="admin-heading">
+
+                <div class="admin-heading-text">
+
+                    <h2>
+                        Library Operations
+                    </h2>
+
+                    <p>
+                        Monitor books, borrowing activity, students,
+                        and items that need attention.
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="admin-date"
+                    id="currentDate"
+                >
+                    Loading date...
+                </div>
+
+            </div>
+
+
+
+            <!-- ERROR MESSAGE -->
+
+            <div
+                class="admin-error"
+                id="adminError"
+                style="display: none;"
+            >
+                Unable to load some library information.
+            </div>
+
+
+
+            <!-- =================================================
+                 SUMMARY
+                 ================================================= -->
+
+            <section class="admin-summary">
+
+
+                <!-- TITLES -->
+
+                <div class="admin-summary-card">
+
+                    <div class="admin-summary-icon">
+                        📚
+                    </div>
+
+                    <div class="admin-summary-content">
+
+                        <span>
+                            Book Titles
+                        </span>
+
+                        <strong id="totalTitles">
+                            —
+                        </strong>
+
+                        <small>
+                            Titles in catalog
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- COPIES -->
+
+                <div class="admin-summary-card">
+
+                    <div class="admin-summary-icon green">
+                        📦
+                    </div>
+
+                    <div class="admin-summary-content">
+
+                        <span>
+                            Total Copies
+                        </span>
+
+                        <strong id="totalCopies">
+                            —
+                        </strong>
+
+                        <small>
+                            Physical copies
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- AVAILABLE -->
+
+                <div class="admin-summary-card">
+
+                    <div class="admin-summary-icon blue">
+                        🟢
+                    </div>
+
+                    <div class="admin-summary-content">
+
+                        <span>
+                            Available
+                        </span>
+
+                        <strong id="availableCopies">
+                            —
+                        </strong>
+
+                        <small>
+                            Ready to issue
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BORROWED -->
+
+                <div class="admin-summary-card">
+
+                    <div class="admin-summary-icon orange">
+                        📖
+                    </div>
+
+                    <div class="admin-summary-content">
+
+                        <span>
+                            Currently Borrowed
+                        </span>
+
+                        <strong id="borrowedCount">
+                            —
+                        </strong>
+
+                        <small>
+                            Active loans
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =================================================
+                 MAIN GRID
+                 ================================================= -->
+
+            <div class="admin-main-grid">
+
+
+                <!-- =================================================
+                     RECENT BORROWING
+                     ================================================= -->
+
+                <section class="admin-panel">
+
+
+                    <div class="admin-panel-header">
+
+                        <div class="admin-panel-title">
+
+                            <h3>
+                                Recent Borrowing Activity
+                            </h3>
+
+                            <p>
+                                Latest issue and return records.
+                            </p>
+
+                        </div>
+
+
+                        <a
+                            href="admin-borrow.html"
+                            class="admin-panel-link"
+                        >
+                            Manage Borrowing →
+                        </a>
+
+                    </div>
+
+
+                    <div class="admin-table-wrap">
+
+                        <table class="admin-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Book
+                                    </th>
+
+                                    <th>
+                                        Student
+                                    </th>
+
+                                    <th>
+                                        Due Date
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="recentBorrowTable">
+
+                                <tr>
+
+                                    <td colspan="4">
+
+                                        <div class="admin-empty">
+
+                                            <div class="admin-empty-icon">
+                                                ⏳
+                                            </div>
+
+                                            Loading borrowing activity...
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     INVENTORY
+                     ================================================= -->
+
+                <section class="admin-panel">
+
+
+                    <div class="admin-panel-header">
+
+                        <div class="admin-panel-title">
+
+                            <h3>
+                                Inventory Status
+                            </h3>
+
+                            <p>
+                                Current copy availability.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="inventory-body">
+
+
+                        <div
+                            class="inventory-number"
+                            id="inventoryPercent"
+                        >
+                            —
+                        </div>
+
+
+                        <div class="inventory-description">
+                            of physical copies are currently available.
+                        </div>
+
+
+                        <div class="inventory-bar">
+
+                            <div
+                                class="inventory-available"
+                                id="inventoryAvailableBar"
+                            ></div>
+
+                            <div
+                                class="inventory-issued"
+                                id="inventoryIssuedBar"
+                            ></div>
+
+                        </div>
+
+
+                        <div class="inventory-legend">
+
+
+                            <div class="inventory-legend-item">
+
+                                <div class="inventory-legend-top">
+
+                                    <span class="inventory-dot"></span>
+
+                                    <span>
+                                        Available
+                                    </span>
+
+                                </div>
+
+                                <strong id="inventoryAvailable">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                            <div class="inventory-legend-item">
+
+                                <div class="inventory-legend-top">
+
+                                    <span class="inventory-dot blue"></span>
+
+                                    <span>
+                                        Issued
+                                    </span>
+
+                                </div>
+
+                                <strong id="inventoryIssued">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                </section>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 ATTENTION + STUDENTS
+                 ================================================= -->
+
+            <div
+                class="admin-main-grid"
+                style="margin-top: 20px;"
+            >
+
+
+                <!-- ATTENTION -->
+
+                <section class="admin-panel">
+
+
+                    <div class="admin-panel-header">
+
+                        <div class="admin-panel-title">
+
+                            <h3>
+                                Items Requiring Attention
+                            </h3>
+
+                            <p>
+                                Library activity that may need action.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="attention-list">
+
+
+                        <!-- OVERDUE -->
+
+                        <div class="attention-item">
+
+                            <div class="attention-icon red">
+                                ⚠️
+                            </div>
+
+                            <div class="attention-text">
+
+                                <strong>
+                                    Overdue Books
+                                </strong>
+
+                                <span>
+                                    Books past their return date
+                                </span>
+
+                            </div>
+
+                            <div
+                                class="attention-number"
+                                id="overdueCount"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <!-- ACTIVE -->
+
+                        <div class="attention-item">
+
+                            <div class="attention-icon blue">
+                                📖
+                            </div>
+
+                            <div class="attention-text">
+
+                                <strong>
+                                    Active Loans
+                                </strong>
+
+                                <span>
+                                    Books currently issued
+                                </span>
+
+                            </div>
+
+                            <div
+                                class="attention-number"
+                                id="activeLoansCount"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <!-- STUDENTS -->
+
+                        <div class="attention-item">
+
+                            <div class="attention-icon">
+                                🎓
+                            </div>
+
+                            <div class="attention-text">
+
+                                <strong>
+                                    Registered Students
+                                </strong>
+
+                                <span>
+                                    Students in the library database
+                                </span>
+
+                            </div>
+
+                            <div
+                                class="attention-number"
+                                id="studentCount"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- QUICK INFO -->
+
+                <section class="admin-panel">
+
+
+                    <div class="admin-panel-header">
+
+                        <div class="admin-panel-title">
+
+                            <h3>
+                                Library Snapshot
+                            </h3>
+
+                            <p>
+                                Current catalog information.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="inventory-body">
+
+
+                        <div class="inventory-description">
+                            Books currently listed in the system.
+                        </div>
+
+
+                        <div class="inventory-legend">
+
+
+                            <div class="inventory-legend-item">
+
+                                <div class="inventory-legend-top">
+
+                                    <span class="inventory-dot"></span>
+
+                                    <span>
+                                        Titles
+                                    </span>
+
+                                </div>
+
+                                <strong id="snapshotTitles">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                            <div class="inventory-legend-item">
+
+                                <div class="inventory-legend-top">
+
+                                    <span class="inventory-dot blue"></span>
+
+                                    <span>
+                                        Copies
+                                    </span>
+
+                                </div>
+
+                                <strong id="snapshotCopies">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                            <div
+                                class="inventory-legend-item"
+                                style="grid-column: 1 / -1;"
+                            >
+
+                                <div class="inventory-legend-top">
+
+                                    <span class="inventory-dot"></span>
+
+                                    <span>
+                                        Availability Rate
+                                    </span>
+
+                                </div>
+
+                                <strong id="snapshotRate">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                </section>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 QUICK OPERATIONS
+                 ================================================= -->
+
+            <div class="admin-actions">
+
+
+                <a
+                    href="admin-books.html"
+                    class="admin-action"
+                >
+
+                    <div class="admin-action-icon">
+                        📚
+                    </div>
+
+                    <h4>
+                        Manage Books
+                    </h4>
+
+                    <p>
+                        Add, view and manage books in the catalog.
+                    </p>
+
+                </a>
+
+
+                <a
+                    href="admin-borrow.html"
+                    class="admin-action"
+                >
+
+                    <div class="admin-action-icon">
+                        ↔
+                    </div>
+
+                    <h4>
+                        Borrow & Return
+                    </h4>
+
+                    <p>
+                        Issue books, process returns and monitor due dates.
+                    </p>
+
+                </a>
+
+
+                <a
+                    href="admin-students.html"
+                    class="admin-action"
+                >
+
+                    <div class="admin-action-icon">
+                        🎓
+                    </div>
+
+                    <h4>
+                        Manage Students
+                    </h4>
+
+                    <p>
+                        View registered students and their library activity.
+                    </p>
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+    </main>
+
+</div>
+
+
+
+<!-- =========================================================
+     AUTH
+     ========================================================= -->
+
+<script src="auth.js"></script>
+
+
+<script>
+
+    /* =========================================================
+       ADMIN PROTECTION
+       ========================================================= */
+
+    if (!requireAdmin()) {
+
+        throw new Error(
+            "Admin authentication required."
+        );
+
+    }
+
+
+    /* =========================================================
+       USER
+       ========================================================= */
+
+    const currentUser =
+        getCurrentUser() || {};
+
+
+    const API =
+        typeof API_URL !== "undefined"
+            ? API_URL
+            : "http://127.0.0.1:5000";
+
+
+    /* =========================================================
+       ELEMENT HELPER
+       ========================================================= */
+
+    function element(id) {
+
+        return document.getElementById(id);
+
+    }
+
+
+    /* =========================================================
+       TEXT ESCAPE
+       ========================================================= */
+
+    function escapeHTML(value) {
+
+        return String(
+            value ?? ""
+        )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+    }
+
+
+    /* =========================================================
+       INITIALS
+       ========================================================= */
+
+    function getInitials(name) {
+
+        if (!name) {
+            return "A";
+        }
+
+
+        const parts =
+            String(name)
+                .trim()
+                .split(/\s+/);
+
+
+        if (parts.length === 1) {
+
+            return parts[0]
+                .charAt(0)
+                .toUpperCase();
+
+        }
+
+
+        return (
+            parts[0].charAt(0) +
+            parts[parts.length - 1].charAt(0)
+        ).toUpperCase();
+
+    }
+
+
+    const adminName =
+        currentUser.username ||
+        currentUser.name ||
+        "Admin";
+
+
+    const adminInitials =
+        getInitials(
+            adminName
+        );
+
+
+    element(
+        "sidebarUserName"
+    ).textContent =
+        adminName;
+
+
+    element(
+        "sidebarAvatar"
+    ).textContent =
+        adminInitials;
+
+
+    element(
+        "topbarAvatar"
+    ).textContent =
+        adminInitials;
+
+
+
+    /* =========================================================
+       DATE
+       ========================================================= */
+
+    element(
+        "currentDate"
+    ).textContent =
+        new Intl.DateTimeFormat(
+            "en-IN",
+            {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+            }
+        ).format(
+            new Date()
+        );
+
+
+
+    /* =========================================================
+       AUTH HEADERS
+       ========================================================= */
+
+    function getAuthHeaders() {
+
+        if (
+            typeof authHeaders ===
+            "function"
+        ) {
+
+            return authHeaders();
+
+        }
+
+
+        const token =
+            localStorage.getItem(
+                "token"
+            ) ||
+            localStorage.getItem(
+                "authToken"
+            );
+
+
+        if (!token) {
+
+            return {};
+
+        }
+
+
+        return {
+
+            Authorization:
+                `Bearer ${token}`
+
+        };
+
+    }
+
+
+
+    /* =========================================================
+       SIDEBAR
+       ========================================================= */
+
+    const sidebarToggle =
+        element(
+            "sidebarToggle"
+        );
+
+
+    if (sidebarToggle) {
+
+        sidebarToggle.addEventListener(
+            "click",
+            function () {
+
+                const sidebar =
+                    document.querySelector(
+                        ".sidebar"
+                    );
+
+                const main =
+                    document.querySelector(
+                        ".main-content"
+                    );
+
+
+                if (!sidebar) {
+                    return;
+                }
+
+
+                if (
+                    window.innerWidth <= 650
+                ) {
+
+                    sidebar.classList.toggle(
+                        "mobile-open"
+                    );
+
+                    return;
+
+                }
+
+
+                sidebar.classList.toggle(
+                    "collapsed"
+                );
+
+
+                if (main) {
+
+                    main.classList.toggle(
+                        "sidebar-collapsed"
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+
+    /* =========================================================
+       LOGOUT
+       ========================================================= */
+
+    const logoutLink =
+        element(
+            "logoutLink"
+        );
+
+
+    if (logoutLink) {
+
+        logoutLink.addEventListener(
+            "click",
+            function (event) {
+
+                event.preventDefault();
+
+                logout();
+
+            }
+        );
+
+    }
+
+
+
+    /* =========================================================
+       FETCH HELPER
+       ========================================================= */
+
+    async function fetchJSON(
+        endpoint
+    ) {
+
+        const response =
+            await fetch(
+                `${API}${endpoint}`,
+                {
+                    headers:
+                        getAuthHeaders()
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `${endpoint} returned ${response.status}`
+            );
+
+        }
+
+
+        return response.json();
+
+    }
+
+
+
+    /* =========================================================
+       COVER MARKUP
+       ========================================================= */
+
+    function coverMarkup(
+        book
+    ) {
+
+        const cover =
+            book?.coverImage ||
+            book?.cover ||
+            book?.image ||
+            book?.imageUrl;
+
+
+        if (!cover) {
+
+            return "📖";
+
+        }
+
+
+        let source =
+            String(cover);
+
+
+        if (
+            source.startsWith(
+                "http://"
+            ) ||
+            source.startsWith(
+                "https://"
+            )
+        ) {
+
+            return `
+                <img
+                    src="${escapeHTML(source)}"
+                    alt=""
+                    onerror="this.style.display='none'; this.parentElement.innerHTML='📖';"
+                >
+            `;
+
+        }
+
+
+        if (
+            !source.startsWith("/")
+        ) {
+
+            source =
+                `/${source}`;
+
+        }
+
+
+        return `
+            <img
+                src="${escapeHTML(API + source)}"
+                alt=""
+                onerror="this.style.display='none'; this.parentElement.innerHTML='📖';"
+            >
+        `;
+
+    }
+
+
+
+    /* =========================================================
+       FORMAT DATE
+       ========================================================= */
+
+    function formatDate(
+        value
+    ) {
+
+        if (!value) {
+
+            return "—";
+
+        }
+
+
+        const date =
+            new Date(value);
+
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+
+            return "—";
+
+        }
+
+
+        return new Intl.DateTimeFormat(
+            "en-IN",
+            {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            }
+        ).format(date);
+
+    }
+
+
+
+    /* =========================================================
+       NORMALIZE BORROW STUDENT
+       ========================================================= */
+
+    function getStudentId(
+        borrow
+    ) {
+
+        if (!borrow) {
+            return "";
+        }
+
+
+        const value =
+            borrow.studentId;
+
+
+        if (
+            value &&
+            typeof value === "object"
+        ) {
+
+            return (
+                value.studentId ||
+                value._id ||
+                value.id ||
+                ""
+            );
+
+        }
+
+
+        return value || "";
+
+    }
+
+
+
+    /* =========================================================
+       GET BOOK FROM BORROW RECORD
+       ========================================================= */
+
+    function getBookForBorrow(
+        borrow,
+        books
+    ) {
+
+        if (!borrow) {
+            return null;
+        }
+
+
+        const rawId =
+            borrow.bookId;
+
+
+        if (
+            rawId &&
+            typeof rawId === "object"
+        ) {
+
+            const ids = [
+
+                rawId.isbn,
+
+                rawId._id,
+
+                rawId.id
+
+            ].filter(Boolean);
+
+
+            for (
+                const id of ids
+            ) {
+
+                const found =
+                    books.find(
+                        book =>
+                            String(
+                                book.isbn
+                            ) === String(id)
+                            ||
+                            String(
+                                book._id
+                            ) === String(id)
+                            ||
+                            String(
+                                book.id
+                            ) === String(id)
+                    );
+
+
+                if (found) {
+                    return found;
+                }
+
+            }
+
+        }
+
+
+        if (rawId) {
+
+            const found =
+                books.find(
+                    book =>
+                        String(
+                            book.isbn
+                        ) === String(rawId)
+                        ||
+                        String(
+                            book._id
+                        ) === String(rawId)
+                        ||
+                        String(
+                            book.id
+                        ) === String(rawId)
+                );
+
+
+            if (found) {
+                return found;
+            }
+
+        }
+
+
+        if (borrow.isbn) {
+
+            return (
+                books.find(
+                    book =>
+                        String(
+                            book.isbn
+                        ) ===
+                        String(
+                            borrow.isbn
+                        )
+                ) || null
+            );
+
+        }
+
+
+        return null;
+
+    }
+
+
+
+    /* =========================================================
+       STATUS
+       ========================================================= */
+
+    function getBorrowStatus(
+        borrow
+    ) {
+
+        const status =
+            String(
+                borrow?.status ||
+                ""
+            ).toLowerCase();
+
+
+        if (
+            status === "returned"
+        ) {
+
+            return {
+                text: "Returned",
+                className: "returned"
+            };
+
+        }
+
+
+        if (
+            status === "borrowed"
+        ) {
+
+            if (
+                borrow.dueDate
+            ) {
+
+                const due =
+                    new Date(
+                        borrow.dueDate
+                    );
+
+
+                const today =
+                    new Date();
+
+
+                today.setHours(
+                    0,
+                    0,
+                    0,
+                    0
+                );
+
+
+                due.setHours(
+                    0,
+                    0,
+                    0,
+                    0
+                );
+
+
+                if (
+                    due < today
+                ) {
+
+                    return {
+                        text: "Overdue",
+                        className: "overdue"
+                    };
+
+                }
+
+            }
+
+
+            return {
+                text: "Borrowed",
+                className: "borrowed"
+            };
+
+        }
+
+
+        return {
+
+            text:
+                borrow?.status ||
+                "Unknown",
+
+            className:
+                "borrowed"
+
+        };
+
+    }
+
+
+
+    /* =========================================================
+       UPDATE SUMMARY
+       ========================================================= */
+
+    function updateSummary(
+        books,
+        borrows,
+        students,
+        overdue
+    ) {
+
+        let totalCopies = 0;
+
+        let availableCopies = 0;
+
+
+        books.forEach(
+            book => {
+
+                totalCopies +=
+                    Number(
+                        book.totalCopies ||
+                        0
+                    );
+
+
+                availableCopies +=
+                    Number(
+                        book.availableCopies ||
+                        0
+                    );
+
+            }
+        );
+
+
+        const activeBorrows =
+            borrows.filter(
+                borrow =>
+                    String(
+                        borrow.status
+                    ).toLowerCase() ===
+                    "borrowed"
+            );
+
+
+        element(
+            "totalTitles"
+        ).textContent =
+            books.length;
+
+
+        element(
+            "totalCopies"
+        ).textContent =
+            totalCopies;
+
+
+        element(
+            "availableCopies"
+        ).textContent =
+            availableCopies;
+
+
+        element(
+            "borrowedCount"
+        ).textContent =
+            activeBorrows.length;
+
+
+        element(
+            "overdueCount"
+        ).textContent =
+            Array.isArray(overdue)
+                ? overdue.length
+                : 0;
+
+
+        element(
+            "activeLoansCount"
+        ).textContent =
+            activeBorrows.length;
+
+
+        element(
+            "studentCount"
+        ).textContent =
+            Array.isArray(students)
+                ? students.length
+                : 0;
+
+
+        element(
+            "snapshotTitles"
+        ).textContent =
+            books.length;
+
+
+        element(
+            "snapshotCopies"
+        ).textContent =
+            totalCopies;
+
+
+        const rate =
+            totalCopies > 0
+                ? Math.round(
+                    (
+                        availableCopies /
+                        totalCopies
+                    ) * 100
+                )
+                : 0;
+
+
+        element(
+            "snapshotRate"
+        ).textContent =
+            `${rate}%`;
+
+
+        element(
+            "inventoryPercent"
+        ).textContent =
+            `${rate}%`;
+
+
+        element(
+            "inventoryAvailable"
+        ).textContent =
+            availableCopies;
+
+
+        element(
+            "inventoryIssued"
+        ).textContent =
+            Math.max(
+                0,
+                totalCopies -
+                availableCopies
+            );
+
+
+        element(
+            "inventoryAvailableBar"
+        ).style.width =
+            `${rate}%`;
+
+
+        element(
+            "inventoryIssuedBar"
+        ).style.width =
+            `${Math.max(
+                0,
+                100 - rate
+            )}%`;
+
+    }
+
+
+
+    /* =========================================================
+       RECENT BORROWING TABLE
+       ========================================================= */
+
+    function renderRecentBorrowing(
+        borrows,
+        books
+    ) {
+
+        const table =
+            element(
+                "recentBorrowTable"
+            );
+
+
+        if (!table) {
+            return;
+        }
+
+
+        if (
+            !Array.isArray(
+                borrows
+            ) ||
+            borrows.length === 0
+        ) {
+
+            table.innerHTML = `
+
+                <tr>
+
+                    <td colspan="4">
+
+                        <div class="admin-empty">
+
+                            <div class="admin-empty-icon">
+                                📚
+                            </div>
+
+                            No borrowing records yet.
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+        const recent =
+            [...borrows]
+                .sort(
+                    function (
+                        a,
+                        b
+                    ) {
+
+                        const aDate =
+                            new Date(
+                                a.issueDate ||
+                                a.createdAt ||
+                                0
+                            );
+
+                        const bDate =
+                            new Date(
+                                b.issueDate ||
+                                b.createdAt ||
+                                0
+                            );
+
+                        return (
+                            bDate -
+                            aDate
+                        );
+
+                    }
+                )
+                .slice(
+                    0,
+                    6
+                );
+
+
+        table.innerHTML =
+            recent
+                .map(
+                    function (
+                        borrow
+                    ) {
+
+                        const book =
+                            getBookForBorrow(
+                                borrow,
+                                books
+                            );
+
+
+                        const status =
+                            getBorrowStatus(
+                                borrow
+                            );
+
+
+                        const student =
+                            getStudentId(
+                                borrow
+                            );
+
+
+                        const bookTitle =
+                            book?.title ||
+                            `Book ${borrow.bookId || ""}`;
+
+
+                        const author =
+                            book?.author ||
+                            "Unknown author";
+
+
+                        return `
+
+                            <tr>
+
+                                <td>
+
+                                    <div class="admin-book-cell">
+
+                                        <div class="admin-book-mini">
+
+                                            ${coverMarkup(
+                                                book
+                                            )}
+
+                                        </div>
+
+                                        <div class="admin-book-name">
+
+                                            <strong>
+                                                ${escapeHTML(
+                                                    bookTitle
+                                                )}
+                                            </strong>
+
+                                            <span>
+                                                ${escapeHTML(
+                                                    author
+                                                )}
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+                                    ${escapeHTML(
+                                        student || "—"
+                                    )}
+                                </td>
+
+
+                                <td>
+                                    ${formatDate(
+                                        borrow.dueDate
+                                    )}
+                                </td>
+
+
+                                <td>
+
+                                    <span
+                                        class="
+                                            admin-status
+                                            ${status.className}
+                                        "
+                                    >
+                                        ${escapeHTML(
+                                            status.text
+                                        )}
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+                        `;
+
+                    }
+                )
+                .join("");
+
+    }
+
+
+
+    /* =========================================================
+       LOAD DASHBOARD
+       ========================================================= */
+
+    async function loadAdminDashboard() {
+
+        try {
+
+            const [
+                books,
+                borrows,
+                students,
+                overdue
+            ] = await Promise.all([
+
+                fetchJSON(
+                    "/books"
+                ),
+
+                fetchJSON(
+                    "/borrow"
+                ),
+
+                fetchJSON(
+                    "/students"
+                ),
+
+                fetchJSON(
+                    "/borrow/overdue"
+                )
+
+            ]);
+
+
+            updateSummary(
+                Array.isArray(
+                    books
+                )
+                    ? books
+                    : [],
+
+                Array.isArray(
+                    borrows
+                )
+                    ? borrows
+                    : [],
+
+                Array.isArray(
+                    students
+                )
+                    ? students
+                    : [],
+
+                Array.isArray(
+                    overdue
+                )
+                    ? overdue
+                    : []
+
+            );
+
+
+            renderRecentBorrowing(
+
+                Array.isArray(
+                    borrows
+                )
+                    ? borrows
+                    : [],
+
+                Array.isArray(
+                    books
+                )
+                    ? books
+                    : []
+
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Admin dashboard error:",
+                error
+            );
+
+
+            const errorBox =
+                element(
+                    "adminError"
+                );
+
+
+            if (errorBox) {
+
+                errorBox.style.display =
+                    "block";
+
+
+                errorBox.textContent =
+                    "Some library information could not be loaded. Check that the backend is running and your admin account is authenticated.";
+
+            }
+
+
+            /*
+               Keep the dashboard usable
+               even if one API request fails.
+            */
+
+            const ids = [
+
+                "totalTitles",
+                "totalCopies",
+                "availableCopies",
+                "borrowedCount",
+                "overdueCount",
+                "activeLoansCount",
+                "studentCount",
+                "snapshotTitles",
+                "snapshotCopies"
+
+            ];
+
+
+            ids.forEach(
+                id => {
+
+                    const target =
+                        element(id);
+
+
+                    if (
+                        target &&
+                        target.textContent ===
+                        "—"
+                    ) {
+
+                        target.textContent =
+                            "—";
+
+                    }
+
+                }
+            );
+
+        }
+
+    }
+
+
+
+    /* =========================================================
+       START
+       ========================================================= */
+
+    loadAdminDashboard();
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,1766 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Dashboard | LibTrack</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside
+        class="sidebar"
+        id="sidebar"
+    >
+
+        <!-- BRAND -->
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                📖
+            </div>
+
+            <div class="brand-text">
+
+                <strong>
+                    LibTrack
+                </strong>
+
+                <span>
+                    College Library
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="sidebar-menu">
+
+            <div class="menu-label">
+                Main
+            </div>
+
+
+            <a
+                href="index.html"
+                class="menu-item active"
+            >
+
+                <span class="menu-icon">
+                    ⌂
+                </span>
+
+                <span class="menu-text">
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <a
+                href="browse.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ▣
+                </span>
+
+                <span class="menu-text">
+                    Browse Books
+                </span>
+
+            </a>
+
+
+            <a
+                href="my-library.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ▤
+                </span>
+
+                <span class="menu-text">
+                    My Library
+                </span>
+
+            </a>
+
+
+            <div class="menu-label account-label">
+                Account
+            </div>
+
+
+            <a
+                href="profile.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ◯
+                </span>
+
+                <span class="menu-text">
+                    Profile
+                </span>
+
+            </a>
+
+
+            <a
+                href="#"
+                class="menu-item"
+                id="logoutLink"
+            >
+
+                <span class="menu-icon">
+                    ↪
+                </span>
+
+                <span class="menu-text">
+                    Logout
+                </span>
+
+            </a>
+
+        </nav>
+
+
+        <!-- SIDEBAR LIBRARY STATUS -->
+
+        <div class="sidebar-status">
+
+            <div class="sidebar-status-top">
+
+                <span class="sidebar-status-dot"></span>
+
+                <span>
+                    Library Status
+                </span>
+
+            </div>
+
+            <strong id="sidebarAvailableCount">
+                —
+            </strong>
+
+            <span class="sidebar-status-text">
+                copies currently available
+            </span>
+
+        </div>
+
+
+        <!-- USER -->
+
+        <div class="sidebar-user">
+
+            <div class="sidebar-user-box">
+
+                <div
+                    class="user-avatar"
+                    id="sidebarAvatar"
+                >
+                    S
+                </div>
+
+                <div class="user-info">
+
+                    <strong id="sidebarUserName">
+                        Student
+                    </strong>
+
+                    <span>
+                        Student Account
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MOBILE OVERLAY -->
+
+    <div
+        class="sidebar-backdrop"
+        id="sidebarBackdrop"
+    ></div>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    type="button"
+                    class="sidebar-toggle"
+                    id="sidebarToggle"
+                    aria-label="Toggle sidebar"
+                >
+                    ☰
+                </button>
+
+
+                <div class="topbar-title">
+
+                    <h1>
+                        Dashboard
+                    </h1>
+
+                    <p>
+                        Your library at a glance
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="topbar-user">
+
+                <div class="topbar-user-copy">
+
+                    <span>
+                        Signed in as
+                    </span>
+
+                    <strong id="topbarUserName">
+                        Student
+                    </strong>
+
+                </div>
+
+
+                <div
+                    class="topbar-avatar"
+                    id="topbarAvatar"
+                >
+                    S
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             PAGE
+        ================================================== -->
+
+        <div class="page-container">
+
+
+            <!-- HERO -->
+
+            <section class="dashboard-hero">
+
+                <div class="hero-content">
+
+                    <div class="hero-eyebrow">
+
+                        <span class="hero-eyebrow-line"></span>
+
+                        LIBRARY DASHBOARD
+
+                    </div>
+
+
+                    <h2 id="welcomeTitle">
+                        Welcome back! 👋
+                    </h2>
+
+
+                    <p id="welcomeText">
+                        Find a book, check its availability,
+                        and locate it on the shelf.
+                    </p>
+
+
+                    <div class="hero-actions">
+
+                        <a
+                            href="browse.html"
+                            class="btn btn-hero"
+                        >
+                            Browse Library
+                            <span>→</span>
+                        </a>
+
+                        <a
+                            href="my-library.html"
+                            class="hero-secondary-link"
+                        >
+                            View my borrowed books
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PURPOSEFUL LIBRARY FLOW -->
+
+                <div class="hero-flow">
+
+                    <div class="flow-label">
+                        SIMPLE LIBRARY FLOW
+                    </div>
+
+
+                    <div class="flow-step">
+
+                        <span class="flow-number">
+                            01
+                        </span>
+
+                        <div>
+                            <strong>
+                                Search
+                            </strong>
+
+                            <small>
+                                Find the title
+                            </small>
+                        </div>
+
+                    </div>
+
+
+                    <div class="flow-connector"></div>
+
+
+                    <div class="flow-step">
+
+                        <span class="flow-number">
+                            02
+                        </span>
+
+                        <div>
+                            <strong>
+                                Check
+                            </strong>
+
+                            <small>
+                                See availability
+                            </small>
+                        </div>
+
+                    </div>
+
+
+                    <div class="flow-connector"></div>
+
+
+                    <div class="flow-step">
+
+                        <span class="flow-number">
+                            03
+                        </span>
+
+                        <div>
+                            <strong>
+                                Locate
+                            </strong>
+
+                            <small>
+                                Find the shelf
+                            </small>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 STATISTICS
+            ================================================== -->
+
+            <section class="stats-grid dashboard-stats">
+
+
+                <div class="stat-card dashboard-stat">
+
+                    <div class="stat-icon blue">
+                        📚
+                    </div>
+
+                    <div class="stat-info">
+
+                        <span>
+                            Total Copies
+                        </span>
+
+                        <strong id="totalBooks">
+                            —
+                        </strong>
+
+                    </div>
+
+                    <span class="stat-caption">
+                        in catalog
+                    </span>
+
+                </div>
+
+
+
+                <div class="stat-card dashboard-stat">
+
+                    <div class="stat-icon green">
+                        ✓
+                    </div>
+
+                    <div class="stat-info">
+
+                        <span>
+                            Available
+                        </span>
+
+                        <strong id="availableBooks">
+                            —
+                        </strong>
+
+                    </div>
+
+                    <span class="stat-caption">
+                        ready to issue
+                    </span>
+
+                </div>
+
+
+
+                <div class="stat-card dashboard-stat">
+
+                    <div class="stat-icon orange">
+                        📖
+                    </div>
+
+                    <div class="stat-info">
+
+                        <span>
+                            My Borrowed
+                        </span>
+
+                        <strong id="borrowedBooks">
+                            —
+                        </strong>
+
+                    </div>
+
+                    <span class="stat-caption">
+                        currently with you
+                    </span>
+
+                </div>
+
+
+
+                <div class="stat-card dashboard-stat">
+
+                    <div class="stat-icon red">
+                        ⏰
+                    </div>
+
+                    <div class="stat-info">
+
+                        <span>
+                            Due Soon
+                        </span>
+
+                        <strong id="dueSoonBooks">
+                            —
+                        </strong>
+
+                    </div>
+
+                    <span class="stat-caption">
+                        within 7 days
+                    </span>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 FIND A BOOK
+            ================================================== -->
+
+            <section class="find-book-section">
+
+                <div class="find-book-intro">
+
+                    <div class="section-kicker">
+                        LIBRARY SEARCH
+                    </div>
+
+                    <h2>
+                        What are you looking for?
+                    </h2>
+
+                    <p>
+                        Search the catalog by title, author,
+                        ISBN or category.
+                    </p>
+
+                </div>
+
+
+                <div class="find-book-search">
+
+                    <div class="search-box dashboard-search">
+
+                        <span class="search-icon">
+                            ⌕
+                        </span>
+
+                        <input
+                            type="text"
+                            id="quickSearch"
+                            placeholder="Search books, authors, ISBNs..."
+                            autocomplete="off"
+                        >
+
+                        <span class="search-hint">
+                            Search
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        id="searchResults"
+                        class="search-results"
+                    ></div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 RECENT BOOKS
+            ================================================== -->
+
+            <section class="books-section">
+
+                <div class="books-section-header">
+
+                    <div>
+
+                        <div class="section-kicker">
+                            YOUR CATALOG
+                        </div>
+
+                        <h2>
+                            Recently Added
+                        </h2>
+
+                        <p>
+                            Explore the latest books available
+                            in your college library.
+                        </p>
+
+                    </div>
+
+
+                    <a
+                        href="browse.html"
+                        class="view-all-link"
+                    >
+                        View full catalog
+                        <span>→</span>
+                    </a>
+
+                </div>
+
+
+                <div
+                    class="book-grid dashboard-book-grid"
+                    id="recentBooks"
+                >
+
+                    <div class="loading">
+                        Loading books...
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 BOTTOM UTILITY
+            ================================================== -->
+
+            <section class="dashboard-bottom-row">
+
+
+                <a
+                    href="my-library.html"
+                    class="utility-card utility-primary"
+                >
+
+                    <div class="utility-icon">
+                        ▤
+                    </div>
+
+                    <div class="utility-copy">
+
+                        <span>
+                            YOUR LIBRARY
+                        </span>
+
+                        <strong>
+                            Manage borrowed books
+                        </strong>
+
+                        <small>
+                            Check due dates and your current loans.
+                        </small>
+
+                    </div>
+
+                    <span class="utility-arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="browse.html"
+                    class="utility-card"
+                >
+
+                    <div class="utility-icon">
+                        ⌕
+                    </div>
+
+                    <div class="utility-copy">
+
+                        <span>
+                            EXPLORE
+                        </span>
+
+                        <strong>
+                            Browse the complete catalog
+                        </strong>
+
+                        <small>
+                            Search and locate books across the library.
+                        </small>
+
+                    </div>
+
+                    <span class="utility-arrow">
+                        →
+                    </span>
+
+                </a>
+
+            </section>
+
+
+        </div>
+
+    </main>
+
+</div>
+
+
+
+<!-- =========================================================
+     AUTH
+========================================================= -->
+
+<script src="auth.js"></script>
+
+
+<script>
+
+/* =========================================================
+   PROTECT PAGE
+========================================================= */
+
+if (!requireStudent()) {
+
+    throw new Error(
+        "Student authentication required."
+    );
+
+}
+
+
+
+/* =========================================================
+   USER INFORMATION
+========================================================= */
+
+const currentUser =
+    getCurrentUser();
+
+
+function getInitials(name) {
+
+    if (!name) {
+
+        return "S";
+
+    }
+
+
+    const parts =
+        name
+            .trim()
+            .split(/\s+/);
+
+
+    if (parts.length === 1) {
+
+        return parts[0]
+            .charAt(0)
+            .toUpperCase();
+
+    }
+
+
+    return (
+        parts[0].charAt(0) +
+        parts[parts.length - 1].charAt(0)
+    ).toUpperCase();
+
+}
+
+
+const userName =
+    currentUser?.name ||
+    currentUser?.username ||
+    "Student";
+
+
+const initials =
+    getInitials(userName);
+
+
+document.getElementById(
+    "sidebarUserName"
+).textContent =
+    userName;
+
+
+document.getElementById(
+    "topbarUserName"
+).textContent =
+    userName;
+
+
+document.getElementById(
+    "sidebarAvatar"
+).textContent =
+    initials;
+
+
+document.getElementById(
+    "topbarAvatar"
+).textContent =
+    initials;
+
+
+document.getElementById(
+    "welcomeTitle"
+).textContent =
+    `Welcome back, ${userName}! 👋`;
+
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+const sidebarToggle =
+    document.getElementById(
+        "sidebarToggle"
+    );
+
+
+const sidebarBackdrop =
+    document.getElementById(
+        "sidebarBackdrop"
+    );
+
+
+function toggleSidebar() {
+
+    if (window.innerWidth <= 800) {
+
+        document.body.classList.toggle(
+            "sidebar-open"
+        );
+
+    } else {
+
+        document.body.classList.toggle(
+            "sidebar-collapsed"
+        );
+
+    }
+
+}
+
+
+sidebarToggle.addEventListener(
+    "click",
+    toggleSidebar
+);
+
+
+sidebarBackdrop.addEventListener(
+    "click",
+    function () {
+
+        document.body.classList.remove(
+            "sidebar-open"
+        );
+
+    }
+);
+
+
+document
+    .querySelectorAll(".sidebar .menu-item")
+    .forEach(function (item) {
+
+        item.addEventListener(
+            "click",
+            function () {
+
+                if (
+                    window.innerWidth <= 800
+                ) {
+
+                    document.body.classList.remove(
+                        "sidebar-open"
+                    );
+
+                }
+
+            }
+        );
+
+    });
+
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+document
+    .getElementById("logoutLink")
+    .addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+
+            logout();
+
+        }
+    );
+
+
+
+/* =========================================================
+   API
+========================================================= */
+
+const BOOKS_API =
+    `${API_URL}/books`;
+
+
+const BORROW_API =
+    `${API_URL}/borrow`;
+
+
+
+/* =========================================================
+   BOOK STORAGE
+========================================================= */
+
+let allBooks = [];
+
+
+
+/* =========================================================
+   LOAD BOOKS
+========================================================= */
+
+async function loadBooks() {
+
+    const recentBooks =
+        document.getElementById(
+            "recentBooks"
+        );
+
+
+    try {
+
+        const response =
+            await fetch(
+                BOOKS_API
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Unable to load books."
+            );
+
+        }
+
+
+        const books =
+            await response.json();
+
+
+        allBooks =
+            Array.isArray(books)
+                ? books
+                : [];
+
+
+        updateBookStatistics(
+            allBooks
+        );
+
+
+        displayRecentBooks(
+            allBooks
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Book loading error:",
+            error
+        );
+
+
+        recentBooks.innerHTML = `
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    ⚠️
+                </div>
+
+                <h3>
+                    Unable to load books
+                </h3>
+
+                <p>
+                    Please make sure the library
+                    server is available.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+
+/* =========================================================
+   BOOK STATISTICS
+========================================================= */
+
+function updateBookStatistics(
+    books
+) {
+
+    let totalCopies = 0;
+
+    let availableCopies = 0;
+
+
+    books.forEach(
+        function (book) {
+
+            totalCopies +=
+                Number(
+                    book.totalCopies || 0
+                );
+
+
+            availableCopies +=
+                Number(
+                    book.availableCopies || 0
+                );
+
+        }
+    );
+
+
+    document.getElementById(
+        "totalBooks"
+    ).textContent =
+        totalCopies;
+
+
+    document.getElementById(
+        "availableBooks"
+    ).textContent =
+        availableCopies;
+
+
+    document.getElementById(
+        "sidebarAvailableCount"
+    ).textContent =
+        availableCopies;
+
+}
+
+
+
+/* =========================================================
+   RECENT BOOKS
+========================================================= */
+
+function displayRecentBooks(
+    books
+) {
+
+    const container =
+        document.getElementById(
+            "recentBooks"
+        );
+
+
+    if (!books.length) {
+
+        container.innerHTML = `
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    📚
+                </div>
+
+                <h3>
+                    No books found
+                </h3>
+
+                <p>
+                    Books added by the library
+                    will appear here.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const recent =
+        [...books]
+            .reverse()
+            .slice(0, 6);
+
+
+    container.innerHTML =
+        recent
+            .map(createBookCard)
+            .join("");
+
+}
+
+
+
+/* =========================================================
+   BOOK CARD
+========================================================= */
+
+function createBookCard(
+    book
+) {
+
+    const available =
+        Number(
+            book.availableCopies || 0
+        );
+
+
+    const total =
+        Number(
+            book.totalCopies || 0
+        );
+
+
+    let statusClass =
+        "issued";
+
+
+    let statusText =
+        "Issued";
+
+
+    if (available > 0) {
+
+        statusClass =
+            "available";
+
+        statusText =
+            "Available";
+
+    } else if (book.reserved) {
+
+        statusClass =
+            "reserved";
+
+        statusText =
+            "Reserved";
+
+    }
+
+
+    const imageUrl =
+        book.coverImage
+            ? `${API_URL}${book.coverImage}`
+            : "";
+
+
+    let coverHTML = "";
+
+
+    if (imageUrl) {
+
+        coverHTML = `
+
+            <img
+                src="${imageUrl}"
+                alt="${escapeHTML(
+                    book.title || "Book cover"
+                )}"
+                onerror="
+                    this.style.display='none';
+                    this.parentElement
+                        .querySelector('.book-cover-fallback')
+                        .style.display='flex';
+                "
+            >
+
+            <div
+                class="book-cover-fallback"
+                style="display:none;"
+            >
+                📖
+            </div>
+
+        `;
+
+    } else {
+
+        coverHTML = `
+
+            <div class="book-cover-fallback">
+                📖
+            </div>
+
+        `;
+
+    }
+
+
+    return `
+
+        <article class="book-card">
+
+            <div class="book-cover">
+
+                <div class="book-cover-inner">
+
+                    ${coverHTML}
+
+                </div>
+
+            </div>
+
+
+            <div class="book-content">
+
+                <div class="book-top-line">
+
+                    <span class="book-category">
+                        ${escapeHTML(
+                            book.category || "General"
+                        )}
+                    </span>
+
+                    <span class="book-code">
+                        ${escapeHTML(
+                            book.isbn ||
+                            book.bookId ||
+                            ""
+                        )}
+                    </span>
+
+                </div>
+
+
+                <h3 class="book-title">
+
+                    ${escapeHTML(
+                        book.title ||
+                        "Untitled Book"
+                    )}
+
+                </h3>
+
+
+                <p class="book-author">
+
+                    ${escapeHTML(
+                        book.author ||
+                        "Unknown Author"
+                    )}
+
+                </p>
+
+
+                <div class="book-location">
+
+                    <div>
+
+                        <span>
+                            RACK
+                        </span>
+
+                        <strong>
+                            ${escapeHTML(
+                                book.rack || "—"
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            SHELF
+                        </span>
+
+                        <strong>
+                            ${escapeHTML(
+                                String(
+                                    book.shelf || "—"
+                                )
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            COPIES
+                        </span>
+
+                        <strong>
+                            ${available}/${total}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="book-card-footer">
+
+                    <span
+                        class="status ${statusClass}"
+                    >
+
+                        <span class="status-dot"></span>
+
+                        ${statusText}
+
+                    </span>
+
+
+                    <a
+                        href="browse.html"
+                        class="book-view-link"
+                    >
+                        View
+                        <span>→</span>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </article>
+
+    `;
+
+}
+
+
+
+/* =========================================================
+   QUICK SEARCH
+========================================================= */
+
+const quickSearch =
+    document.getElementById(
+        "quickSearch"
+    );
+
+
+quickSearch.addEventListener(
+    "input",
+    function () {
+
+        const query =
+            this.value
+                .trim()
+                .toLowerCase();
+
+
+        const results =
+            document.getElementById(
+                "searchResults"
+            );
+
+
+        if (!query) {
+
+            results.innerHTML = "";
+
+            return;
+
+        }
+
+
+        const matches =
+            allBooks
+                .filter(
+                    function (book) {
+
+                        return (
+
+                            String(
+                                book.title || ""
+                            )
+                                .toLowerCase()
+                                .includes(query)
+
+                            ||
+
+                            String(
+                                book.author || ""
+                            )
+                                .toLowerCase()
+                                .includes(query)
+
+                            ||
+
+                            String(
+                                book.isbn || ""
+                            )
+                                .toLowerCase()
+                                .includes(query)
+
+                            ||
+
+                            String(
+                                book.category || ""
+                            )
+                                .toLowerCase()
+                                .includes(query)
+
+                        );
+
+                    }
+                )
+                .slice(0, 5);
+
+
+        if (!matches.length) {
+
+            results.innerHTML = `
+
+                <div class="search-empty">
+
+                    <span>
+                        ⌕
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            No matching books
+                        </strong>
+
+                        <small>
+                            Try another title,
+                            author, ISBN or category.
+                        </small>
+
+                    </div>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        results.innerHTML =
+            matches
+                .map(
+                    function (book) {
+
+                        const available =
+                            Number(
+                                book.availableCopies ||
+                                0
+                            );
+
+
+                        return `
+
+                            <div
+                                class="search-result-item"
+                            >
+
+                                <div
+                                    class="search-result-book-icon"
+                                >
+                                    📖
+                                </div>
+
+
+                                <div
+                                    class="search-result-info"
+                                >
+
+                                    <strong>
+                                        ${escapeHTML(
+                                            book.title ||
+                                            "Untitled"
+                                        )}
+                                    </strong>
+
+                                    <span>
+                                        ${escapeHTML(
+                                            book.author ||
+                                            "Unknown author"
+                                        )}
+                                    </span>
+
+                                    <small>
+
+                                        Rack
+                                        ${escapeHTML(
+                                            book.rack ||
+                                            "—"
+                                        )}
+
+                                        ·
+
+                                        Shelf
+                                        ${escapeHTML(
+                                            String(
+                                                book.shelf ||
+                                                "—"
+                                            )
+                                        )}
+
+                                    </small>
+
+                                </div>
+
+
+                                <span
+                                    class="status ${
+                                        available > 0
+                                            ? "available"
+                                            : "issued"
+                                    }"
+                                >
+
+                                    <span
+                                        class="status-dot"
+                                    ></span>
+
+                                    ${
+                                        available > 0
+                                            ? "Available"
+                                            : "Issued"
+                                    }
+
+                                </span>
+
+                            </div>
+
+                        `;
+
+                    }
+                )
+                .join("");
+
+    }
+);
+
+
+
+/* =========================================================
+   BORROW INFORMATION
+========================================================= */
+
+async function loadBorrowSummary() {
+
+    try {
+
+        const response =
+            await fetch(
+                BORROW_API
+            );
+
+
+        if (!response.ok) {
+
+            return;
+
+        }
+
+
+        const records =
+            await response.json();
+
+
+        if (!Array.isArray(records)) {
+
+            return;
+
+        }
+
+
+        const studentId =
+            currentUser?.studentId ||
+            currentUser?.username ||
+            "";
+
+
+        const activeRecords =
+            records.filter(
+                function (record) {
+
+                    const sameStudent =
+                        String(
+                            record.studentId || ""
+                        ).toLowerCase()
+                        ===
+                        String(
+                            studentId
+                        ).toLowerCase();
+
+
+                    const active =
+                        String(
+                            record.status || ""
+                        ).toLowerCase()
+                        ===
+                        "borrowed";
+
+
+                    return (
+                        sameStudent &&
+                        active
+                    );
+
+                }
+            );
+
+
+        document.getElementById(
+            "borrowedBooks"
+        ).textContent =
+            activeRecords.length;
+
+
+        const today =
+            new Date();
+
+
+        const dueSoon =
+            activeRecords.filter(
+                function (record) {
+
+                    if (!record.dueDate) {
+
+                        return false;
+
+                    }
+
+
+                    const dueDate =
+                        new Date(
+                            record.dueDate
+                        );
+
+
+                    const difference =
+                        dueDate.getTime()
+                        -
+                        today.getTime();
+
+
+                    const days =
+                        difference /
+                        (
+                            1000 *
+                            60 *
+                            60 *
+                            24
+                        );
+
+
+                    return (
+                        days >= 0 &&
+                        days <= 7
+                    );
+
+                }
+            );
+
+
+        document.getElementById(
+            "dueSoonBooks"
+        ).textContent =
+            dueSoon.length;
+
+
+    } catch (error) {
+
+        console.warn(
+            "Borrow summary unavailable:",
+            error
+        );
+
+    }
+
+}
+
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(
+    value
+) {
+
+    return String(value)
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
+
+
+
+/* =========================================================
+   START
+========================================================= */
+
+loadBooks();
+
+loadBorrowSummary();
+
+</script>
+
+
+</body>
+</html>

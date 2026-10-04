@@ -1,0 +1,3433 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Students - LibTrack</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* =====================================================
+           ADMIN STUDENTS PAGE
+           ===================================================== */
+
+        .admin-students-page {
+            min-height: 100vh;
+        }
+
+        .admin-students-page .page-header {
+            margin-bottom: 24px;
+        }
+
+        .admin-students-page .page-header p {
+            margin-top: 6px;
+        }
+
+
+        /* =====================================================
+           ALERT
+           ===================================================== */
+
+        .student-alert {
+            display: none;
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid transparent;
+        }
+
+        .student-alert.show {
+            display: block;
+        }
+
+        .student-alert.success {
+            background: #ecfdf3;
+            border-color: #bbf7d0;
+            color: #166534;
+        }
+
+        .student-alert.error {
+            background: #fff1f2;
+            border-color: #fecdd3;
+            color: #be123c;
+        }
+
+
+        /* =====================================================
+           STAT CARDS
+           ===================================================== */
+
+        .students-stat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .students-stat-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: var(--shadow);
+            min-height: 118px;
+        }
+
+        .students-stat-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .students-stat-label {
+            color: var(--text-light);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+        }
+
+        .students-stat-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--blue-light);
+            color: var(--blue);
+            font-size: 18px;
+        }
+
+        .students-stat-value {
+            margin-top: 14px;
+            color: var(--text);
+            font-size: 28px;
+            line-height: 1;
+            font-weight: 800;
+        }
+
+        .students-stat-note {
+            margin-top: 7px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+
+        /* =====================================================
+           TOOLBAR
+           ===================================================== */
+
+        .students-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .students-search {
+            position: relative;
+            flex: 1 1 380px;
+        }
+
+        .students-search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7b8da3;
+            font-size: 16px;
+            pointer-events: none;
+        }
+
+        .students-search input {
+            width: 100%;
+            min-height: 46px;
+            padding: 0 16px 0 42px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #ffffff;
+            color: var(--text);
+            outline: none;
+            font: inherit;
+            box-sizing: border-box;
+        }
+
+        .students-search input:focus,
+        .student-form input:focus,
+        .student-form select:focus {
+            border-color: #7aa9ec;
+            box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.09);
+        }
+
+        .students-toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .students-count-text {
+            color: var(--text-light);
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+
+        /* =====================================================
+           TABLE
+           ===================================================== */
+
+        .students-table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: #ffffff;
+        }
+
+        .students-table {
+            width: 100%;
+            min-width: 900px;
+            border-collapse: collapse;
+        }
+
+        .students-table th {
+            background: #f7f9fc;
+            color: #60748b;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            text-align: left;
+            padding: 13px 14px;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .students-table td {
+            padding: 14px;
+            border-bottom: 1px solid #edf1f5;
+            color: var(--text);
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        .students-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .students-table tbody tr:hover {
+            background: #fbfcfe;
+        }
+
+
+        /* =====================================================
+           STUDENT ID
+           ===================================================== */
+
+        .student-id {
+            font-weight: 800;
+            color: var(--blue);
+            white-space: nowrap;
+        }
+
+
+        /* =====================================================
+           STUDENT NAME
+           ===================================================== */
+
+        .student-name-cell {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            min-width: 180px;
+        }
+
+        .student-avatar {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            border-radius: 50%;
+            background: #eaf2ff;
+            color: var(--blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .student-name-info {
+            min-width: 0;
+        }
+
+        .student-name-info strong {
+            display: block;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 750;
+        }
+
+        .student-name-info span {
+            display: block;
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+
+        /* =====================================================
+           COURSE
+           ===================================================== */
+
+        .course-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 9px;
+            border-radius: 7px;
+            background: #f1f5f9;
+            color: #52667d;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+
+        /* =====================================================
+           BORROWED COUNT
+           ===================================================== */
+
+        .borrowed-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 32px;
+            height: 28px;
+            padding: 0 8px;
+            border-radius: 8px;
+            background: #eaf2ff;
+            color: var(--blue);
+            font-weight: 800;
+            font-size: 12px;
+        }
+
+        .borrowed-count.zero {
+            background: #f3f6f9;
+            color: #7b8da3;
+        }
+
+
+        /* =====================================================
+           STATUS
+           ===================================================== */
+
+        .student-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 9px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .student-status.active {
+            background: var(--green-light);
+            color: var(--green);
+        }
+
+        .student-status.borrowing {
+            background: var(--blue-light);
+            color: var(--blue);
+        }
+
+
+        /* =====================================================
+           ACTION
+           ===================================================== */
+
+        .student-action-btn {
+            border: 1px solid var(--border);
+            background: #ffffff;
+            color: #52667d;
+            border-radius: 8px;
+            padding: 8px 11px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            transition: .18s ease;
+        }
+
+        .student-action-btn:hover {
+            border-color: #9db9d8;
+            color: var(--blue);
+            background: #f8fbff;
+        }
+
+
+        /* =====================================================
+           EMPTY / LOADING
+           ===================================================== */
+
+        .students-empty {
+            padding: 55px 20px;
+            text-align: center;
+            color: var(--text-light);
+        }
+
+        .students-empty-icon {
+            font-size: 34px;
+            margin-bottom: 12px;
+        }
+
+        .students-empty strong {
+            display: block;
+            color: var(--text);
+            font-size: 15px;
+        }
+
+        .students-empty p {
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           MODAL
+           ===================================================== */
+
+        .student-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(7, 31, 58, 0.45);
+        }
+
+        .student-modal.show {
+            display: flex;
+        }
+
+        .student-modal-card {
+            width: min(560px, 100%);
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 25px 70px rgba(7, 31, 58, .18);
+        }
+
+        .student-modal-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 20px 22px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .student-modal-header h2 {
+            margin: 0;
+            color: var(--text);
+            font-size: 19px;
+        }
+
+        .student-modal-header p {
+            margin: 5px 0 0;
+            color: var(--text-light);
+            font-size: 12px;
+        }
+
+        .student-modal-close {
+            width: 34px;
+            height: 34px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: #ffffff;
+            color: #60748b;
+            cursor: pointer;
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        .student-modal-close:hover {
+            background: #f5f7fa;
+        }
+
+        .student-modal-body {
+            padding: 22px;
+        }
+
+
+        /* =====================================================
+           DETAILS
+           ===================================================== */
+
+        .student-detail-head {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding-bottom: 18px;
+            margin-bottom: 18px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .student-detail-avatar {
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
+            border-radius: 50%;
+            background: #eaf2ff;
+            color: var(--blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 17px;
+        }
+
+        .student-detail-head h3 {
+            margin: 0;
+            color: var(--text);
+            font-size: 17px;
+        }
+
+        .student-detail-head p {
+            margin: 4px 0 0;
+            color: var(--text-light);
+            font-size: 12px;
+        }
+
+        .student-detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .student-detail-item {
+            padding: 13px;
+            border: 1px solid #e4eaf0;
+            border-radius: 10px;
+            background: #fbfcfe;
+        }
+
+        .student-detail-label {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            font-weight: 700;
+        }
+
+        .student-detail-value {
+            display: block;
+            margin-top: 5px;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 700;
+            word-break: break-word;
+        }
+
+        .student-borrow-section {
+            margin-top: 20px;
+        }
+
+        .student-borrow-section h4 {
+            margin: 0 0 10px;
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        .student-borrow-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .student-borrow-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 11px 12px;
+            border: 1px solid #e4eaf0;
+            border-radius: 9px;
+            background: #ffffff;
+        }
+
+        .student-borrow-title {
+            min-width: 0;
+        }
+
+        .student-borrow-title strong {
+            display: block;
+            color: var(--text);
+            font-size: 12px;
+        }
+
+        .student-borrow-title span {
+            display: block;
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .student-borrow-due {
+            white-space: nowrap;
+            color: #52667d;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .student-no-borrow {
+            padding: 16px;
+            text-align: center;
+            border: 1px dashed var(--border);
+            border-radius: 10px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+
+        /* =====================================================
+           ADD STUDENT FORM
+           ===================================================== */
+
+        .student-form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .student-form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .student-form-field.full {
+            grid-column: 1 / -1;
+        }
+
+        .student-form-field label {
+            color: #52667d;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .student-form-field label span {
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .student-form-field input,
+        .student-form-field select {
+            width: 100%;
+            min-height: 44px;
+            padding: 0 12px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: #ffffff;
+            color: var(--text);
+            outline: none;
+            font: inherit;
+            box-sizing: border-box;
+        }
+
+        .student-form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 9px;
+            margin-top: 20px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border);
+        }
+
+        .student-form-btn {
+            min-height: 42px;
+            padding: 0 15px;
+            border-radius: 9px;
+            border: 1px solid var(--border);
+            background: #ffffff;
+            color: #52667d;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .student-form-btn.primary {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: #ffffff;
+        }
+
+        .student-form-btn.primary:hover {
+            background: var(--blue-dark);
+        }
+
+        .student-form-btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+           ===================================================== */
+
+        @media (max-width: 1050px) {
+
+            .students-stat-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .students-stat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .student-detail-grid,
+            .student-form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .student-form-field.full {
+                grid-column: auto;
+            }
+
+            .students-toolbar {
+                align-items: stretch;
+            }
+
+            .students-toolbar-right {
+                justify-content: space-between;
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            .student-modal {
+                padding: 12px;
+            }
+
+            .student-modal-card {
+                max-height: calc(100vh - 24px);
+            }
+
+            .student-modal-header,
+            .student-modal-body {
+                padding: 17px;
+            }
+
+        }
+    </style>
+</head>
+
+
+<body>
+
+<div class="app admin-students-page">
+
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                📖
+            </div>
+
+            <div class="brand-text">
+                <strong>LibTrack</strong>
+                <span>College Library</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-menu">
+
+            <div class="menu-label">
+                MAIN
+            </div>
+
+
+            <a
+                href="admin.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">▦</span>
+                <span class="menu-text">Dashboard</span>
+            </a>
+
+
+            <a
+                href="admin-books.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">📚</span>
+                <span class="menu-text">Manage Books</span>
+            </a>
+
+
+            <a
+                href="admin-borrow.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">↔</span>
+                <span class="menu-text">Borrow &amp; Return</span>
+            </a>
+
+
+            <a
+                href="admin-students.html"
+                class="menu-item active"
+            >
+                <span class="menu-icon">👥</span>
+                <span class="menu-text">Students</span>
+            </a>
+
+
+            <div class="menu-label">
+                ACCOUNT
+            </div>
+
+
+            <a
+                href="profile.html"
+                class="menu-item"
+            >
+                <span class="menu-icon">👤</span>
+                <span class="menu-text">Account</span>
+            </a>
+
+
+            <a
+                href="#"
+                class="menu-item"
+                id="logoutLink"
+            >
+                <span class="menu-icon">↪</span>
+                <span class="menu-text">Logout</span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <main
+        class="main-content"
+        id="mainContent"
+    >
+
+
+        <!-- =================================================
+             TOPBAR
+             ================================================= -->
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    type="button"
+                    class="sidebar-toggle"
+                    id="sidebarToggle"
+                    aria-label="Toggle sidebar"
+                >
+                    ☰
+                </button>
+
+
+                <div class="topbar-title">
+
+                    <h1>
+                        Students
+                    </h1>
+
+                    <p>
+                        Manage registered students and view their library activity.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="topbar-user">
+
+                <div
+                    class="topbar-avatar"
+                    id="topbarAvatar"
+                >
+                    A
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             PAGE CONTAINER
+             ================================================= -->
+
+        <div class="page-container">
+
+
+            <!-- PAGE HEADER -->
+
+            <div class="page-header">
+
+                <div>
+
+                    <h2>
+                        Student Management
+                    </h2>
+
+                    <p>
+                        View students, borrowing activity, and library account information.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="btn btn-primary"
+                    type="button"
+                    id="addStudentButton"
+                >
+                    ＋ Add Student
+                </button>
+
+            </div>
+
+
+            <!-- ALERT -->
+
+            <div
+                id="studentAlert"
+                class="student-alert"
+            ></div>
+
+
+
+            <!-- =================================================
+                 STATISTICS
+                 ================================================= -->
+
+            <div class="students-stat-grid">
+
+
+                <div class="students-stat-card">
+
+                    <div class="students-stat-top">
+
+                        <span class="students-stat-label">
+                            Total Students
+                        </span>
+
+                        <div class="students-stat-icon">
+                            👥
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="students-stat-value"
+                        id="totalStudents"
+                    >
+                        0
+                    </div>
+
+                    <div class="students-stat-note">
+                        Registered library students
+                    </div>
+
+                </div>
+
+
+
+                <div class="students-stat-card">
+
+                    <div class="students-stat-top">
+
+                        <span class="students-stat-label">
+                            Currently Borrowing
+                        </span>
+
+                        <div class="students-stat-icon">
+                            📚
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="students-stat-value"
+                        id="studentsBorrowing"
+                    >
+                        0
+                    </div>
+
+                    <div class="students-stat-note">
+                        Students with active books
+                    </div>
+
+                </div>
+
+
+
+                <div class="students-stat-card">
+
+                    <div class="students-stat-top">
+
+                        <span class="students-stat-label">
+                            Active Loans
+                        </span>
+
+                        <div class="students-stat-icon">
+                            ↔
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="students-stat-value"
+                        id="activeLoans"
+                    >
+                        0
+                    </div>
+
+                    <div class="students-stat-note">
+                        Books currently issued
+                    </div>
+
+                </div>
+
+
+
+                <div class="students-stat-card">
+
+                    <div class="students-stat-top">
+
+                        <span class="students-stat-label">
+                            Overdue
+                        </span>
+
+                        <div class="students-stat-icon">
+                            !
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="students-stat-value"
+                        id="overdueStudents"
+                    >
+                        0
+                    </div>
+
+                    <div class="students-stat-note">
+                        Students with overdue books
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 STUDENTS TABLE CARD
+                 ================================================= -->
+
+            <section class="card">
+
+                <div class="card-body">
+
+
+                    <div class="students-toolbar">
+
+
+                        <div class="students-search">
+
+                            <span class="students-search-icon">
+                                ⌕
+                            </span>
+
+                            <input
+                                type="search"
+                                id="studentSearch"
+                                placeholder="Search by student ID, name, email or course..."
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+
+                        <div class="students-toolbar-right">
+
+                            <span
+                                class="students-count-text"
+                                id="studentsCountText"
+                            >
+                                0 students
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="students-table-wrap">
+
+                        <table class="students-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Student ID
+                                    </th>
+
+                                    <th>
+                                        Student
+                                    </th>
+
+                                    <th>
+                                        Email
+                                    </th>
+
+                                    <th>
+                                        Course
+                                    </th>
+
+                                    <th>
+                                        Borrowed
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                    <th>
+                                        Action
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="studentsTableBody">
+
+                                <tr>
+
+                                    <td colspan="7">
+
+                                        <div class="students-empty">
+
+                                            <div class="students-empty-icon">
+                                                ⏳
+                                            </div>
+
+                                            <strong>
+                                                Loading students...
+                                            </strong>
+
+                                            <p>
+                                                Getting student information from the library database.
+                                            </p>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+        </div>
+
+    </main>
+
+</div>
+
+
+
+<!-- =========================================================
+     STUDENT DETAILS MODAL
+     ========================================================= -->
+
+<div
+    class="student-modal"
+    id="studentDetailsModal"
+    aria-hidden="true"
+>
+
+    <div class="student-modal-card">
+
+
+        <div class="student-modal-header">
+
+            <div>
+
+                <h2>
+                    Student Details
+                </h2>
+
+                <p>
+                    Student account and current library activity.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="student-modal-close"
+                id="closeDetailsButton"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div
+            class="student-modal-body"
+            id="studentDetailsBody"
+        ></div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     ADD STUDENT MODAL
+     ========================================================= -->
+
+<div
+    class="student-modal"
+    id="addStudentModal"
+    aria-hidden="true"
+>
+
+    <div class="student-modal-card">
+
+
+        <div class="student-modal-header">
+
+            <div>
+
+                <h2>
+                    Add Student
+                </h2>
+
+                <p>
+                    Register a student in the LibTrack library system.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="student-modal-close"
+                id="closeAddStudentButton"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="student-modal-body">
+
+
+            <div
+                id="addStudentAlert"
+                class="student-alert"
+            ></div>
+
+
+            <form id="addStudentForm">
+
+
+                <div class="student-form-grid">
+
+
+                    <div class="student-form-field">
+
+                        <label for="studentIdInput">
+                            Student ID
+                        </label>
+
+                        <input
+                            type="text"
+                            id="studentIdInput"
+                            placeholder="e.g. BCA002"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="student-form-field">
+
+                        <label for="studentNameInput">
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="studentNameInput"
+                            placeholder="e.g. Mohammed Ali"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="student-form-field full">
+
+                        <label for="studentEmailInput">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="studentEmailInput"
+                            placeholder="student@example.com"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="student-form-field">
+
+                        <label for="studentCourseInput">
+                            Course
+                        </label>
+
+                        <input
+                            type="text"
+                            id="studentCourseInput"
+                            placeholder="e.g. BCA"
+                            required
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="student-form-actions">
+
+                    <button
+                        type="button"
+                        class="student-form-btn"
+                        id="cancelAddStudentButton"
+                    >
+                        Cancel
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="student-form-btn primary"
+                        id="saveStudentButton"
+                    >
+                        Add Student
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script src="auth.js"></script>
+
+
+<script>
+/* =========================================================
+   CONFIG
+   ========================================================= */
+
+const API =
+    typeof API_URL !== "undefined"
+        ? API_URL
+        : "http://127.0.0.1:5000";
+
+
+let allStudents = [];
+let allBorrows = [];
+
+
+/* =========================================================
+   AUTH HELPERS
+   ========================================================= */
+
+function readCurrentUser() {
+
+    if (typeof getCurrentUser === "function") {
+
+        try {
+            return getCurrentUser();
+        } catch (error) {
+            console.warn(
+                "getCurrentUser failed:",
+                error
+            );
+        }
+
+    }
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem("user") || "null"
+        );
+
+    } catch (error) {
+
+        return null;
+
+    }
+}
+
+
+function getToken() {
+
+    return (
+        localStorage.getItem("token") ||
+        localStorage.getItem("authToken") ||
+        ""
+    );
+
+}
+
+
+function getAuthHeaders() {
+
+    const token = getToken();
+
+    return token
+        ? {
+            Authorization:
+                `Bearer ${token}`
+        }
+        : {};
+
+}
+
+
+const currentUser =
+    readCurrentUser();
+
+
+if (
+    !currentUser ||
+    String(
+        currentUser.role || ""
+    ).toLowerCase() !== "admin"
+) {
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+/* =========================================================
+   GENERAL HELPERS
+   ========================================================= */
+
+function escapeHTML(value) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+function getInitials(name) {
+
+    const value =
+        String(name || "")
+            .trim();
+
+    if (!value) {
+        return "S";
+    }
+
+    const parts =
+        value.split(/\s+/);
+
+    if (parts.length === 1) {
+
+        return parts[0]
+            .charAt(0)
+            .toUpperCase();
+
+    }
+
+    return (
+        parts[0].charAt(0) +
+        parts[parts.length - 1].charAt(0)
+    ).toUpperCase();
+
+}
+
+
+function formatDate(date) {
+
+    if (!date) {
+        return "—";
+    }
+
+    const parsed =
+        new Date(date);
+
+    if (
+        Number.isNaN(
+            parsed.getTime()
+        )
+    ) {
+        return "—";
+    }
+
+    return parsed.toLocaleDateString(
+        "en-GB",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+function showAlert(
+    message,
+    type = "success"
+) {
+
+    const element =
+        document.getElementById(
+            "studentAlert"
+        );
+
+    if (!element) {
+        return;
+    }
+
+    element.textContent =
+        message;
+
+    element.className =
+        `student-alert show ${type}`;
+
+    clearTimeout(
+        showAlert.timer
+    );
+
+    showAlert.timer =
+        setTimeout(
+            () => {
+
+                element.className =
+                    "student-alert";
+
+                element.textContent =
+                    "";
+
+            },
+            4500
+        );
+
+}
+
+
+function showAddStudentAlert(
+    message,
+    type = "error"
+) {
+
+    const element =
+        document.getElementById(
+            "addStudentAlert"
+        );
+
+    if (!element) {
+        return;
+    }
+
+    element.textContent =
+        message;
+
+    element.className =
+        `student-alert show ${type}`;
+
+}
+
+
+function clearAddStudentAlert() {
+
+    const element =
+        document.getElementById(
+            "addStudentAlert"
+        );
+
+    if (!element) {
+        return;
+    }
+
+    element.textContent =
+        "";
+
+    element.className =
+        "student-alert";
+
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+function initializeSidebar() {
+
+    const sidebar =
+        document.getElementById(
+            "sidebar"
+        );
+
+    const main =
+        document.getElementById(
+            "mainContent"
+        );
+
+    const toggle =
+        document.getElementById(
+            "sidebarToggle"
+        );
+
+    if (
+        !sidebar ||
+        !toggle
+    ) {
+        return;
+    }
+
+
+    toggle.addEventListener(
+        "click",
+        function () {
+
+            if (
+                window.innerWidth <= 650
+            ) {
+
+                sidebar.classList.toggle(
+                    "mobile-open"
+                );
+
+                return;
+            }
+
+
+            sidebar.classList.toggle(
+                "collapsed"
+            );
+
+
+            if (main) {
+
+                main.classList.toggle(
+                    "sidebar-collapsed"
+                );
+
+            }
+
+        }
+    );
+
+
+    sidebar
+        .querySelectorAll(
+            ".menu-item"
+        )
+        .forEach(
+            function (link) {
+
+                link.addEventListener(
+                    "click",
+                    function () {
+
+                        if (
+                            window.innerWidth <=
+                            650
+                        ) {
+
+                            sidebar.classList.remove(
+                                "mobile-open"
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+function logoutAdmin() {
+
+    if (
+        typeof logout ===
+        "function"
+    ) {
+
+        logout();
+        return;
+
+    }
+
+
+    localStorage.removeItem(
+        "token"
+    );
+
+    localStorage.removeItem(
+        "authToken"
+    );
+
+    localStorage.removeItem(
+        "user"
+    );
+
+    localStorage.removeItem(
+        "student"
+    );
+
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+/* =========================================================
+   BORROW HELPERS
+   ========================================================= */
+
+function getBorrowStudentId(
+    borrow
+) {
+
+    if (!borrow) {
+        return "";
+    }
+
+    const value =
+        borrow.studentId;
+
+
+    if (
+        value &&
+        typeof value ===
+        "object"
+    ) {
+
+        return (
+            value.studentId ||
+            value._id ||
+            value.id ||
+            ""
+        );
+
+    }
+
+
+    return value || "";
+
+}
+
+
+function getBorrowStatus(
+    borrow
+) {
+
+    return String(
+        borrow?.status || ""
+    ).toLowerCase();
+
+}
+
+
+function isActiveBorrow(
+    borrow
+) {
+
+    return (
+        getBorrowStatus(
+            borrow
+        ) === "borrowed"
+    );
+
+}
+
+
+function isOverdue(
+    borrow
+) {
+
+    if (
+        !isActiveBorrow(
+            borrow
+        )
+    ) {
+        return false;
+    }
+
+    if (!borrow.dueDate) {
+        return false;
+    }
+
+    const due =
+        new Date(
+            borrow.dueDate
+        );
+
+    if (
+        Number.isNaN(
+            due.getTime()
+        )
+    ) {
+        return false;
+    }
+
+    return (
+        due <
+        new Date()
+    );
+
+}
+
+
+/* =========================================================
+   STUDENT BORROW COUNT
+   ========================================================= */
+
+function getStudentBorrows(
+    studentId
+) {
+
+    return allBorrows.filter(
+        function (borrow) {
+
+            return (
+                String(
+                    getBorrowStudentId(
+                        borrow
+                    )
+                ) ===
+                String(studentId)
+            );
+
+        }
+    );
+
+}
+
+
+function getActiveBorrowCount(
+    studentId
+) {
+
+    return getStudentBorrows(
+        studentId
+    ).filter(
+        isActiveBorrow
+    ).length;
+
+}
+
+
+function getOverdueBorrowCount(
+    studentId
+) {
+
+    return getStudentBorrows(
+        studentId
+    ).filter(
+        isOverdue
+    ).length;
+
+}
+
+
+/* =========================================================
+   LOAD STUDENTS
+   ========================================================= */
+
+async function loadStudents() {
+
+    const tableBody =
+        document.getElementById(
+            "studentsTableBody"
+        );
+
+    if (!tableBody) {
+        return;
+    }
+
+
+    tableBody.innerHTML = `
+        <tr>
+            <td colspan="7">
+
+                <div class="students-empty">
+
+                    <div class="students-empty-icon">
+                        ⏳
+                    </div>
+
+                    <strong>
+                        Loading students...
+                    </strong>
+
+                    <p>
+                        Getting student information from the library database.
+                    </p>
+
+                </div>
+
+            </td>
+        </tr>
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/students`,
+                {
+                    headers: {
+                        ...getAuthHeaders()
+                    }
+                }
+            );
+
+
+        if (!response.ok) {
+
+            let message =
+                `Request failed (${response.status})`;
+
+            try {
+
+                const data =
+                    await response.json();
+
+                message =
+                    data.message ||
+                    message;
+
+            } catch (error) {
+                /* ignore */
+            }
+
+            throw new Error(
+                message
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        allStudents =
+            Array.isArray(data)
+                ? data
+                : [];
+
+
+        renderStudents();
+
+
+    } catch (error) {
+
+        console.error(
+            "Load students error:",
+            error
+        );
+
+
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="7">
+
+                    <div class="students-empty">
+
+                        <div class="students-empty-icon">
+                            ⚠️
+                        </div>
+
+                        <strong>
+                            Unable to load students.
+                        </strong>
+
+                        <p>
+                            ${escapeHTML(
+                                error.message
+                            )}
+                        </p>
+
+                    </div>
+
+                </td>
+            </tr>
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD BORROW RECORDS
+   ========================================================= */
+
+async function loadBorrows() {
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/borrow`,
+                {
+                    headers: {
+                        ...getAuthHeaders()
+                    }
+                }
+            );
+
+
+        if (!response.ok) {
+            throw new Error(
+                `Borrow request failed (${response.status})`
+            );
+        }
+
+
+        const data =
+            await response.json();
+
+
+        allBorrows =
+            Array.isArray(data)
+                ? data
+                : [];
+
+
+    } catch (error) {
+
+        console.error(
+            "Load borrow records error:",
+            error
+        );
+
+        allBorrows = [];
+
+    }
+
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+function studentMatchesSearch(
+    student,
+    query
+) {
+
+    if (!query) {
+        return true;
+    }
+
+
+    const searchable = [
+
+        student.studentId,
+
+        student.name,
+
+        student.email,
+
+        student.course
+
+    ]
+        .map(
+            value =>
+                String(
+                    value ?? ""
+                ).toLowerCase()
+        )
+        .join(" ");
+
+
+    return searchable.includes(
+        query
+    );
+
+}
+
+
+/* =========================================================
+   RENDER STUDENTS
+   ========================================================= */
+
+function renderStudents() {
+
+    const tableBody =
+        document.getElementById(
+            "studentsTableBody"
+        );
+
+    const search =
+        document.getElementById(
+            "studentSearch"
+        );
+
+
+    if (!tableBody) {
+        return;
+    }
+
+
+    const query =
+        String(
+            search?.value || ""
+        )
+            .trim()
+            .toLowerCase();
+
+
+    const filteredStudents =
+        allStudents.filter(
+            student =>
+                studentMatchesSearch(
+                    student,
+                    query
+                )
+        );
+
+
+    const countElement =
+        document.getElementById(
+            "studentsCountText"
+        );
+
+
+    if (countElement) {
+
+        countElement.textContent =
+            `${filteredStudents.length} student${
+                filteredStudents.length === 1
+                    ? ""
+                    : "s"
+            }`;
+
+    }
+
+
+    if (
+        filteredStudents.length ===
+        0
+    ) {
+
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="7">
+
+                    <div class="students-empty">
+
+                        <div class="students-empty-icon">
+                            👥
+                        </div>
+
+                        <strong>
+                            No students found.
+                        </strong>
+
+                        <p>
+                            Try a different search.
+                        </p>
+
+                    </div>
+
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    tableBody.innerHTML =
+        filteredStudents
+            .map(
+                function (student) {
+
+                    const studentId =
+                        student.studentId ||
+                        student._id ||
+                        student.id ||
+                        "";
+
+                    const name =
+                        student.name ||
+                        "Unnamed Student";
+
+                    const email =
+                        student.email ||
+                        "—";
+
+                    const course =
+                        student.course ||
+                        "Not provided";
+
+
+                    const activeCount =
+                        getActiveBorrowCount(
+                            studentId
+                        );
+
+
+                    const overdueCount =
+                        getOverdueBorrowCount(
+                            studentId
+                        );
+
+
+                    let statusHTML;
+
+
+                    if (
+                        overdueCount > 0
+                    ) {
+
+                        statusHTML = `
+                            <span
+                                class="student-status"
+                                style="
+                                    background:#fff1f2;
+                                    color:#be123c;
+                                "
+                            >
+                                ● Overdue
+                            </span>
+                        `;
+
+                    } else if (
+                        activeCount > 0
+                    ) {
+
+                        statusHTML = `
+                            <span class="student-status borrowing">
+                                ● Borrowing
+                            </span>
+                        `;
+
+                    } else {
+
+                        statusHTML = `
+                            <span class="student-status active">
+                                ● Active
+                            </span>
+                        `;
+
+                    }
+
+
+                    return `
+
+                        <tr>
+
+                            <td>
+
+                                <span class="student-id">
+                                    ${escapeHTML(
+                                        studentId
+                                    )}
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <div class="student-name-cell">
+
+                                    <div class="student-avatar">
+                                        ${escapeHTML(
+                                            getInitials(
+                                                name
+                                            )
+                                        )}
+                                    </div>
+
+                                    <div class="student-name-info">
+
+                                        <strong>
+                                            ${escapeHTML(
+                                                name
+                                            )}
+                                        </strong>
+
+                                        <span>
+                                            Library Student
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+                                ${escapeHTML(
+                                    email
+                                )}
+                            </td>
+
+
+                            <td>
+
+                                <span class="course-badge">
+                                    ${escapeHTML(
+                                        course
+                                    )}
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <span
+                                    class="borrowed-count ${
+                                        activeCount === 0
+                                            ? "zero"
+                                            : ""
+                                    }"
+                                >
+                                    ${activeCount}
+                                </span>
+
+                            </td>
+
+
+                            <td>
+                                ${statusHTML}
+                            </td>
+
+
+                            <td>
+
+                                <button
+                                    type="button"
+                                    class="student-action-btn"
+                                    data-view-student="${escapeHTML(
+                                        studentId
+                                    )}"
+                                >
+                                    View Details
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+
+    tableBody
+        .querySelectorAll(
+            "[data-view-student]"
+        )
+        .forEach(
+            function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        openStudentDetails(
+                            button.dataset.viewStudent
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   UPDATE STATISTICS
+   ========================================================= */
+
+function updateStatistics() {
+
+    const totalStudents =
+        allStudents.length;
+
+
+    const activeBorrowRecords =
+        allBorrows.filter(
+            isActiveBorrow
+        );
+
+
+    const studentsBorrowing =
+        new Set(
+            activeBorrowRecords.map(
+                borrow =>
+                    String(
+                        getBorrowStudentId(
+                            borrow
+                        )
+                    )
+            )
+        ).size;
+
+
+    const overdueStudentIds =
+        new Set(
+            allBorrows
+                .filter(
+                    isOverdue
+                )
+                .map(
+                    borrow =>
+                        String(
+                            getBorrowStudentId(
+                                borrow
+                            )
+                        )
+                )
+        );
+
+
+    const totalElement =
+        document.getElementById(
+            "totalStudents"
+        );
+
+    const borrowingElement =
+        document.getElementById(
+            "studentsBorrowing"
+        );
+
+    const loansElement =
+        document.getElementById(
+            "activeLoans"
+        );
+
+    const overdueElement =
+        document.getElementById(
+            "overdueStudents"
+        );
+
+
+    if (totalElement) {
+        totalElement.textContent =
+            totalStudents;
+    }
+
+
+    if (borrowingElement) {
+        borrowingElement.textContent =
+            studentsBorrowing;
+    }
+
+
+    if (loansElement) {
+        loansElement.textContent =
+            activeBorrowRecords.length;
+    }
+
+
+    if (overdueElement) {
+        overdueElement.textContent =
+            overdueStudentIds.size;
+    }
+
+}
+
+
+/* =========================================================
+   STUDENT DETAILS
+   ========================================================= */
+
+function openStudentDetails(
+    studentId
+) {
+
+    const student =
+        allStudents.find(
+            item =>
+                String(
+                    item.studentId ||
+                    item._id ||
+                    item.id ||
+                    ""
+                ) ===
+                String(studentId)
+        );
+
+
+    if (!student) {
+        return;
+    }
+
+
+    const modal =
+        document.getElementById(
+            "studentDetailsModal"
+        );
+
+    const body =
+        document.getElementById(
+            "studentDetailsBody"
+        );
+
+
+    if (
+        !modal ||
+        !body
+    ) {
+        return;
+    }
+
+
+    const name =
+        student.name ||
+        "Unnamed Student";
+
+    const email =
+        student.email ||
+        "—";
+
+    const course =
+        student.course ||
+        "Not provided";
+
+    const id =
+        student.studentId ||
+        student._id ||
+        student.id ||
+        "—";
+
+
+    const records =
+        getStudentBorrows(
+            id
+        );
+
+
+    const activeRecords =
+        records.filter(
+            isActiveBorrow
+        );
+
+
+    body.innerHTML = `
+
+        <div class="student-detail-head">
+
+            <div class="student-detail-avatar">
+                ${escapeHTML(
+                    getInitials(
+                        name
+                    )
+                )}
+            </div>
+
+            <div>
+
+                <h3>
+                    ${escapeHTML(
+                        name
+                    )}
+                </h3>
+
+                <p>
+                    ${escapeHTML(
+                        id
+                    )}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="student-detail-grid">
+
+
+            <div class="student-detail-item">
+
+                <span class="student-detail-label">
+                    Student ID
+                </span>
+
+                <span class="student-detail-value">
+                    ${escapeHTML(
+                        id
+                    )}
+                </span>
+
+            </div>
+
+
+            <div class="student-detail-item">
+
+                <span class="student-detail-label">
+                    Course
+                </span>
+
+                <span class="student-detail-value">
+                    ${escapeHTML(
+                        course
+                    )}
+                </span>
+
+            </div>
+
+
+            <div class="student-detail-item">
+
+                <span class="student-detail-label">
+                    Email
+                </span>
+
+                <span class="student-detail-value">
+                    ${escapeHTML(
+                        email
+                    )}
+                </span>
+
+            </div>
+
+
+            <div class="student-detail-item">
+
+                <span class="student-detail-label">
+                    Currently Borrowed
+                </span>
+
+                <span class="student-detail-value">
+                    ${activeRecords.length}
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="student-borrow-section">
+
+            <h4>
+                Current Borrowing
+            </h4>
+
+
+            <div class="student-borrow-list">
+
+                ${
+                    activeRecords.length
+                        ? activeRecords
+                            .map(
+                                function (
+                                    borrow
+                                ) {
+
+                                    const bookId =
+                                        borrow.bookId &&
+                                        typeof borrow.bookId ===
+                                        "object"
+                                            ? (
+                                                borrow.bookId.isbn ||
+                                                borrow.bookId._id ||
+                                                borrow.bookId.id ||
+                                                "Unknown Book"
+                                            )
+                                            : (
+                                                borrow.bookId ||
+                                                "Unknown Book"
+                                            );
+
+
+                                    const overdue =
+                                        isOverdue(
+                                            borrow
+                                        );
+
+
+                                    return `
+
+                                        <div class="student-borrow-item">
+
+                                            <div class="student-borrow-title">
+
+                                                <strong>
+                                                    ${escapeHTML(
+                                                        bookId
+                                                    )}
+                                                </strong>
+
+                                                <span>
+                                                    Borrowed:
+                                                    ${escapeHTML(
+                                                        formatDate(
+                                                            borrow.borrowDate ||
+                                                            borrow.createdAt
+                                                        )
+                                                    )}
+                                                </span>
+
+                                            </div>
+
+
+                                            <div
+                                                class="student-borrow-due"
+                                                style="${
+                                                    overdue
+                                                        ? "color:#be123c;"
+                                                        : ""
+                                                }"
+                                            >
+                                                Due:
+                                                ${escapeHTML(
+                                                    formatDate(
+                                                        borrow.dueDate
+                                                    )
+                                                )}
+                                            </div>
+
+                                        </div>
+
+                                    `;
+
+                                }
+                            )
+                            .join("")
+                        : `
+                            <div class="student-no-borrow">
+                                This student currently has no borrowed books.
+                            </div>
+                        `
+                }
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    modal.classList.add(
+        "show"
+    );
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
+/* =========================================================
+   CLOSE DETAILS
+   ========================================================= */
+
+function closeStudentDetails() {
+
+    const modal =
+        document.getElementById(
+            "studentDetailsModal"
+        );
+
+
+    if (!modal) {
+        return;
+    }
+
+
+    modal.classList.remove(
+        "show"
+    );
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+/* =========================================================
+   ADD STUDENT MODAL
+   ========================================================= */
+
+function openAddStudentModal() {
+
+    const modal =
+        document.getElementById(
+            "addStudentModal"
+        );
+
+
+    if (!modal) {
+        return;
+    }
+
+
+    clearAddStudentAlert();
+
+
+    const form =
+        document.getElementById(
+            "addStudentForm"
+        );
+
+
+    if (form) {
+        form.reset();
+    }
+
+
+    modal.classList.add(
+        "show"
+    );
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
+
+    setTimeout(
+        function () {
+
+            const input =
+                document.getElementById(
+                    "studentIdInput"
+                );
+
+            if (input) {
+                input.focus();
+            }
+
+        },
+        100
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE ADD STUDENT
+   ========================================================= */
+
+function closeAddStudentModal() {
+
+    const modal =
+        document.getElementById(
+            "addStudentModal"
+        );
+
+
+    if (!modal) {
+        return;
+    }
+
+
+    modal.classList.remove(
+        "show"
+    );
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+/* =========================================================
+   ADD STUDENT
+   ========================================================= */
+
+async function addStudent(
+    event
+) {
+
+    event.preventDefault();
+
+
+    const studentId =
+        document.getElementById(
+            "studentIdInput"
+        ).value.trim();
+
+    const name =
+        document.getElementById(
+            "studentNameInput"
+        ).value.trim();
+
+    const email =
+        document.getElementById(
+            "studentEmailInput"
+        ).value.trim();
+
+    const course =
+        document.getElementById(
+            "studentCourseInput"
+        ).value.trim();
+
+
+    if (
+        !studentId ||
+        !name ||
+        !email ||
+        !course
+    ) {
+
+        showAddStudentAlert(
+            "Please fill in all student details.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const saveButton =
+        document.getElementById(
+            "saveStudentButton"
+        );
+
+
+    if (saveButton) {
+
+        saveButton.disabled =
+            true;
+
+        saveButton.textContent =
+            "Adding...";
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/students`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+
+                        ...getAuthHeaders()
+                    },
+
+                    body: JSON.stringify({
+
+                        studentId,
+
+                        name,
+
+                        email,
+
+                        course
+
+                    })
+                }
+            );
+
+
+        let data = {};
+
+        try {
+            data =
+                await response.json();
+        } catch (error) {
+            /* ignore */
+        }
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                `Unable to add student (${response.status})`
+            );
+
+        }
+
+
+        showAddStudentAlert(
+            "Student added successfully.",
+            "success"
+        );
+
+
+        await loadStudents();
+
+
+        updateStatistics();
+
+
+        setTimeout(
+            function () {
+
+                closeAddStudentModal();
+
+                showAlert(
+                    `${name} was added to LibTrack.`,
+                    "success"
+                );
+
+            },
+            700
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Add student error:",
+            error
+        );
+
+
+        showAddStudentAlert(
+            error.message ||
+            "Unable to add student.",
+            "error"
+        );
+
+
+    } finally {
+
+        if (saveButton) {
+
+            saveButton.disabled =
+                false;
+
+            saveButton.textContent =
+                "Add Student";
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   INITIAL LOAD
+   ========================================================= */
+
+async function initializeStudentsPage() {
+
+    initializeSidebar();
+
+
+    const logoutLink =
+        document.getElementById(
+            "logoutLink"
+        );
+
+
+    if (logoutLink) {
+
+        logoutLink.addEventListener(
+            "click",
+            function (event) {
+
+                event.preventDefault();
+
+                logoutAdmin();
+
+            }
+        );
+
+    }
+
+
+    const searchInput =
+        document.getElementById(
+            "studentSearch"
+        );
+
+
+    if (searchInput) {
+
+        searchInput.addEventListener(
+            "input",
+            function () {
+
+                renderStudents();
+
+            }
+        );
+
+    }
+
+
+    const addButton =
+        document.getElementById(
+            "addStudentButton"
+        );
+
+
+    if (addButton) {
+
+        addButton.addEventListener(
+            "click",
+            openAddStudentModal
+        );
+
+    }
+
+
+    const closeDetailsButton =
+        document.getElementById(
+            "closeDetailsButton"
+        );
+
+
+    if (closeDetailsButton) {
+
+        closeDetailsButton.addEventListener(
+            "click",
+            closeStudentDetails
+        );
+
+    }
+
+
+    const closeAddButton =
+        document.getElementById(
+            "closeAddStudentButton"
+        );
+
+
+    if (closeAddButton) {
+
+        closeAddButton.addEventListener(
+            "click",
+            closeAddStudentModal
+        );
+
+    }
+
+
+    const cancelAddButton =
+        document.getElementById(
+            "cancelAddStudentButton"
+        );
+
+
+    if (cancelAddButton) {
+
+        cancelAddButton.addEventListener(
+            "click",
+            closeAddStudentModal
+        );
+
+    }
+
+
+    const addForm =
+        document.getElementById(
+            "addStudentForm"
+        );
+
+
+    if (addForm) {
+
+        addForm.addEventListener(
+            "submit",
+            addStudent
+        );
+
+    }
+
+
+    const detailsModal =
+        document.getElementById(
+            "studentDetailsModal"
+        );
+
+
+    if (detailsModal) {
+
+        detailsModal.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target ===
+                    detailsModal
+                ) {
+
+                    closeStudentDetails();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    const addModal =
+        document.getElementById(
+            "addStudentModal"
+        );
+
+
+    if (addModal) {
+
+        addModal.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target ===
+                    addModal
+                ) {
+
+                    closeAddStudentModal();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key ===
+                "Escape"
+            ) {
+
+                closeStudentDetails();
+
+                closeAddStudentModal();
+
+            }
+
+        }
+    );
+
+
+    /* Load both datasets */
+
+    await Promise.all([
+        loadStudents(),
+        loadBorrows()
+    ]);
+
+
+    updateStatistics();
+
+    renderStudents();
+
+
+    /* Admin identity */
+
+    const adminName =
+        currentUser?.username ||
+        currentUser?.name ||
+        "Admin";
+
+
+    const initials =
+        getInitials(
+            adminName
+        );
+
+
+    const avatar =
+        document.getElementById(
+            "topbarAvatar"
+        );
+
+
+    if (avatar) {
+        avatar.textContent =
+            initials;
+    }
+
+}
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        initializeStudentsPage()
+            .catch(
+                function (error) {
+
+                    console.error(
+                        "Students page initialization error:",
+                        error
+                    );
+
+                }
+            );
+
+    }
+);
+
+</script>
+
+</body>
+</html>

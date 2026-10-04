@@ -1,0 +1,3074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Books - LibTrack</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* =====================================================
+           ADMIN BOOKS PAGE
+           ===================================================== */
+
+        .admin-books-page {
+            min-height: 100vh;
+        }
+
+        .admin-books-page .page-header {
+            margin-bottom: 24px;
+        }
+
+        .admin-books-page .page-header p {
+            margin-top: 6px;
+        }
+
+        /* =====================================================
+           TOOLBAR
+           ===================================================== */
+
+        .books-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .books-search {
+            position: relative;
+            flex: 1 1 360px;
+        }
+
+        .books-search span {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 17px;
+            color: #7b8da3;
+            pointer-events: none;
+        }
+
+        .books-search input {
+            width: 100%;
+            min-height: 46px;
+            padding: 0 16px 0 43px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #fff;
+            color: var(--text);
+            outline: none;
+            font: inherit;
+            box-sizing: border-box;
+        }
+
+        .books-search input:focus,
+        .admin-book-form input:focus,
+        .admin-book-form select:focus {
+            border-color: #7aa9ec;
+            box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.09);
+        }
+
+        .book-filters {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .book-filter {
+            border: 1px solid var(--border);
+            background: #fff;
+            color: #52667d;
+            border-radius: 9px;
+            padding: 10px 13px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .book-filter:hover {
+            border-color: #a9bfd9;
+        }
+
+        .book-filter.active {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: #fff;
+        }
+
+        /* =====================================================
+           COUNT
+           ===================================================== */
+
+        .book-count-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin: 0 0 12px;
+            color: var(--text-light);
+            font-size: 13px;
+        }
+
+        /* =====================================================
+           TABLE
+           ===================================================== */
+
+        .book-table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: #fff;
+        }
+
+        .admin-book-table {
+            width: 100%;
+            min-width: 930px;
+            border-collapse: collapse;
+        }
+
+        .admin-book-table th {
+            background: #f7f9fc;
+            color: #60748b;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            text-align: left;
+            padding: 13px 14px;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .admin-book-table td {
+            padding: 14px;
+            border-bottom: 1px solid #edf1f6;
+            vertical-align: middle;
+            color: var(--text);
+            font-size: 13px;
+        }
+
+        .admin-book-table tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .admin-book-table tbody tr:hover {
+            background: #fbfcfe;
+        }
+
+        .admin-book-main {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 250px;
+        }
+
+        .admin-book-cover {
+            width: 48px;
+            height: 62px;
+            flex: 0 0 48px;
+            border-radius: 7px;
+            border: 1px solid #dfe7f0;
+            background: #f5f7fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            font-size: 22px;
+        }
+
+        .admin-book-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .admin-book-title {
+            font-weight: 800;
+            line-height: 1.35;
+        }
+
+        .admin-book-author {
+            color: var(--text-light);
+            margin-top: 3px;
+            line-height: 1.35;
+        }
+
+        .isbn-text {
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 12px;
+            color: #50657c;
+        }
+
+        .location-text {
+            line-height: 1.55;
+        }
+
+        .location-text strong {
+            color: var(--text);
+        }
+
+        .availability-box {
+            min-width: 105px;
+        }
+
+        .availability-number {
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .availability-sub {
+            margin-top: 3px;
+            color: var(--text-light);
+            font-size: 11px;
+        }
+
+        .availability-badge {
+            display: inline-flex;
+            margin-top: 6px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .availability-badge.available {
+            background: var(--green-light);
+            color: var(--green);
+        }
+
+        .availability-badge.issued {
+            background: var(--red-light);
+            color: var(--red);
+        }
+
+        .availability-badge.partial {
+            background: var(--orange-light);
+            color: var(--orange);
+        }
+
+        /* =====================================================
+           ACTION BUTTONS
+           ===================================================== */
+
+        .book-actions {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            white-space: nowrap;
+        }
+
+        .book-action {
+            border: 1px solid var(--border);
+            background: #fff;
+            color: #3f5870;
+            border-radius: 8px;
+            min-height: 34px;
+            padding: 0 10px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .book-action:hover {
+            background: #f7f9fc;
+        }
+
+        .book-action.edit {
+            color: var(--blue);
+            border-color: #bfd4f5;
+        }
+
+        .book-action.delete {
+            color: #b42342;
+            border-color: #f1c6d1;
+        }
+
+        /* =====================================================
+           EMPTY
+           ===================================================== */
+
+        .book-empty {
+            padding: 55px 25px;
+            text-align: center;
+            color: var(--text-light);
+        }
+
+        .book-empty-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            margin: 0 auto 13px;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+        }
+
+        /* =====================================================
+           MODAL
+           ===================================================== */
+
+        .admin-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 22px;
+        }
+
+        .admin-modal.show {
+            display: flex;
+        }
+
+        .admin-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(7, 31, 58, 0.48);
+        }
+
+        .admin-modal-card {
+            position: relative;
+            z-index: 1;
+            width: min(760px, 100%);
+            max-height: calc(100vh - 44px);
+            overflow-y: auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 24px 70px rgba(16, 42, 67, 0.2);
+        }
+
+        .admin-modal-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 21px 22px 17px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .admin-modal-header h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .admin-modal-header p {
+            margin: 5px 0 0;
+            color: var(--text-light);
+            font-size: 13px;
+        }
+
+        .modal-close {
+            width: 35px;
+            height: 35px;
+            border: 1px solid var(--border);
+            background: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #53687d;
+            font-size: 19px;
+            flex: 0 0 35px;
+        }
+
+        .admin-modal-body {
+            padding: 21px 22px;
+        }
+
+        .admin-book-form {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .form-field.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-field label {
+            display: block;
+            margin-bottom: 7px;
+            color: #40566d;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .form-field label span {
+            color: #9aa9b9;
+            font-weight: 600;
+        }
+
+        .admin-book-form input,
+        .admin-book-form select {
+            width: 100%;
+            min-height: 44px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 0 12px;
+            color: var(--text);
+            background: #fff;
+            outline: none;
+            font: inherit;
+            box-sizing: border-box;
+        }
+
+        /* =====================================================
+           COVER UPLOAD
+           ===================================================== */
+
+        .cover-upload-box {
+            border: 1px dashed #b7c9dc;
+            border-radius: 11px;
+            background: #fafcff;
+            padding: 14px;
+        }
+
+        .cover-upload-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cover-preview {
+            width: 74px;
+            height: 94px;
+            flex: 0 0 74px;
+            border: 1px solid #dbe5ef;
+            border-radius: 8px;
+            background: #f2f5f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            font-size: 27px;
+        }
+
+        .cover-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .cover-upload-info {
+            flex: 1;
+        }
+
+        .cover-upload-info strong {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .cover-upload-info small {
+            display: block;
+            color: var(--text-light);
+            line-height: 1.45;
+        }
+
+        .cover-file-input {
+            margin-top: 9px;
+            min-height: auto !important;
+            border: 0 !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+            font-size: 12px !important;
+        }
+
+        .edit-note {
+            margin-top: 12px;
+            padding: 10px 12px;
+            border-radius: 9px;
+            background: #f7f9fc;
+            color: #65788d;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        /* =====================================================
+           FOOTER
+           ===================================================== */
+
+        .admin-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 9px;
+            padding: 16px 22px 21px;
+            border-top: 1px solid var(--border);
+        }
+
+        .admin-btn {
+            min-height: 42px;
+            border-radius: 9px;
+            padding: 0 15px;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: #4b6177;
+            cursor: pointer;
+            font-weight: 800;
+        }
+
+        .admin-btn.primary {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: #fff;
+        }
+
+        .admin-btn.primary:hover {
+            background: var(--blue-dark);
+        }
+
+        .admin-btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        /* =====================================================
+           ALERTS
+           ===================================================== */
+
+        .admin-alert {
+            display: none;
+            margin-bottom: 16px;
+            padding: 11px 13px;
+            border-radius: 9px;
+            font-size: 13px;
+            line-height: 1.45;
+        }
+
+        .admin-alert.show {
+            display: block;
+        }
+
+        .admin-alert.error {
+            background: #fff1f2;
+            color: #9f1239;
+            border: 1px solid #fecdd3;
+        }
+
+        .admin-alert.success {
+            background: #ecfdf3;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+           ===================================================== */
+
+        @media (max-width: 760px) {
+
+            .admin-book-form {
+                grid-template-columns: 1fr;
+            }
+
+            .form-field.full {
+                grid-column: auto;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .books-toolbar {
+                align-items: stretch;
+            }
+
+            .books-search {
+                flex-basis: 100%;
+            }
+
+            .book-filters {
+                width: 100%;
+            }
+
+            .book-filter {
+                flex: 1;
+            }
+
+            .admin-modal {
+                padding: 10px;
+            }
+
+            .admin-modal-card {
+                max-height: calc(100vh - 20px);
+            }
+
+            .admin-modal-header,
+            .admin-modal-body,
+            .admin-modal-footer {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .cover-upload-row {
+                align-items: flex-start;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app admin-books-page">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">📖</div>
+
+            <div class="brand-text">
+                <strong>LibTrack</strong>
+                <span>College Library</span>
+            </div>
+
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <div class="menu-label">
+                Admin
+            </div>
+
+            <a href="admin.html" class="menu-item">
+                <span class="menu-icon">▦</span>
+                <span class="menu-text">Dashboard</span>
+            </a>
+
+            <a href="admin-books.html" class="menu-item active">
+                <span class="menu-icon">📚</span>
+                <span class="menu-text">Manage Books</span>
+            </a>
+
+            <a href="admin-borrow.html" class="menu-item">
+                <span class="menu-icon">↔</span>
+                <span class="menu-text">Borrow &amp; Return</span>
+            </a>
+
+            <a href="admin-students.html" class="menu-item">
+                <span class="menu-icon">♙</span>
+                <span class="menu-text">Students</span>
+            </a>
+
+            <div class="menu-label">
+                Account
+            </div>
+
+            <a href="profile.html" class="menu-item">
+                <span class="menu-icon">👤</span>
+                <span class="menu-text">Account</span>
+            </a>
+
+            <a href="#" class="menu-item" id="logoutLink">
+                <span class="menu-icon">↪</span>
+                <span class="menu-text">Logout</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-user">
+
+            <div class="sidebar-user-box">
+
+                <div class="user-avatar" id="sidebarAvatar">
+                    A
+                </div>
+
+                <div class="user-info">
+                    <strong id="sidebarUserName">Admin</strong>
+                    <span>Administrator</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main-content" id="mainContent">
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    class="sidebar-toggle"
+                    id="sidebarToggle"
+                    type="button"
+                    aria-label="Toggle sidebar"
+                >
+                    ☰
+                </button>
+
+                <div class="topbar-title">
+
+                    <h1>Manage Books</h1>
+
+                    <p>
+                        Add, update, organize, and remove library books.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="topbar-user">
+
+                <div
+                    class="topbar-avatar"
+                    id="topbarAvatar"
+                >
+                    A
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <div class="page-container">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h2>Book Inventory</h2>
+
+                    <p>
+                        Keep the LibTrack catalog accurate with book details and cover images.
+                    </p>
+
+                </div>
+
+                <button
+                    class="btn btn-primary"
+                    id="addBookButton"
+                    type="button"
+                >
+                    ＋ Add Book
+                </button>
+
+            </div>
+
+
+            <div
+                id="pageAlert"
+                class="admin-alert"
+            ></div>
+
+
+            <section class="card">
+
+                <div class="card-body">
+
+                    <div class="books-toolbar">
+
+                        <div class="books-search">
+
+                            <span>⌕</span>
+
+                            <input
+                                type="search"
+                                id="bookSearch"
+                                placeholder="Search title, author, ISBN, category, rack or shelf..."
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+
+                        <div class="book-filters">
+
+                            <button
+                                type="button"
+                                class="book-filter active"
+                                data-filter="all"
+                            >
+                                All Books
+                            </button>
+
+                            <button
+                                type="button"
+                                class="book-filter"
+                                data-filter="available"
+                            >
+                                Available
+                            </button>
+
+                            <button
+                                type="button"
+                                class="book-filter"
+                                data-filter="issued"
+                            >
+                                Fully Issued
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="book-count-line">
+
+                        <span id="bookCountText">
+                            Loading books...
+                        </span>
+
+                        <span>
+                            MongoDB inventory
+                        </span>
+
+                    </div>
+
+
+                    <div class="book-table-wrap">
+
+                        <table class="admin-book-table">
+
+                            <thead>
+
+                                <tr>
+                                    <th>Book</th>
+                                    <th>ISBN</th>
+                                    <th>Category</th>
+                                    <th>Location</th>
+                                    <th>Copies</th>
+                                    <th>Actions</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="booksTableBody">
+
+                                <tr>
+
+                                    <td colspan="6">
+
+                                        <div class="book-empty">
+                                            Loading book inventory...
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- =====================================================
+     ADD / EDIT MODAL
+     ===================================================== -->
+
+<div
+    class="admin-modal"
+    id="bookModal"
+    aria-hidden="true"
+>
+
+    <div
+        class="admin-modal-backdrop"
+        id="modalBackdrop"
+    ></div>
+
+
+    <div
+        class="admin-modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitle"
+    >
+
+        <div class="admin-modal-header">
+
+            <div>
+
+                <h2 id="modalTitle">
+                    Add Book
+                </h2>
+
+                <p id="modalSubtitle">
+                    Create a new book record in the LibTrack catalog.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="modal-close"
+                id="modalCloseButton"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="bookForm">
+
+            <div class="admin-modal-body">
+
+                <div
+                    id="modalAlert"
+                    class="admin-alert"
+                ></div>
+
+
+                <div class="admin-book-form">
+
+                    <div class="form-field">
+
+                        <label for="bookTitle">
+                            Book Title
+                        </label>
+
+                        <input
+                            id="bookTitle"
+                            name="title"
+                            type="text"
+                            required
+                            placeholder="e.g. Database System Concepts"
+                        >
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label for="bookAuthor">
+                            Author
+                        </label>
+
+                        <input
+                            id="bookAuthor"
+                            name="author"
+                            type="text"
+                            required
+                            placeholder="e.g. Abraham Silberschatz"
+                        >
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label for="bookISBN">
+                            ISBN
+                        </label>
+
+                        <input
+                            id="bookISBN"
+                            name="isbn"
+                            type="text"
+                            required
+                            placeholder="e.g. DBMS004"
+                        >
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label for="bookCategory">
+                            Category
+                        </label>
+
+                        <input
+                            id="bookCategory"
+                            name="category"
+                            type="text"
+                            placeholder="e.g. DBMS"
+                        >
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label for="bookRack">
+                            Rack
+                        </label>
+
+                        <input
+                            id="bookRack"
+                            name="rack"
+                            type="text"
+                            required
+                            placeholder="e.g. B"
+                        >
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label for="bookShelf">
+                            Shelf
+                        </label>
+
+                        <input
+                            id="bookShelf"
+                            name="shelf"
+                            type="text"
+                            required
+                            placeholder="e.g. 14"
+                        >
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label for="bookCopies">
+                            Total Copies
+                        </label>
+
+                        <input
+                            id="bookCopies"
+                            name="totalCopies"
+                            type="number"
+                            min="1"
+                            step="1"
+                            required
+                            placeholder="e.g. 5"
+                        >
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label>
+                            Book Cover
+                            <span>(optional)</span>
+                        </label>
+
+
+                        <div class="cover-upload-box">
+
+                            <div class="cover-upload-row">
+
+                                <div
+                                    class="cover-preview"
+                                    id="coverPreview"
+                                >
+                                    📖
+                                </div>
+
+
+                                <div class="cover-upload-info">
+
+                                    <strong>
+                                        Upload book cover
+                                    </strong>
+
+                                    <small>
+                                        JPG, PNG or WEBP · maximum 5 MB
+                                    </small>
+
+
+                                    <input
+                                        class="cover-file-input"
+                                        id="bookCover"
+                                        type="file"
+                                        accept="image/jpeg,image/png,image/webp"
+                                    >
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="edit-note"
+                    id="editNote"
+                    style="display:none;"
+                >
+                    Available copies are calculated automatically so active borrowed copies are never lost during an update.
+                </div>
+
+            </div>
+
+
+            <div class="admin-modal-footer">
+
+                <button
+                    type="button"
+                    class="admin-btn"
+                    id="cancelButton"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="admin-btn primary"
+                    id="saveBookButton"
+                >
+                    Save Book
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script src="auth.js"></script>
+
+<script>
+
+/* =====================================================
+   CONFIG
+   ===================================================== */
+
+const API =
+    typeof API_URL !== "undefined"
+        ? API_URL
+        : "http://127.0.0.1:5000";
+
+
+let allBooks = [];
+let activeFilter = "all";
+let editingISBN = null;
+
+
+/* =====================================================
+   AUTH
+   ===================================================== */
+
+function readCurrentUser() {
+
+    if (typeof getCurrentUser === "function") {
+
+        try {
+            return getCurrentUser();
+        } catch (error) {
+            console.warn("getCurrentUser failed:", error);
+        }
+
+    }
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem("user") || "null"
+        );
+
+    } catch (error) {
+
+        return null;
+
+    }
+
+}
+
+
+function getToken() {
+
+    return (
+        localStorage.getItem("token") ||
+        localStorage.getItem("authToken") ||
+        ""
+    );
+
+}
+
+
+function authHeaders() {
+
+    const token = getToken();
+
+    if (!token) {
+        return {};
+    }
+
+    return {
+        Authorization: `Bearer ${token}`
+    };
+
+}
+
+
+const currentUser = readCurrentUser();
+
+
+if (
+    !currentUser ||
+    String(currentUser.role).toLowerCase() !== "admin"
+) {
+
+    window.location.href = "login.html";
+
+    throw new Error(
+        "Admin authentication required."
+    );
+
+}
+
+
+function logoutAdmin() {
+
+    if (typeof logout === "function") {
+
+        logout();
+        return;
+
+    }
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("user");
+    localStorage.removeItem("student");
+
+    window.location.href = "login.html";
+
+}
+
+
+/* =====================================================
+   UI HELPERS
+   ===================================================== */
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+function getInitials(name) {
+
+    if (!name) {
+        return "A";
+    }
+
+    const parts =
+        String(name)
+            .trim()
+            .split(/\s+/);
+
+    if (parts.length === 1) {
+
+        return parts[0]
+            .charAt(0)
+            .toUpperCase();
+
+    }
+
+    return (
+        parts[0].charAt(0) +
+        parts[parts.length - 1].charAt(0)
+    ).toUpperCase();
+
+}
+
+
+function showPageAlert(
+    message,
+    type = "success"
+) {
+
+    const alertBox =
+        document.getElementById("pageAlert");
+
+    if (!alertBox) {
+        return;
+    }
+
+    alertBox.className =
+        `admin-alert show ${type}`;
+
+    alertBox.textContent =
+        message;
+
+    window.clearTimeout(
+        showPageAlert.timer
+    );
+
+    showPageAlert.timer =
+        window.setTimeout(() => {
+
+            alertBox.className =
+                "admin-alert";
+
+            alertBox.textContent =
+                "";
+
+        }, 4500);
+
+}
+
+
+function showModalAlert(
+    message,
+    type = "error"
+) {
+
+    const alertBox =
+        document.getElementById("modalAlert");
+
+    if (!alertBox) {
+        return;
+    }
+
+    alertBox.className =
+        `admin-alert show ${type}`;
+
+    alertBox.textContent =
+        message;
+
+}
+
+
+function clearModalAlert() {
+
+    const alertBox =
+        document.getElementById("modalAlert");
+
+    if (!alertBox) {
+        return;
+    }
+
+    alertBox.className =
+        "admin-alert";
+
+    alertBox.textContent =
+        "";
+
+}
+
+
+/* =====================================================
+   COVER URL
+   ===================================================== */
+
+function getCoverUrl(book) {
+
+    const value =
+        book?.coverImage ||
+        book?.cover ||
+        book?.image ||
+        book?.imageUrl ||
+        "";
+
+    if (!value) {
+        return "";
+    }
+
+    const cleanValue =
+        String(value).trim();
+
+    if (!cleanValue) {
+        return "";
+    }
+
+    if (
+        /^https?:\/\//i.test(cleanValue)
+    ) {
+
+        return cleanValue;
+
+    }
+
+    if (
+        cleanValue.startsWith("/")
+    ) {
+
+        return `${API}${cleanValue}`;
+
+    }
+
+    return `${API}/uploads/${cleanValue}`;
+
+}
+
+
+/* =====================================================
+   COVER HTML
+   ===================================================== */
+
+function coverHTML(
+    book,
+    className = "admin-book-cover"
+) {
+
+    const coverUrl =
+        getCoverUrl(book);
+
+    if (!coverUrl) {
+
+        return `
+            <div class="${className}">
+                📖
+            </div>
+        `;
+
+    }
+
+    const safeURL =
+        escapeHTML(coverUrl);
+
+    const safeTitle =
+        escapeHTML(
+            book.title || "Book cover"
+        );
+
+    return `
+        <div
+            class="${className}"
+            data-cover-box="true"
+        >
+
+            <img
+                src="${safeURL}"
+                alt="${safeTitle}"
+                loading="lazy"
+                decoding="async"
+            >
+
+        </div>
+    `;
+
+}
+
+
+/* =====================================================
+   AVAILABILITY
+   ===================================================== */
+
+function getAvailability(book) {
+
+    const total =
+        Number(book.totalCopies || 0);
+
+    const available =
+        Number(book.availableCopies || 0);
+
+    const borrowed =
+        Math.max(
+            total - available,
+            0
+        );
+
+    if (available <= 0) {
+
+        return {
+            className: "issued",
+            label: "Fully Issued",
+            total,
+            available,
+            borrowed
+        };
+
+    }
+
+    if (available < total) {
+
+        return {
+            className: "partial",
+            label: "Partly Issued",
+            total,
+            available,
+            borrowed
+        };
+
+    }
+
+    return {
+        className: "available",
+        label: "Available",
+        total,
+        available,
+        borrowed
+    };
+
+}
+
+
+/* =====================================================
+   SIDEBAR
+   ===================================================== */
+
+function initializeSidebar() {
+
+    const sidebar =
+        document.getElementById("sidebar");
+
+    const main =
+        document.getElementById("mainContent");
+
+    const toggle =
+        document.getElementById("sidebarToggle");
+
+    if (!sidebar || !toggle) {
+        return;
+    }
+
+    toggle.addEventListener(
+        "click",
+        () => {
+
+            if (window.innerWidth <= 650) {
+
+                sidebar.classList.toggle(
+                    "mobile-open"
+                );
+
+                return;
+
+            }
+
+            sidebar.classList.toggle(
+                "collapsed"
+            );
+
+            if (main) {
+
+                main.classList.toggle(
+                    "sidebar-collapsed"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   LOAD BOOKS
+   ===================================================== */
+
+async function loadBooks() {
+
+    const tableBody =
+        document.getElementById(
+            "booksTableBody"
+        );
+
+    tableBody.innerHTML = `
+        <tr>
+            <td colspan="6">
+                <div class="book-empty">
+                    Loading book inventory...
+                </div>
+            </td>
+        </tr>
+    `;
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/books`,
+                {
+                    headers: {
+                        ...authHeaders()
+                    }
+                }
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+                await readError(response)
+            );
+
+        }
+
+        const data =
+            await response.json();
+
+        allBooks =
+            Array.isArray(data)
+                ? data
+                : [];
+
+        renderBooks();
+
+    } catch (error) {
+
+        console.error(
+            "Load books error:",
+            error
+        );
+
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="6">
+
+                    <div class="book-empty">
+
+                        <div class="book-empty-icon">
+                            ⚠️
+                        </div>
+
+                        <strong>
+                            Unable to load book inventory.
+                        </strong>
+
+                        <div style="margin-top:6px;">
+                            ${escapeHTML(error.message)}
+                        </div>
+
+                    </div>
+
+                </td>
+            </tr>
+        `;
+
+    }
+
+}
+
+
+/* =====================================================
+   READ ERROR
+   ===================================================== */
+
+async function readError(response) {
+
+    try {
+
+        const data =
+            await response.json();
+
+        return (
+            data.message ||
+            `Request failed (${response.status})`
+        );
+
+    } catch (error) {
+
+        return `Request failed (${response.status})`;
+
+    }
+
+}
+
+
+/* =====================================================
+   SEARCH
+   ===================================================== */
+
+function matchesSearch(
+    book,
+    query
+) {
+
+    if (!query) {
+        return true;
+    }
+
+    const searchable = [
+
+        book.title,
+        book.author,
+        book.isbn,
+        book.category,
+        book.rack,
+        book.shelf
+
+    ]
+        .map(value =>
+            String(value ?? "")
+                .toLowerCase()
+        )
+        .join(" ");
+
+    return searchable.includes(query);
+
+}
+
+
+/* =====================================================
+   RENDER
+   ===================================================== */
+
+function renderBooks() {
+
+    const tableBody =
+        document.getElementById(
+            "booksTableBody"
+        );
+
+    const search =
+        document.getElementById(
+            "bookSearch"
+        );
+
+    const query =
+        String(
+            search?.value || ""
+        )
+        .trim()
+        .toLowerCase();
+
+    const filteredBooks =
+        allBooks.filter(book => {
+
+            if (
+                !matchesSearch(
+                    book,
+                    query
+                )
+            ) {
+
+                return false;
+
+            }
+
+            const available =
+                Number(
+                    book.availableCopies || 0
+                );
+
+            if (
+                activeFilter === "available"
+            ) {
+
+                return available > 0;
+
+            }
+
+            if (
+                activeFilter === "issued"
+            ) {
+
+                return available <= 0;
+
+            }
+
+            return true;
+
+        });
+
+
+    document.getElementById(
+        "bookCountText"
+    ).textContent =
+        `${filteredBooks.length} book title${
+            filteredBooks.length === 1
+                ? ""
+                : "s"
+        } shown`;
+
+
+    if (!filteredBooks.length) {
+
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="6">
+
+                    <div class="book-empty">
+
+                        <div class="book-empty-icon">
+                            📚
+                        </div>
+
+                        <strong>
+                            No books found.
+                        </strong>
+
+                        <div style="margin-top:6px;">
+                            Try a different search or filter.
+                        </div>
+
+                    </div>
+
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    tableBody.innerHTML =
+        filteredBooks
+            .map(book => {
+
+                const availability =
+                    getAvailability(book);
+
+                return `
+                    <tr>
+
+                        <td>
+
+                            <div class="admin-book-main">
+
+                                ${coverHTML(book)}
+
+                                <div>
+
+                                    <div class="admin-book-title">
+                                        ${escapeHTML(
+                                            book.title ||
+                                            "Untitled Book"
+                                        )}
+                                    </div>
+
+                                    <div class="admin-book-author">
+                                        ${escapeHTML(
+                                            book.author ||
+                                            "Unknown Author"
+                                        )}
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="isbn-text">
+                                ${escapeHTML(
+                                    book.isbn || "—"
+                                )}
+                            </span>
+
+                        </td>
+
+
+                        <td>
+                            ${escapeHTML(
+                                book.category ||
+                                "General"
+                            )}
+                        </td>
+
+
+                        <td>
+
+                            <div class="location-text">
+
+                                <strong>
+                                    Rack ${escapeHTML(
+                                        book.rack || "—"
+                                    )}
+                                </strong>
+
+                                <br>
+
+                                Shelf ${escapeHTML(
+                                    book.shelf || "—"
+                                )}
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="availability-box">
+
+                                <div class="availability-number">
+                                    ${availability.available}
+                                    /
+                                    ${availability.total}
+                                </div>
+
+                                <div class="availability-sub">
+                                    ${availability.borrowed}
+                                    borrowed
+                                </div>
+
+                                <span
+                                    class="
+                                        availability-badge
+                                        ${availability.className}
+                                    "
+                                >
+                                    ${availability.label}
+                                </span>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="book-actions">
+
+                                <button
+                                    type="button"
+                                    class="book-action edit"
+                                    data-action="edit"
+                                    data-isbn="${escapeHTML(
+                                        book.isbn
+                                    )}"
+                                >
+                                    Edit
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="book-action delete"
+                                    data-action="delete"
+                                    data-isbn="${escapeHTML(
+                                        book.isbn
+                                    )}"
+                                >
+                                    Delete
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+                `;
+
+            })
+            .join("");
+
+
+    /*
+     * Handle image errors after the HTML has been inserted.
+     * This is more reliable than inline onerror handlers.
+     */
+
+    tableBody
+        .querySelectorAll(
+            ".admin-book-cover img"
+        )
+        .forEach(image => {
+
+            image.addEventListener(
+                "error",
+                () => {
+
+                    image.style.display =
+                        "none";
+
+                    image.parentElement.textContent =
+                        "📖";
+
+                },
+                {
+                    once: true
+                }
+            );
+
+        });
+
+}
+
+
+/* =====================================================
+   OPEN ADD
+   ===================================================== */
+
+function openAddModal() {
+
+    editingISBN = null;
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent =
+        "Add Book";
+
+    document.getElementById(
+        "modalSubtitle"
+    ).textContent =
+        "Create a new book record in the LibTrack catalog.";
+
+    document.getElementById(
+        "saveBookButton"
+    ).textContent =
+        "Save Book";
+
+    document.getElementById(
+        "editNote"
+    ).style.display =
+        "none";
+
+    document.getElementById(
+        "bookForm"
+    ).reset();
+
+    document.getElementById(
+        "bookISBN"
+    ).disabled =
+        false;
+
+    setCoverPreview("");
+
+    clearModalAlert();
+
+    openModal();
+
+}
+
+
+/* =====================================================
+   OPEN EDIT
+   ===================================================== */
+
+function openEditModal(isbn) {
+
+    const book =
+        allBooks.find(
+            item =>
+                String(item.isbn) ===
+                String(isbn)
+        );
+
+    if (!book) {
+
+        showPageAlert(
+            "Book could not be found.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    editingISBN =
+        book.isbn;
+
+    document.getElementById(
+        "modalTitle"
+    ).textContent =
+        "Update Book";
+
+    document.getElementById(
+        "modalSubtitle"
+    ).textContent =
+        "Update the catalog details or replace the book cover.";
+
+    document.getElementById(
+        "saveBookButton"
+    ).textContent =
+        "Update Book";
+
+    document.getElementById(
+        "editNote"
+    ).style.display =
+        "block";
+
+    document.getElementById(
+        "bookTitle"
+    ).value =
+        book.title || "";
+
+    document.getElementById(
+        "bookAuthor"
+    ).value =
+        book.author || "";
+
+    document.getElementById(
+        "bookISBN"
+    ).value =
+        book.isbn || "";
+
+    document.getElementById(
+        "bookCategory"
+    ).value =
+        book.category || "";
+
+    document.getElementById(
+        "bookRack"
+    ).value =
+        book.rack || "";
+
+    document.getElementById(
+        "bookShelf"
+    ).value =
+        book.shelf || "";
+
+    document.getElementById(
+        "bookCopies"
+    ).value =
+        Number(
+            book.totalCopies || 1
+        );
+
+    document.getElementById(
+        "bookCover"
+    ).value =
+        "";
+
+    document.getElementById(
+        "bookISBN"
+    ).disabled =
+        true;
+
+    setCoverPreview(
+        getCoverUrl(book)
+    );
+
+    clearModalAlert();
+
+    openModal();
+
+}
+
+
+/* =====================================================
+   MODAL
+   ===================================================== */
+
+function openModal() {
+
+    const modal =
+        document.getElementById(
+            "bookModal"
+        );
+
+    modal.classList.add("show");
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+    document.body.classList.add(
+        "modal-open"
+    );
+
+}
+
+
+function closeModal() {
+
+    const modal =
+        document.getElementById(
+            "bookModal"
+        );
+
+    modal.classList.remove(
+        "show"
+    );
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    document.body.classList.remove(
+        "modal-open"
+    );
+
+}
+
+
+/* =====================================================
+   COVER PREVIEW
+   ===================================================== */
+
+function setCoverPreview(url) {
+
+    const preview =
+        document.getElementById(
+            "coverPreview"
+        );
+
+    if (!preview) {
+        return;
+    }
+
+    if (!url) {
+
+        preview.innerHTML =
+            "📖";
+
+        return;
+
+    }
+
+    preview.innerHTML = `
+        <img
+            src="${escapeHTML(url)}"
+            alt="Book cover preview"
+        >
+    `;
+
+
+    const image =
+        preview.querySelector("img");
+
+
+    if (image) {
+
+        image.addEventListener(
+            "error",
+            () => {
+
+                image.style.display =
+                    "none";
+
+                preview.textContent =
+                    "📖";
+
+            },
+            {
+                once: true
+            }
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   FORM DATA
+   ===================================================== */
+
+function getBookFormData() {
+
+    const title =
+        document.getElementById(
+            "bookTitle"
+        ).value.trim();
+
+    const author =
+        document.getElementById(
+            "bookAuthor"
+        ).value.trim();
+
+    const isbn =
+        editingISBN ||
+        document.getElementById(
+            "bookISBN"
+        ).value.trim();
+
+    const category =
+        document.getElementById(
+            "bookCategory"
+        ).value.trim();
+
+    const rack =
+        document.getElementById(
+            "bookRack"
+        ).value.trim();
+
+    const shelf =
+        document.getElementById(
+            "bookShelf"
+        ).value.trim();
+
+    const totalCopies =
+        Number(
+            document.getElementById(
+                "bookCopies"
+            ).value
+        );
+
+    return {
+        title,
+        author,
+        isbn,
+        category,
+        rack,
+        shelf,
+        totalCopies
+    };
+
+}
+
+
+/* =====================================================
+   VALIDATE
+   ===================================================== */
+
+function validateBookForm(data) {
+
+    if (!data.title) {
+        return "Book title is required.";
+    }
+
+    if (!data.author) {
+        return "Author is required.";
+    }
+
+    if (!data.isbn) {
+        return "ISBN is required.";
+    }
+
+    if (!data.rack) {
+        return "Rack is required.";
+    }
+
+    if (!data.shelf) {
+        return "Shelf is required.";
+    }
+
+    if (
+        !Number.isInteger(
+            data.totalCopies
+        ) ||
+        data.totalCopies < 1
+    ) {
+
+        return "Total copies must be a whole number greater than 0.";
+
+    }
+
+    return null;
+
+}
+
+
+/* =====================================================
+   BUILD MULTIPART FORM
+   ===================================================== */
+
+function buildBookFormData(
+    bookData,
+    coverFile
+) {
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "title",
+        bookData.title
+    );
+
+    formData.append(
+        "author",
+        bookData.author
+    );
+
+    formData.append(
+        "isbn",
+        bookData.isbn
+    );
+
+    formData.append(
+        "category",
+        bookData.category
+    );
+
+    formData.append(
+        "rack",
+        bookData.rack
+    );
+
+    formData.append(
+        "shelf",
+        bookData.shelf
+    );
+
+    formData.append(
+        "totalCopies",
+        String(bookData.totalCopies)
+    );
+
+
+    if (coverFile) {
+
+        formData.append(
+            "coverImage",
+            coverFile
+        );
+
+    }
+
+
+    return formData;
+
+}
+
+
+/* =====================================================
+   SAVE / UPDATE BOOK
+   ===================================================== */
+
+async function saveBook(event) {
+
+    event.preventDefault();
+
+    clearModalAlert();
+
+
+    const saveButton =
+        document.getElementById(
+            "saveBookButton"
+        );
+
+
+    const wasEditing =
+        Boolean(editingISBN);
+
+
+    const oldISBN =
+        editingISBN;
+
+
+    saveButton.disabled =
+        true;
+
+
+    saveButton.textContent =
+        wasEditing
+            ? "Updating..."
+            : "Saving...";
+
+
+    try {
+
+        /* ---------------------------------------------
+           1. READ FORM
+           --------------------------------------------- */
+
+        const bookData =
+            getBookFormData();
+
+
+        /* ---------------------------------------------
+           2. VALIDATE
+           --------------------------------------------- */
+
+        const validationError =
+            validateBookForm(
+                bookData
+            );
+
+
+        if (validationError) {
+
+            throw new Error(
+                validationError
+            );
+
+        }
+
+
+        /* ---------------------------------------------
+           3. READ COVER
+           --------------------------------------------- */
+
+        const coverInput =
+            document.getElementById(
+                "bookCover"
+            );
+
+
+        const coverFile =
+            coverInput.files?.[0] || null;
+
+
+        /* ---------------------------------------------
+           4. CREATE MULTIPART FORM
+           --------------------------------------------- */
+
+        const formData =
+            buildBookFormData(
+                bookData,
+                coverFile
+            );
+
+
+        /* ---------------------------------------------
+           5. API REQUEST
+           --------------------------------------------- */
+
+        const endpoint =
+            wasEditing
+                ? `${API}/books/${encodeURIComponent(oldISBN)}`
+                : `${API}/books`;
+
+
+        const method =
+            wasEditing
+                ? "PUT"
+                : "POST";
+
+
+        /*
+         * IMPORTANT:
+         *
+         * Do NOT manually set Content-Type here.
+         *
+         * Browser automatically creates:
+         * multipart/form-data
+         * with the correct boundary.
+         */
+
+        const response =
+            await fetch(
+                endpoint,
+                {
+                    method,
+
+                    headers: {
+                        ...authHeaders()
+                    },
+
+                    body: formData
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                await readError(response)
+            );
+
+        }
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "Book saved:",
+            result
+        );
+
+
+        /* ---------------------------------------------
+           6. SUCCESS
+           --------------------------------------------- */
+
+        closeModal();
+
+
+        showPageAlert(
+            wasEditing
+                ? "Book updated successfully."
+                : "Book added successfully.",
+            "success"
+        );
+
+
+        await loadBooks();
+
+
+    } catch (error) {
+
+        console.error(
+            "Save book error:",
+            error
+        );
+
+
+        showModalAlert(
+            error.message ||
+            "Unable to save the book.",
+            "error"
+        );
+
+
+    } finally {
+
+        saveButton.disabled =
+            false;
+
+
+        saveButton.textContent =
+            wasEditing
+                ? "Update Book"
+                : "Save Book";
+
+    }
+
+}
+
+
+/* =====================================================
+   DELETE BOOK
+   ===================================================== */
+
+async function deleteBook(isbn) {
+
+    const book =
+        allBooks.find(
+            item =>
+                String(item.isbn) ===
+                String(isbn)
+        );
+
+
+    if (!book) {
+
+        showPageAlert(
+            "Book could not be found.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const total =
+        Number(
+            book.totalCopies || 0
+        );
+
+
+    const available =
+        Number(
+            book.availableCopies || 0
+        );
+
+
+    const borrowed =
+        Math.max(
+            total - available,
+            0
+        );
+
+
+    if (borrowed > 0) {
+
+        showPageAlert(
+            `${book.title} cannot be deleted because ${borrowed} copy/copies are currently borrowed.`,
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const confirmed =
+        window.confirm(
+            `Delete "${book.title}" from the library catalog?\n\nThis action cannot be undone.`
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/books/${encodeURIComponent(isbn)}`,
+                {
+                    method: "DELETE",
+
+                    headers: {
+                        ...authHeaders()
+                    }
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                await readError(response)
+            );
+
+        }
+
+
+        await response.json();
+
+
+        showPageAlert(
+            "Book deleted successfully.",
+            "success"
+        );
+
+
+        await loadBooks();
+
+
+    } catch (error) {
+
+        console.error(
+            "Delete book error:",
+            error
+        );
+
+
+        showPageAlert(
+            error.message ||
+            "Unable to delete the book.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   EVENTS
+   ===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const displayName =
+            currentUser?.username ||
+            currentUser?.name ||
+            "Admin";
+
+
+        const initials =
+            getInitials(
+                displayName
+            );
+
+
+        document.getElementById(
+            "sidebarUserName"
+        ).textContent =
+            displayName;
+
+
+        document.getElementById(
+            "sidebarAvatar"
+        ).textContent =
+            initials;
+
+
+        document.getElementById(
+            "topbarAvatar"
+        ).textContent =
+            initials;
+
+
+        initializeSidebar();
+
+
+        loadBooks();
+
+
+        /* ADD */
+
+        document.getElementById(
+            "addBookButton"
+        ).addEventListener(
+            "click",
+            openAddModal
+        );
+
+
+        /* FORM */
+
+        document.getElementById(
+            "bookForm"
+        ).addEventListener(
+            "submit",
+            saveBook
+        );
+
+
+        /* CLOSE */
+
+        document.getElementById(
+            "cancelButton"
+        ).addEventListener(
+            "click",
+            closeModal
+        );
+
+
+        document.getElementById(
+            "modalCloseButton"
+        ).addEventListener(
+            "click",
+            closeModal
+        );
+
+
+        document.getElementById(
+            "modalBackdrop"
+        ).addEventListener(
+            "click",
+            closeModal
+        );
+
+
+        /* LOGOUT */
+
+        document.getElementById(
+            "logoutLink"
+        ).addEventListener(
+            "click",
+            event => {
+
+                event.preventDefault();
+
+                logoutAdmin();
+
+            }
+        );
+
+
+        /* SEARCH */
+
+        document.getElementById(
+            "bookSearch"
+        ).addEventListener(
+            "input",
+            renderBooks
+        );
+
+
+        /* FILTERS */
+
+        document
+            .querySelectorAll(
+                ".book-filter"
+            )
+            .forEach(button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        activeFilter =
+                            button.dataset.filter ||
+                            "all";
+
+
+                        document
+                            .querySelectorAll(
+                                ".book-filter"
+                            )
+                            .forEach(item => {
+
+                                item.classList.toggle(
+                                    "active",
+                                    item === button
+                                );
+
+                            });
+
+
+                        renderBooks();
+
+                    }
+                );
+
+            });
+
+
+        /* TABLE ACTIONS */
+
+        document.getElementById(
+            "booksTableBody"
+        ).addEventListener(
+            "click",
+            event => {
+
+                const actionButton =
+                    event.target.closest(
+                        "[data-action]"
+                    );
+
+
+                if (!actionButton) {
+                    return;
+                }
+
+
+                const action =
+                    actionButton.dataset.action;
+
+
+                const isbn =
+                    actionButton.dataset.isbn;
+
+
+                if (action === "edit") {
+
+                    openEditModal(
+                        isbn
+                    );
+
+                }
+
+
+                if (action === "delete") {
+
+                    deleteBook(
+                        isbn
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* COVER PREVIEW */
+
+        document.getElementById(
+            "bookCover"
+        ).addEventListener(
+            "change",
+            event => {
+
+                const file =
+                    event.target.files?.[0];
+
+
+                if (!file) {
+
+                    if (!editingISBN) {
+                        setCoverPreview("");
+                    }
+
+                    return;
+
+                }
+
+
+                if (
+                    ![
+                        "image/jpeg",
+                        "image/png",
+                        "image/webp"
+                    ].includes(
+                        file.type
+                    )
+                ) {
+
+                    showModalAlert(
+                        "Please select a JPG, PNG or WEBP image."
+                    );
+
+
+                    event.target.value =
+                        "";
+
+
+                    return;
+
+                }
+
+
+                if (
+                    file.size >
+                    5 * 1024 * 1024
+                ) {
+
+                    showModalAlert(
+                        "Book cover must be 5 MB or smaller."
+                    );
+
+
+                    event.target.value =
+                        "";
+
+
+                    return;
+
+                }
+
+
+                clearModalAlert();
+
+
+                const reader =
+                    new FileReader();
+
+
+                reader.onload =
+                    () => {
+
+                        setCoverPreview(
+                            reader.result
+                        );
+
+                    };
+
+
+                reader.readAsDataURL(
+                    file
+                );
+
+            }
+        );
+
+
+        /* ESCAPE */
+
+        document.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key === "Escape"
+                ) {
+
+                    closeModal();
+
+                }
+
+            }
+        );
+
+    }
+);
+
+</script>
+
+</body>
+</html>

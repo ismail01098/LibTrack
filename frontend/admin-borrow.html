@@ -1,0 +1,3183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Borrow & Return - LibTrack</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <style>
+
+        /* =========================================================
+           BORROW & RETURN PAGE
+           Page-specific styling only.
+           Shared LibTrack styling comes from style.css
+           ========================================================= */
+
+        .borrow-page .page-header {
+            margin-bottom: 24px;
+        }
+
+
+        /* =========================================================
+           STATISTICS
+           ========================================================= */
+
+        .borrow-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+
+        .borrow-stat-card {
+            background: #ffffff;
+            border: 1px solid #dce5ef;
+            border-radius: 14px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 8px 25px rgba(16, 42, 67, 0.06);
+        }
+
+
+        .borrow-stat-icon {
+            width: 46px;
+            height: 46px;
+            min-width: 46px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+            font-weight: 700;
+        }
+
+
+        .borrow-stat-icon.blue {
+            background: #eaf2ff;
+            color: #1769e0;
+        }
+
+
+        .borrow-stat-icon.orange {
+            background: #fff7ed;
+            color: #c2410c;
+        }
+
+
+        .borrow-stat-icon.red {
+            background: #fff1f2;
+            color: #be123c;
+        }
+
+
+        .borrow-stat-icon.green {
+            background: #ecfdf3;
+            color: #15803d;
+        }
+
+
+        .borrow-stat-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+
+        .borrow-stat-info span {
+            font-size: 13px;
+            color: #66788a;
+        }
+
+
+        .borrow-stat-info strong {
+            font-size: 25px;
+            line-height: 1;
+            color: #102a43;
+        }
+
+
+        /* =========================================================
+           ISSUE BOOK LAYOUT
+           ========================================================= */
+
+        .issue-card {
+            margin-bottom: 24px;
+        }
+
+
+        .issue-form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #334e68;
+        }
+
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            height: 44px;
+            border: 1px solid #dce5ef;
+            border-radius: 8px;
+            background: #ffffff;
+            color: #102a43;
+            padding: 0 13px;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s ease,
+                        box-shadow 0.2s ease;
+        }
+
+
+        .form-group select:focus,
+        .form-group input:focus {
+            border-color: #1769e0;
+            box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.10);
+        }
+
+
+        .form-help {
+            font-size: 12px;
+            color: #8a9bb0;
+        }
+
+
+        /* =========================================================
+           SELECTED BOOK INFORMATION
+           ========================================================= */
+
+        .book-availability-box {
+            display: none;
+            margin-top: 10px;
+            padding: 13px 15px;
+            border-radius: 9px;
+            border: 1px solid #dce5ef;
+            background: #f8fafc;
+        }
+
+
+        .book-availability-box.show {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+
+        .availability-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+
+        .availability-icon {
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+            border-radius: 8px;
+            background: #eaf2ff;
+            color: #1769e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .availability-details {
+            min-width: 0;
+        }
+
+
+        .availability-details strong {
+            display: block;
+            font-size: 13px;
+            color: #102a43;
+            margin-bottom: 2px;
+        }
+
+
+        .availability-details span {
+            font-size: 12px;
+            color: #71839a;
+        }
+
+
+        .availability-count {
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+
+        .availability-count.available {
+            color: #15803d;
+        }
+
+
+        .availability-count.unavailable {
+            color: #be123c;
+        }
+
+
+        .issue-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 22px;
+            padding-top: 18px;
+            border-top: 1px solid #eef2f6;
+        }
+
+
+        /* =========================================================
+           RECORDS TOOLBAR
+           ========================================================= */
+
+        .records-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+
+        .records-search {
+            position: relative;
+            width: 310px;
+            max-width: 100%;
+        }
+
+
+        .records-search span {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8a9bb0;
+            font-size: 15px;
+            pointer-events: none;
+        }
+
+
+        .records-search input {
+            width: 100%;
+            height: 42px;
+            border: 1px solid #dce5ef;
+            border-radius: 8px;
+            padding: 0 13px 0 38px;
+            outline: none;
+            font-family: inherit;
+            font-size: 13px;
+            color: #102a43;
+            background: #ffffff;
+        }
+
+
+        .records-search input:focus {
+            border-color: #1769e0;
+            box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.10);
+        }
+
+
+        .record-filters {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+
+        .record-filter {
+            height: 36px;
+            padding: 0 13px;
+            border: 1px solid #dce5ef;
+            background: #ffffff;
+            color: #66788a;
+            border-radius: 7px;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+
+        .record-filter:hover {
+            border-color: #b9c8d8;
+            color: #102a43;
+        }
+
+
+        .record-filter.active {
+            background: #1769e0;
+            border-color: #1769e0;
+            color: #ffffff;
+        }
+
+
+        /* =========================================================
+           TABLE
+           ========================================================= */
+
+        .records-table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+
+        .records-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+
+        .records-table th {
+            text-align: left;
+            padding: 13px 14px;
+            background: #f8fafc;
+            border-bottom: 1px solid #dce5ef;
+            color: #66788a;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+        }
+
+
+        .records-table td {
+            padding: 15px 14px;
+            border-bottom: 1px solid #eef2f6;
+            color: #334e68;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+
+        .records-table tbody tr:hover {
+            background: #fbfdff;
+        }
+
+
+        .student-cell strong,
+        .book-cell strong {
+            display: block;
+            color: #102a43;
+            font-size: 13px;
+            margin-bottom: 3px;
+        }
+
+
+        .student-cell span,
+        .book-cell span {
+            display: block;
+            color: #8a9bb0;
+            font-size: 11px;
+        }
+
+
+        .date-cell {
+            white-space: nowrap;
+            color: #52677d;
+        }
+
+
+        /* =========================================================
+           STATUS BADGES
+           ========================================================= */
+
+        .borrow-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 9px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+
+        .borrow-status::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+
+        .borrow-status.active {
+            background: #ecfdf3;
+            color: #15803d;
+        }
+
+
+        .borrow-status.overdue {
+            background: #fff1f2;
+            color: #be123c;
+        }
+
+
+        .borrow-status.returned {
+            background: #eaf2ff;
+            color: #1769e0;
+        }
+
+
+        /* =========================================================
+           ACTION BUTTON
+           ========================================================= */
+
+        .return-btn {
+            height: 34px;
+            padding: 0 11px;
+            border: 1px solid #1769e0;
+            background: #ffffff;
+            color: #1769e0;
+            border-radius: 7px;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+
+        .return-btn:hover {
+            background: #1769e0;
+            color: #ffffff;
+        }
+
+
+        .return-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+
+        /* =========================================================
+           EMPTY / LOADING STATES
+           ========================================================= */
+
+        .borrow-empty {
+            text-align: center;
+            padding: 55px 20px;
+            color: #8a9bb0;
+        }
+
+
+        .borrow-empty-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 12px;
+            border-radius: 12px;
+            background: #eaf2ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+
+        .borrow-empty h3 {
+            margin: 0 0 6px;
+            color: #334e68;
+            font-size: 15px;
+        }
+
+
+        .borrow-empty p {
+            margin: 0;
+            font-size: 12px;
+        }
+
+
+        /* =========================================================
+           TOAST
+           ========================================================= */
+
+        .borrow-toast {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            z-index: 9999;
+            min-width: 280px;
+            max-width: 380px;
+            padding: 13px 16px;
+            border-radius: 9px;
+            background: #ffffff;
+            border: 1px solid #dce5ef;
+            box-shadow: 0 12px 35px rgba(16, 42, 67, 0.15);
+            color: #102a43;
+            font-size: 13px;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateY(15px);
+            pointer-events: none;
+            transition: 0.25s ease;
+        }
+
+
+        .borrow-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+
+        .borrow-toast.success {
+            border-left: 4px solid #15803d;
+        }
+
+
+        .borrow-toast.error {
+            border-left: 4px solid #be123c;
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+        @media (max-width: 1100px) {
+
+            .borrow-stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 760px) {
+
+            .borrow-stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .issue-form-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+
+            .records-toolbar {
+                align-items: stretch;
+            }
+
+
+            .records-search {
+                width: 100%;
+            }
+
+
+            .record-filters {
+                width: 100%;
+            }
+
+
+            .record-filter {
+                flex: 1;
+            }
+
+
+            .issue-actions {
+                justify-content: stretch;
+            }
+
+
+            .issue-actions .btn {
+                width: 100%;
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .borrow-stat-card {
+                padding: 16px;
+            }
+
+
+            .borrow-stat-info strong {
+                font-size: 22px;
+            }
+
+
+            .borrow-toast {
+                left: 15px;
+                right: 15px;
+                bottom: 15px;
+                min-width: 0;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="admin-page borrow-page">
+
+
+<div class="app">
+
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-logo">
+                L
+            </div>
+
+            <div class="brand-text">
+
+                <strong>
+                    LibTrack
+                </strong>
+
+                <span>
+                    College Library
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-menu">
+
+            <div class="menu-label">
+                MAIN
+            </div>
+
+
+            <a
+                href="admin.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ▦
+                </span>
+
+                <span class="menu-text">
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <a
+                href="admin-books.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    📚
+                </span>
+
+                <span class="menu-text">
+                    Manage Books
+                </span>
+
+            </a>
+
+
+            <a
+                href="admin-borrow.html"
+                class="menu-item active"
+            >
+
+                <span class="menu-icon">
+                    ↔
+                </span>
+
+                <span class="menu-text">
+                    Borrow & Return
+                </span>
+
+            </a>
+
+
+            <a
+                href="admin-students.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    👥
+                </span>
+
+                <span class="menu-text">
+                    Students
+                </span>
+
+            </a>
+
+
+            <div class="menu-label">
+                ACCOUNT
+            </div>
+
+
+            <a
+                href="profile.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    👤
+                </span>
+
+                <span class="menu-text">
+                    Account
+                </span>
+
+            </a>
+
+
+            <a
+                href="#"
+                class="menu-item"
+                id="logoutLink"
+            >
+
+                <span class="menu-icon">
+                    ↪
+                </span>
+
+                <span class="menu-text">
+                    Logout
+                </span>
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-user-box">
+
+            <div
+                class="sidebar-avatar"
+                id="sidebarAvatar"
+            >
+                A
+            </div>
+
+            <div class="sidebar-user-info">
+
+                <strong id="sidebarUserName">
+                    Admin
+                </strong>
+
+                <span>
+                    Administrator
+                </span>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- =================================================
+             TOPBAR
+             ================================================= -->
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    type="button"
+                    class="sidebar-toggle"
+                    id="sidebarToggle"
+                    aria-label="Toggle sidebar"
+                >
+                    ☰
+                </button>
+
+
+                <div class="topbar-title">
+
+                    <h1>
+                        Borrow & Return
+                    </h1>
+
+                    <p>
+                        Manage library borrowing activity
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="topbar-user">
+
+                <div
+                    class="topbar-avatar"
+                    id="topbarAvatar"
+                >
+                    A
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             PAGE
+             ================================================= -->
+
+        <div class="page-container">
+
+
+            <!-- PAGE HEADER -->
+
+            <div class="page-header">
+
+                <div>
+
+                    <h2>
+                        Borrow & Return
+                    </h2>
+
+                    <p>
+                        Issue books to students and manage returned books.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 STATISTICS
+                 ================================================= -->
+
+            <section class="borrow-stats-grid">
+
+
+                <div class="borrow-stat-card">
+
+                    <div class="borrow-stat-icon blue">
+                        ↔
+                    </div>
+
+                    <div class="borrow-stat-info">
+
+                        <span>
+                            Total Borrowed
+                        </span>
+
+                        <strong id="totalBorrowed">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="borrow-stat-card">
+
+                    <div class="borrow-stat-icon orange">
+                        ◷
+                    </div>
+
+                    <div class="borrow-stat-info">
+
+                        <span>
+                            Due Soon
+                        </span>
+
+                        <strong id="dueSoon">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="borrow-stat-card">
+
+                    <div class="borrow-stat-icon red">
+                        !
+                    </div>
+
+                    <div class="borrow-stat-info">
+
+                        <span>
+                            Overdue
+                        </span>
+
+                        <strong id="overdueCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="borrow-stat-card">
+
+                    <div class="borrow-stat-icon green">
+                        ✓
+                    </div>
+
+                    <div class="borrow-stat-info">
+
+                        <span>
+                            Returned
+                        </span>
+
+                        <strong id="returnedCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+            <!-- =================================================
+                 ISSUE BOOK
+                 ================================================= -->
+
+            <section class="card issue-card">
+
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h3>
+                            Issue a Book
+                        </h3>
+
+                        <p>
+                            Select a student and an available book to create a borrowing record.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+
+                    <form id="issueForm">
+
+
+                        <div class="issue-form-grid">
+
+
+                            <!-- STUDENT -->
+
+                            <div class="form-group">
+
+                                <label for="studentSelect">
+                                    Student
+                                </label>
+
+                                <select
+                                    id="studentSelect"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Select a student
+                                    </option>
+
+                                </select>
+
+                                <span class="form-help">
+                                    Choose the student receiving the book.
+                                </span>
+
+                            </div>
+
+
+                            <!-- BOOK -->
+
+                            <div class="form-group">
+
+                                <label for="bookSelect">
+                                    Book
+                                </label>
+
+                                <select
+                                    id="bookSelect"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Select an available book
+                                    </option>
+
+                                </select>
+
+                                <div
+                                    class="book-availability-box"
+                                    id="availabilityBox"
+                                >
+
+                                    <div class="availability-left">
+
+                                        <div class="availability-icon">
+                                            📚
+                                        </div>
+
+                                        <div class="availability-details">
+
+                                            <strong id="selectedBookTitle">
+                                                Book
+                                            </strong>
+
+                                            <span id="selectedBookLocation">
+                                                Rack — • Shelf —
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div
+                                        class="availability-count available"
+                                        id="availabilityCount"
+                                    >
+                                        Available
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- BORROW DATE -->
+
+                            <div class="form-group">
+
+                                <label for="borrowDate">
+                                    Borrow Date
+                                </label>
+
+                                <input
+                                    type="date"
+                                    id="borrowDate"
+                                    readonly
+                                >
+
+                                <span class="form-help">
+                                    Automatically set to today.
+                                </span>
+
+                            </div>
+
+
+                            <!-- DUE DATE -->
+
+                            <div class="form-group">
+
+                                <label for="dueDate">
+                                    Due Date
+                                </label>
+
+                                <input
+                                    type="date"
+                                    id="dueDate"
+                                    required
+                                >
+
+                                <span class="form-help">
+                                    Select the expected return date.
+                                </span>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="issue-actions">
+
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                id="clearIssueBtn"
+                            >
+                                Clear
+                            </button>
+
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                                id="issueBtn"
+                            >
+                                Issue Book
+                            </button>
+
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 BORROWING RECORDS
+                 ================================================= -->
+
+            <section class="card">
+
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h3>
+                            Borrowing Records
+                        </h3>
+
+                        <p>
+                            View current and previous library borrowing activity.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body">
+
+
+                    <div class="records-toolbar">
+
+
+                        <div class="records-search">
+
+                            <span>
+                                🔎
+                            </span>
+
+                            <input
+                                type="text"
+                                id="recordSearch"
+                                placeholder="Search student, book or ID..."
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+
+                        <div class="record-filters">
+
+                            <button
+                                type="button"
+                                class="record-filter active"
+                                data-filter="all"
+                            >
+                                All
+                            </button>
+
+                            <button
+                                type="button"
+                                class="record-filter"
+                                data-filter="active"
+                            >
+                                Active
+                            </button>
+
+                            <button
+                                type="button"
+                                class="record-filter"
+                                data-filter="overdue"
+                            >
+                                Overdue
+                            </button>
+
+                            <button
+                                type="button"
+                                class="record-filter"
+                                data-filter="returned"
+                            >
+                                Returned
+                            </button>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="records-table-wrapper">
+
+                        <table class="records-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Student
+                                    </th>
+
+                                    <th>
+                                        Book
+                                    </th>
+
+                                    <th>
+                                        Borrowed
+                                    </th>
+
+                                    <th>
+                                        Due Date
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                    <th>
+                                        Action
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="recordsBody">
+
+                                <tr>
+
+                                    <td colspan="6">
+
+                                        <div class="borrow-empty">
+
+                                            <div class="borrow-empty-icon">
+                                                ↔
+                                            </div>
+
+                                            <h3>
+                                                Loading borrowing records...
+                                            </h3>
+
+                                            <p>
+                                                Please wait.
+                                            </p>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- =========================================================
+     TOAST
+     ========================================================= -->
+
+<div
+    class="borrow-toast"
+    id="borrowToast"
+></div>
+
+
+<script src="auth.js"></script>
+
+
+<script>
+
+/* =========================================================
+   AUTHENTICATION
+   ========================================================= */
+
+if (!requireAdmin()) {
+
+    throw new Error(
+        "Administrator authentication required."
+    );
+
+}
+
+
+/* =========================================================
+   CURRENT USER
+   ========================================================= */
+
+const currentUser =
+    getCurrentUser();
+
+
+function getInitials(name) {
+
+    if (!name) {
+        return "A";
+    }
+
+
+    const parts =
+        String(name)
+            .trim()
+            .split(/\s+/);
+
+
+    if (parts.length === 1) {
+
+        return parts[0]
+            .charAt(0)
+            .toUpperCase();
+
+    }
+
+
+    return (
+        parts[0].charAt(0) +
+        parts[parts.length - 1].charAt(0)
+    ).toUpperCase();
+
+}
+
+
+const adminName =
+    currentUser?.name ||
+    currentUser?.username ||
+    "Admin";
+
+
+const adminInitials =
+    getInitials(adminName);
+
+
+document.getElementById(
+    "sidebarUserName"
+).textContent =
+    adminName;
+
+
+document.getElementById(
+    "sidebarAvatar"
+).textContent =
+    adminInitials;
+
+
+document.getElementById(
+    "topbarAvatar"
+).textContent =
+    adminInitials;
+
+
+/* =========================================================
+   SIDEBAR TOGGLE
+   ========================================================= */
+
+const sidebarToggle =
+    document.getElementById(
+        "sidebarToggle"
+    );
+
+
+if (sidebarToggle) {
+
+    sidebarToggle.addEventListener(
+        "click",
+        function () {
+
+            if (window.innerWidth <= 800) {
+
+                document.body.classList.toggle(
+                    "sidebar-open"
+                );
+
+            } else {
+
+                document.body.classList.toggle(
+                    "sidebar-collapsed"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+const logoutLink =
+    document.getElementById(
+        "logoutLink"
+    );
+
+
+if (logoutLink) {
+
+    logoutLink.addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+
+            logout();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   API
+   ========================================================= */
+
+const BASE_API =
+    typeof API_URL !== "undefined"
+        ? API_URL
+        : "http://127.0.0.1:5000";
+
+
+const STUDENTS_API =
+    `${BASE_API}/students`;
+
+
+const BOOKS_API =
+    `${BASE_API}/books`;
+
+
+const BORROW_API =
+    `${BASE_API}/borrow`;
+
+
+/* =========================================================
+   DATA
+   ========================================================= */
+
+let allStudents = [];
+
+let allBooks = [];
+
+let allBorrows = [];
+
+let currentFilter = "all";
+
+
+/* =========================================================
+   AUTH HEADERS
+   ========================================================= */
+
+function getAuthHeaders() {
+
+    if (typeof authHeaders === "function") {
+
+        return authHeaders();
+
+    }
+
+    const token =
+        localStorage.getItem("token") ||
+        localStorage.getItem("authToken");
+
+    return token
+        ? {
+            Authorization:
+                `Bearer ${token}`
+        }
+        : {};
+
+}
+
+
+/* =========================================================
+   DATE HELPERS
+   ========================================================= */
+
+function toDateInputValue(date) {
+
+    const year =
+        date.getFullYear();
+
+
+    const month =
+        String(
+            date.getMonth() + 1
+        ).padStart(2, "0");
+
+
+    const day =
+        String(
+            date.getDate()
+        ).padStart(2, "0");
+
+
+    return `${year}-${month}-${day}`;
+
+}
+
+
+function formatDate(value) {
+
+    if (!value) {
+        return "—";
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if (Number.isNaN(date.getTime())) {
+        return "—";
+    }
+
+
+    return date.toLocaleDateString(
+        "en-IN",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+   ========================================================= */
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+let toastTimer = null;
+
+
+function showToast(
+    message,
+    type = "success"
+) {
+
+    const toast =
+        document.getElementById(
+            "borrowToast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.className =
+        `borrow-toast ${type} show`;
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            function () {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            3000
+        );
+
+}
+
+
+/* =========================================================
+   LOAD EVERYTHING
+   ========================================================= */
+
+async function loadPageData() {
+
+    await Promise.all([
+        loadStudents(),
+        loadBooks(),
+        loadBorrows()
+    ]);
+
+}
+
+
+/* =========================================================
+   LOAD STUDENTS
+   ========================================================= */
+
+async function loadStudents() {
+
+    const response =
+        await fetch(
+            STUDENTS_API,
+            {
+                headers:
+                    getAuthHeaders()
+            }
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Unable to load students."
+        );
+
+    }
+
+
+    const data =
+        await response.json();
+
+
+    allStudents =
+        Array.isArray(data)
+            ? data
+            : [];
+
+
+    populateStudentSelect();
+
+}
+
+
+/* =========================================================
+   POPULATE STUDENTS
+   ========================================================= */
+
+function populateStudentSelect() {
+
+    const select =
+        document.getElementById(
+            "studentSelect"
+        );
+
+
+    select.innerHTML = `
+        <option value="">
+            Select a student
+        </option>
+    `;
+
+
+    allStudents.forEach(
+        function (student) {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                student.studentId || "";
+
+
+            option.textContent =
+                `${student.name || "Unnamed Student"} — ${student.studentId || "No ID"}`;
+
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   LOAD BOOKS
+   ========================================================= */
+
+async function loadBooks() {
+
+    const response =
+        await fetch(
+            BOOKS_API
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Unable to load books."
+        );
+
+    }
+
+
+    const data =
+        await response.json();
+
+
+    allBooks =
+        Array.isArray(data)
+            ? data
+            : [];
+
+
+    populateBookSelect();
+
+}
+
+
+/* =========================================================
+   POPULATE BOOKS
+   ========================================================= */
+
+function populateBookSelect() {
+
+    const select =
+        document.getElementById(
+            "bookSelect"
+        );
+
+
+    select.innerHTML = `
+        <option value="">
+            Select an available book
+        </option>
+    `;
+
+
+    allBooks
+        .filter(
+            function (book) {
+
+                return Number(
+                    book.availableCopies || 0
+                ) > 0;
+
+            }
+        )
+        .forEach(
+            function (book) {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    book.isbn || "";
+
+
+                option.textContent =
+                    `${book.title || "Untitled"} — ${book.isbn || "No ISBN"} (${book.availableCopies} available)`;
+
+
+                select.appendChild(
+                    option
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   LOAD BORROW RECORDS
+   ========================================================= */
+
+async function loadBorrows() {
+
+    const response =
+        await fetch(
+            BORROW_API
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Unable to load borrowing records."
+        );
+
+    }
+
+
+    const data =
+        await response.json();
+
+
+    allBorrows =
+        Array.isArray(data)
+            ? data
+            : [];
+
+
+    updateStatistics();
+
+    renderRecords();
+
+}
+
+
+/* =========================================================
+   UPDATE STATISTICS
+   ========================================================= */
+
+function updateStatistics() {
+
+    const active =
+        allBorrows.filter(
+            function (record) {
+
+                return String(
+                    record.status || ""
+                ).toLowerCase()
+                === "borrowed";
+
+            }
+        );
+
+
+    const returned =
+        allBorrows.filter(
+            function (record) {
+
+                return String(
+                    record.status || ""
+                ).toLowerCase()
+                === "returned";
+
+            }
+        );
+
+
+    const now =
+        new Date();
+
+
+    const dueSoon =
+        active.filter(
+            function (record) {
+
+                if (!record.dueDate) {
+                    return false;
+                }
+
+
+                const dueDate =
+                    new Date(
+                        record.dueDate
+                    );
+
+
+                const difference =
+                    (
+                        dueDate.getTime() -
+                        now.getTime()
+                    )
+                    /
+                    (
+                        1000 *
+                        60 *
+                        60 *
+                        24
+                    );
+
+
+                return (
+                    difference >= 0 &&
+                    difference <= 7
+                );
+
+            }
+        );
+
+
+    const overdue =
+        active.filter(
+            function (record) {
+
+                if (!record.dueDate) {
+                    return false;
+                }
+
+
+                return (
+                    new Date(
+                        record.dueDate
+                    ) < now
+                );
+
+            }
+        );
+
+
+    document.getElementById(
+        "totalBorrowed"
+    ).textContent =
+        active.length;
+
+
+    document.getElementById(
+        "dueSoon"
+    ).textContent =
+        dueSoon.length;
+
+
+    document.getElementById(
+        "overdueCount"
+    ).textContent =
+        overdue.length;
+
+
+    document.getElementById(
+        "returnedCount"
+    ).textContent =
+        returned.length;
+
+}
+
+
+/* =========================================================
+   FIND STUDENT
+   ========================================================= */
+
+function findStudent(studentId) {
+
+    return allStudents.find(
+        function (student) {
+
+            return String(
+                student.studentId || ""
+            ).toLowerCase()
+            ===
+            String(
+                studentId || ""
+            ).toLowerCase();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   FIND BOOK
+   ========================================================= */
+
+function findBook(bookId) {
+
+    return allBooks.find(
+        function (book) {
+
+            return String(
+                book.isbn || ""
+            ).toLowerCase()
+            ===
+            String(
+                bookId || ""
+            ).toLowerCase();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   RECORD STATUS
+   ========================================================= */
+
+function getRecordStatus(record) {
+
+    const status =
+        String(
+            record.status || ""
+        ).toLowerCase();
+
+
+    if (status === "returned") {
+
+        return {
+            type: "returned",
+            text: "Returned"
+        };
+
+    }
+
+
+    if (
+        status === "borrowed" &&
+        record.dueDate &&
+        new Date(
+            record.dueDate
+        ) < new Date()
+    ) {
+
+        return {
+            type: "overdue",
+            text: "Overdue"
+        };
+
+    }
+
+
+    return {
+        type: "active",
+        text: "Borrowed"
+    };
+
+}
+
+
+/* =========================================================
+   RENDER RECORDS
+   ========================================================= */
+
+function renderRecords() {
+
+    const body =
+        document.getElementById(
+            "recordsBody"
+        );
+
+
+    const search =
+        document.getElementById(
+            "recordSearch"
+        )
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    let records =
+        [...allBorrows];
+
+
+    /* FILTER */
+
+    records =
+        records.filter(
+            function (record) {
+
+                const status =
+                    getRecordStatus(
+                        record
+                    );
+
+
+                if (
+                    currentFilter ===
+                    "active"
+                ) {
+
+                    return status.type ===
+                        "active";
+
+                }
+
+
+                if (
+                    currentFilter ===
+                    "overdue"
+                ) {
+
+                    return status.type ===
+                        "overdue";
+
+                }
+
+
+                if (
+                    currentFilter ===
+                    "returned"
+                ) {
+
+                    return status.type ===
+                        "returned";
+
+                }
+
+
+                return true;
+
+            }
+        );
+
+
+    /* SEARCH */
+
+    if (search) {
+
+        records =
+            records.filter(
+                function (record) {
+
+                    const student =
+                        findStudent(
+                            record.studentId
+                        );
+
+
+                    const book =
+                        findBook(
+                            record.bookId
+                        );
+
+
+                    const searchable =
+                        [
+                            record.studentId,
+                            record.bookId,
+                            record.status,
+                            student?.name,
+                            student?.email,
+                            book?.title,
+                            book?.author,
+                            book?.isbn
+                        ]
+                        .filter(Boolean)
+                        .join(" ")
+                        .toLowerCase();
+
+
+                    return searchable.includes(
+                        search
+                    );
+
+                }
+            );
+
+    }
+
+
+    /* EMPTY */
+
+    if (!records.length) {
+
+        body.innerHTML = `
+
+            <tr>
+
+                <td colspan="6">
+
+                    <div class="borrow-empty">
+
+                        <div class="borrow-empty-icon">
+                            📚
+                        </div>
+
+                        <h3>
+                            No borrowing records found
+                        </h3>
+
+                        <p>
+                            Borrowing activity matching your selection will appear here.
+                        </p>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    /* RECORDS */
+
+    body.innerHTML =
+        records
+            .sort(
+                function (a, b) {
+
+                    return (
+                        new Date(
+                            b.createdAt ||
+                            b.borrowDate ||
+                            0
+                        )
+                        -
+                        new Date(
+                            a.createdAt ||
+                            a.borrowDate ||
+                            0
+                        )
+                    );
+
+                }
+            )
+            .map(
+                function (record) {
+
+                    return createRecordRow(
+                        record
+                    );
+
+                }
+            )
+            .join("");
+
+
+    attachReturnButtons();
+
+}
+
+
+/* =========================================================
+   CREATE RECORD ROW
+   ========================================================= */
+
+function createRecordRow(record) {
+
+    const student =
+        findStudent(
+            record.studentId
+        );
+
+
+    const book =
+        findBook(
+            record.bookId
+        );
+
+
+    const status =
+        getRecordStatus(
+            record
+        );
+
+
+    const studentName =
+        student?.name ||
+        record.studentId ||
+        "Unknown Student";
+
+
+    const studentId =
+        student?.studentId ||
+        record.studentId ||
+        "—";
+
+
+    const bookTitle =
+        book?.title ||
+        record.bookId ||
+        "Unknown Book";
+
+
+    const bookIsbn =
+        book?.isbn ||
+        record.bookId ||
+        "—";
+
+
+    const isReturned =
+        status.type ===
+        "returned";
+
+
+    return `
+
+        <tr>
+
+            <td>
+
+                <div class="student-cell">
+
+                    <strong>
+                        ${escapeHTML(studentName)}
+                    </strong>
+
+                    <span>
+                        ${escapeHTML(studentId)}
+                    </span>
+
+                </div>
+
+            </td>
+
+
+            <td>
+
+                <div class="book-cell">
+
+                    <strong>
+                        ${escapeHTML(bookTitle)}
+                    </strong>
+
+                    <span>
+                        ISBN: ${escapeHTML(bookIsbn)}
+                    </span>
+
+                </div>
+
+            </td>
+
+
+            <td class="date-cell">
+
+                ${formatDate(
+                    record.createdAt ||
+                    record.borrowDate
+                )}
+
+            </td>
+
+
+            <td class="date-cell">
+
+                ${formatDate(
+                    record.dueDate
+                )}
+
+            </td>
+
+
+            <td>
+
+                <span
+                    class="borrow-status ${status.type}"
+                >
+                    ${status.text}
+                </span>
+
+            </td>
+
+
+            <td>
+
+                ${
+                    isReturned
+
+                        ? `
+                            <span
+                                style="
+                                    font-size:11px;
+                                    color:#8a9bb0;
+                                "
+                            >
+                                Completed
+                            </span>
+                        `
+
+                        : `
+                            <button
+                                type="button"
+                                class="return-btn"
+                                data-id="${escapeHTML(record._id || "")}"
+                            >
+                                Return
+                            </button>
+                        `
+                }
+
+            </td>
+
+        </tr>
+
+    `;
+
+}
+
+
+/* =========================================================
+   RETURN BUTTONS
+   ========================================================= */
+
+function attachReturnButtons() {
+
+    document
+        .querySelectorAll(
+            ".return-btn"
+        )
+        .forEach(
+            function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        returnBook(
+                            this.dataset.id,
+                            this
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   RETURN BOOK
+   ========================================================= */
+
+async function returnBook(
+    borrowId,
+    button
+) {
+
+    if (!borrowId) {
+
+        showToast(
+            "Borrow record ID is missing.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const confirmed =
+        window.confirm(
+            "Are you sure you want to mark this book as returned?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    button.disabled =
+        true;
+
+
+    button.textContent =
+        "Returning...";
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${BORROW_API}/return/${encodeURIComponent(borrowId)}`,
+                {
+                    method: "PUT",
+                    headers:
+                        {
+                            ...getAuthHeaders()
+                        }
+                }
+            );
+
+
+        const data =
+            await response.json()
+                .catch(
+                    function () {
+                        return {};
+                    }
+                );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to return book."
+            );
+
+        }
+
+
+        showToast(
+            "Book returned successfully."
+        );
+
+
+        await loadBooks();
+
+        await loadBorrows();
+
+
+    } catch (error) {
+
+        console.error(
+            "Return book error:",
+            error
+        );
+
+
+        button.disabled =
+            false;
+
+
+        button.textContent =
+            "Return";
+
+
+        showToast(
+            error.message ||
+            "Unable to return book.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   BOOK SELECTION
+   ========================================================= */
+
+const bookSelect =
+    document.getElementById(
+        "bookSelect"
+    );
+
+
+bookSelect.addEventListener(
+    "change",
+    function () {
+
+        const isbn =
+            this.value;
+
+
+        const box =
+            document.getElementById(
+                "availabilityBox"
+            );
+
+
+        if (!isbn) {
+
+            box.classList.remove(
+                "show"
+            );
+
+            return;
+
+        }
+
+
+        const book =
+            findBook(
+                isbn
+            );
+
+
+        if (!book) {
+
+            box.classList.remove(
+                "show"
+            );
+
+            return;
+
+        }
+
+
+        const available =
+            Number(
+                book.availableCopies || 0
+            );
+
+
+        document.getElementById(
+            "selectedBookTitle"
+        ).textContent =
+            book.title ||
+            "Untitled Book";
+
+
+        document.getElementById(
+            "selectedBookLocation"
+        ).textContent =
+            `Rack ${book.rack || "—"} • Shelf ${book.shelf || "—"}`;
+
+
+        const count =
+            document.getElementById(
+                "availabilityCount"
+            );
+
+
+        count.textContent =
+            `${available} ${available === 1 ? "copy" : "copies"} available`;
+
+
+        count.className =
+            `availability-count ${
+                available > 0
+                    ? "available"
+                    : "unavailable"
+            }`;
+
+
+        box.classList.add(
+            "show"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   ISSUE FORM
+   ========================================================= */
+
+const issueForm =
+    document.getElementById(
+        "issueForm"
+    );
+
+
+issueForm.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+
+        const studentId =
+            document.getElementById(
+                "studentSelect"
+            ).value;
+
+
+        const bookId =
+            document.getElementById(
+                "bookSelect"
+            ).value;
+
+
+        const dueDate =
+            document.getElementById(
+                "dueDate"
+            ).value;
+
+
+        if (!studentId) {
+
+            showToast(
+                "Please select a student.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        if (!bookId) {
+
+            showToast(
+                "Please select a book.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        if (!dueDate) {
+
+            showToast(
+                "Please select a due date.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        const today =
+            new Date();
+
+
+        today.setHours(
+            0,
+            0,
+            0,
+            0
+        );
+
+
+        const selectedDueDate =
+            new Date(
+                `${dueDate}T00:00:00`
+            );
+
+
+        if (
+            selectedDueDate <
+            today
+        ) {
+
+            showToast(
+                "Due date cannot be before today.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        const issueButton =
+            document.getElementById(
+                "issueBtn"
+            );
+
+
+        issueButton.disabled =
+            true;
+
+
+        issueButton.textContent =
+            "Issuing...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    BORROW_API,
+                    {
+                        method: "POST",
+
+                        headers:
+                            {
+                                "Content-Type":
+                                    "application/json",
+
+                                ...getAuthHeaders()
+                            },
+
+                        body:
+                            JSON.stringify(
+                                {
+                                    studentId,
+                                    bookId,
+                                    dueDate
+                                }
+                            )
+                    }
+                );
+
+
+            const data =
+                await response.json()
+                    .catch(
+                        function () {
+                            return {};
+                        }
+                    );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Unable to issue book."
+                );
+
+            }
+
+
+            showToast(
+                "Book issued successfully."
+            );
+
+
+            issueForm.reset();
+
+
+            setTodayAndDefaultDueDate();
+
+
+            document
+                .getElementById(
+                    "availabilityBox"
+                )
+                .classList.remove(
+                    "show"
+                );
+
+
+            await loadBooks();
+
+            await loadBorrows();
+
+
+        } catch (error) {
+
+            console.error(
+                "Issue book error:",
+                error
+            );
+
+
+            showToast(
+                error.message ||
+                "Unable to issue book.",
+                "error"
+            );
+
+        } finally {
+
+            issueButton.disabled =
+                false;
+
+
+            issueButton.textContent =
+                "Issue Book";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   CLEAR FORM
+   ========================================================= */
+
+document
+    .getElementById(
+        "clearIssueBtn"
+    )
+    .addEventListener(
+        "click",
+        function () {
+
+            issueForm.reset();
+
+
+            document
+                .getElementById(
+                    "availabilityBox"
+                )
+                .classList.remove(
+                    "show"
+                );
+
+
+            setTodayAndDefaultDueDate();
+
+        }
+    );
+
+
+/* =========================================================
+   SET DATES
+   ========================================================= */
+
+function setTodayAndDefaultDueDate() {
+
+    const today =
+        new Date();
+
+
+    const todayValue =
+        toDateInputValue(
+            today
+        );
+
+
+    document.getElementById(
+        "borrowDate"
+    ).value =
+        todayValue;
+
+
+    const dueDate =
+        new Date(
+            today
+        );
+
+
+    dueDate.setDate(
+        dueDate.getDate() + 14
+    );
+
+
+    document.getElementById(
+        "dueDate"
+    ).value =
+        toDateInputValue(
+            dueDate
+        );
+
+
+    document.getElementById(
+        "dueDate"
+    ).min =
+        todayValue;
+
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+document
+    .getElementById(
+        "recordSearch"
+    )
+    .addEventListener(
+        "input",
+        function () {
+
+            renderRecords();
+
+        }
+    );
+
+
+/* =========================================================
+   FILTERS
+   ========================================================= */
+
+document
+    .querySelectorAll(
+        ".record-filter"
+    )
+    .forEach(
+        function (button) {
+
+            button.addEventListener(
+                "click",
+                function () {
+
+                    document
+                        .querySelectorAll(
+                            ".record-filter"
+                        )
+                        .forEach(
+                            function (item) {
+
+                                item.classList.remove(
+                                    "active"
+                                );
+
+                            }
+                        );
+
+
+                    this.classList.add(
+                        "active"
+                    );
+
+
+                    currentFilter =
+                        this.dataset.filter;
+
+
+                    renderRecords();
+
+                }
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   START PAGE
+   ========================================================= */
+
+setTodayAndDefaultDueDate();
+
+
+loadPageData()
+    .catch(
+        function (error) {
+
+            console.error(
+                "Borrow page loading error:",
+                error
+            );
+
+
+            const body =
+                document.getElementById(
+                    "recordsBody"
+                );
+
+
+            body.innerHTML = `
+
+                <tr>
+
+                    <td colspan="6">
+
+                        <div class="borrow-empty">
+
+                            <div class="borrow-empty-icon">
+                                ⚠️
+                            </div>
+
+                            <h3>
+                                Unable to load borrowing data
+                            </h3>
+
+                            <p>
+                                Make sure the backend server is running and try again.
+                            </p>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+
+            showToast(
+                "Unable to load library data.",
+                "error"
+            );
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>

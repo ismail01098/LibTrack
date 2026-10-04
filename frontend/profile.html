@@ -1,0 +1,2020 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Profile - LibTrack</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+
+    <style>
+
+        /* =========================================================
+           LIBTRACK PROFILE PAGE
+           Page-specific styling only
+           ========================================================= */
+
+        .profile-page {
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+
+        /* =========================================================
+           PROFILE HEADER
+           ========================================================= */
+
+        .profile-heading {
+            margin-bottom: 24px;
+        }
+
+        .profile-heading h2 {
+            margin: 0 0 6px;
+            color: #102a43;
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        .profile-heading p {
+            margin: 0;
+            color: #66788a;
+            font-size: 14px;
+        }
+
+
+        /* =========================================================
+           PROFILE MAIN GRID
+           ========================================================= */
+
+        .profile-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.8fr);
+            gap: 22px;
+            align-items: start;
+        }
+
+
+        /* =========================================================
+           IDENTITY CARD
+           ========================================================= */
+
+        .profile-identity {
+            background: #ffffff;
+            border: 1px solid #dce5ef;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(16, 42, 67, 0.06);
+        }
+
+        .profile-identity-top {
+            padding: 26px;
+            border-bottom: 1px solid #e7edf4;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .profile-large-avatar {
+            width: 82px;
+            height: 82px;
+            min-width: 82px;
+            border-radius: 50%;
+            background: #eaf2ff;
+            color: #1769e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+            font-weight: 700;
+            border: 4px solid #f4f7fb;
+            box-shadow: 0 0 0 1px #dce5ef;
+        }
+
+        .profile-identity-name {
+            min-width: 0;
+        }
+
+        .profile-identity-name h3 {
+            margin: 0 0 5px;
+            font-size: 23px;
+            color: #102a43;
+            font-weight: 700;
+        }
+
+        .profile-identity-name p {
+            margin: 0 0 10px;
+            color: #66788a;
+            font-size: 14px;
+        }
+
+        .profile-role {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: #ecfdf3;
+            color: #15803d;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+
+        /* =========================================================
+           INFORMATION SECTION
+           ========================================================= */
+
+        .profile-information {
+            padding: 8px 26px 20px;
+        }
+
+        .profile-information-title {
+            padding: 14px 0 8px;
+            color: #102a43;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .profile-info-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            min-height: 58px;
+            border-bottom: 1px solid #edf1f5;
+        }
+
+        .profile-info-row:last-child {
+            border-bottom: none;
+        }
+
+        .profile-info-label {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            color: #66788a;
+            font-size: 13px;
+        }
+
+        .profile-info-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            background: #f4f7fb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+        }
+
+        .profile-info-value {
+            color: #102a43;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: right;
+            word-break: break-word;
+        }
+
+        .profile-info-value.muted {
+            color: #8a9bb0;
+            font-weight: 500;
+        }
+
+
+        /* =========================================================
+           ACTIVITY PANEL
+           ========================================================= */
+
+        .profile-activity {
+            background: #ffffff;
+            border: 1px solid #dce5ef;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(16, 42, 67, 0.06);
+            overflow: hidden;
+        }
+
+        .profile-activity-header {
+            padding: 22px 22px 16px;
+            border-bottom: 1px solid #e7edf4;
+        }
+
+        .profile-activity-header h3 {
+            margin: 0 0 5px;
+            font-size: 17px;
+            color: #102a43;
+        }
+
+        .profile-activity-header p {
+            margin: 0;
+            color: #66788a;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .profile-activity-list {
+            padding: 6px 22px 14px;
+        }
+
+        .profile-activity-item {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 16px 0;
+            border-bottom: 1px solid #edf1f5;
+        }
+
+        .profile-activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .profile-activity-icon {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            background: #eaf2ff;
+        }
+
+        .profile-activity-icon.green {
+            background: #ecfdf3;
+        }
+
+        .profile-activity-icon.orange {
+            background: #fff7ed;
+        }
+
+        .profile-activity-icon.red {
+            background: #fff1f2;
+        }
+
+        .profile-activity-text {
+            min-width: 0;
+        }
+
+        .profile-activity-text strong {
+            display: block;
+            margin-bottom: 3px;
+            color: #102a43;
+            font-size: 13px;
+        }
+
+        .profile-activity-text span {
+            display: block;
+            color: #8a9bb0;
+            font-size: 11px;
+        }
+
+        .profile-activity-number {
+            margin-left: auto;
+            color: #102a43;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+
+        /* =========================================================
+           ACCOUNT STATUS
+           ========================================================= */
+
+        .profile-status-box {
+            margin: 0 22px 22px;
+            padding: 15px;
+            border: 1px solid #dce5ef;
+            border-radius: 12px;
+            background: #f8fafc;
+        }
+
+        .profile-status-top {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .profile-status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #15803d;
+        }
+
+        .profile-status-top strong {
+            color: #102a43;
+            font-size: 12px;
+        }
+
+        .profile-status-box p {
+            margin: 0;
+            color: #66788a;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+
+        /* =========================================================
+           SECURITY / ACCOUNT AREA
+           ========================================================= */
+
+        .profile-bottom {
+            margin-top: 22px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .profile-small-panel {
+            background: #ffffff;
+            border: 1px solid #dce5ef;
+            border-radius: 16px;
+            padding: 21px;
+            box-shadow: 0 8px 25px rgba(16, 42, 67, 0.05);
+        }
+
+        .profile-small-panel h3 {
+            margin: 0 0 6px;
+            color: #102a43;
+            font-size: 16px;
+        }
+
+        .profile-small-panel p {
+            margin: 0;
+            color: #66788a;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .profile-account-line {
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid #edf1f5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .profile-account-line span {
+            color: #66788a;
+            font-size: 12px;
+        }
+
+        .profile-account-line strong {
+            color: #102a43;
+            font-size: 12px;
+        }
+
+
+        /* =========================================================
+           BROWSE ACTION
+           ========================================================= */
+
+        .profile-action {
+            margin-top: 22px;
+            padding: 20px 22px;
+            background: #f8fafc;
+            border: 1px solid #dce5ef;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .profile-action-text h3 {
+            margin: 0 0 4px;
+            color: #102a43;
+            font-size: 16px;
+        }
+
+        .profile-action-text p {
+            margin: 0;
+            color: #66788a;
+            font-size: 12px;
+        }
+
+        .profile-action .btn {
+            white-space: nowrap;
+        }
+
+
+        /* =========================================================
+           LOADING
+           ========================================================= */
+
+        .profile-loading {
+            padding: 35px;
+            text-align: center;
+            color: #8a9bb0;
+            font-size: 13px;
+        }
+
+
+        /* =========================================================
+           MOBILE
+           ========================================================= */
+
+        @media (max-width: 900px) {
+
+            .profile-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-bottom {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .profile-heading h2 {
+                font-size: 23px;
+            }
+
+            .profile-identity-top {
+                padding: 21px;
+            }
+
+            .profile-large-avatar {
+                width: 68px;
+                height: 68px;
+                min-width: 68px;
+                font-size: 22px;
+            }
+
+            .profile-identity-name h3 {
+                font-size: 19px;
+            }
+
+            .profile-information {
+                padding-left: 21px;
+                padding-right: 21px;
+            }
+
+            .profile-info-row {
+                align-items: flex-start;
+                flex-direction: column;
+                justify-content: center;
+                gap: 5px;
+                padding: 11px 0;
+            }
+
+            .profile-info-value {
+                padding-left: 43px;
+                text-align: left;
+            }
+
+            .profile-action {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .profile-action .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <aside class="sidebar">
+
+
+        <!-- BRAND -->
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                📖
+            </div>
+
+            <div class="brand-text">
+
+                <strong>
+                    LibTrack
+                </strong>
+
+                <span>
+                    College Library
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- MENU -->
+
+        <nav class="sidebar-menu">
+
+
+            <div class="menu-label">
+                MAIN
+            </div>
+
+
+            <a
+                href="index.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ⌂
+                </span>
+
+                <span class="menu-text">
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <a
+                href="browse.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ▣
+                </span>
+
+                <span class="menu-text">
+                    Browse Books
+                </span>
+
+            </a>
+
+
+            <a
+                href="my-library.html"
+                class="menu-item"
+            >
+
+                <span class="menu-icon">
+                    ▤
+                </span>
+
+                <span class="menu-text">
+                    My Library
+                </span>
+
+            </a>
+
+
+            <div class="menu-label">
+                ACCOUNT
+            </div>
+
+
+            <a
+                href="profile.html"
+                class="menu-item active"
+            >
+
+                <span class="menu-icon">
+                    ♙
+                </span>
+
+                <span class="menu-text">
+                    Profile
+                </span>
+
+            </a>
+
+
+            <a
+                href="#"
+                class="menu-item"
+                id="logoutLink"
+            >
+
+                <span class="menu-icon">
+                    ↪
+                </span>
+
+                <span class="menu-text">
+                    Logout
+                </span>
+
+            </a>
+
+
+        </nav>
+
+
+        <!-- SIDEBAR USER -->
+
+        <div class="sidebar-user">
+
+            <div class="sidebar-user-box">
+
+                <div
+                    class="user-avatar"
+                    id="sidebarAvatar"
+                >
+                    S
+                </div>
+
+                <div class="user-info">
+
+                    <strong id="sidebarUserName">
+                        Student
+                    </strong>
+
+                    <span>
+                        Student Account
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    type="button"
+                    class="sidebar-toggle"
+                    id="sidebarToggle"
+                    aria-label="Toggle sidebar"
+                >
+                    ☰
+                </button>
+
+
+                <div class="topbar-title">
+
+                    <h1>
+                        Profile
+                    </h1>
+
+                    <p>
+                        Your LibTrack account information
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="topbar-user">
+
+                <div
+                    class="topbar-avatar"
+                    id="topbarAvatar"
+                >
+                    S
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             PROFILE PAGE
+             ================================================= -->
+
+        <div class="page-container profile-page">
+
+
+            <!-- PAGE HEADING -->
+
+            <div class="profile-heading">
+
+                <h2>
+                    My Profile
+                </h2>
+
+                <p>
+                    View your student information and library activity.
+                </p>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 MAIN PROFILE AREA
+                 ================================================= -->
+
+            <div class="profile-layout">
+
+
+                <!-- =================================================
+                     PERSONAL INFORMATION
+                     ================================================= -->
+
+                <section class="profile-identity">
+
+
+                    <div class="profile-identity-top">
+
+                        <div
+                            class="profile-large-avatar"
+                            id="profileAvatar"
+                        >
+                            S
+                        </div>
+
+
+                        <div class="profile-identity-name">
+
+                            <h3 id="profileName">
+                                Loading...
+                            </h3>
+
+                            <p id="profileEmail">
+                                Loading account information...
+                            </p>
+
+                            <span class="profile-role">
+                                ● <span id="profileRole">Student</span>
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="profile-information">
+
+
+                        <div class="profile-information-title">
+                            Personal Information
+                        </div>
+
+
+                        <!-- STUDENT ID -->
+
+                        <div class="profile-info-row">
+
+                            <div class="profile-info-label">
+
+                                <span class="profile-info-icon">
+                                    🎓
+                                </span>
+
+                                <span>
+                                    Student ID
+                                </span>
+
+                            </div>
+
+                            <div
+                                class="profile-info-value muted"
+                                id="studentId"
+                            >
+                                Not linked
+                            </div>
+
+                        </div>
+
+
+                        <!-- USERNAME -->
+
+                        <div class="profile-info-row">
+
+                            <div class="profile-info-label">
+
+                                <span class="profile-info-icon">
+                                    👤
+                                </span>
+
+                                <span>
+                                    Username
+                                </span>
+
+                            </div>
+
+                            <div
+                                class="profile-info-value"
+                                id="username"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <!-- EMAIL -->
+
+                        <div class="profile-info-row">
+
+                            <div class="profile-info-label">
+
+                                <span class="profile-info-icon">
+                                    ✉️
+                                </span>
+
+                                <span>
+                                    Email
+                                </span>
+
+                            </div>
+
+                            <div
+                                class="profile-info-value"
+                                id="email"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <!-- COURSE -->
+
+                        <div class="profile-info-row">
+
+                            <div class="profile-info-label">
+
+                                <span class="profile-info-icon">
+                                    📘
+                                </span>
+
+                                <span>
+                                    Course
+                                </span>
+
+                            </div>
+
+                            <div
+                                class="profile-info-value muted"
+                                id="course"
+                            >
+                                Not provided
+                            </div>
+
+                        </div>
+
+
+                        <!-- ACCOUNT ROLE -->
+
+                        <div class="profile-info-row">
+
+                            <div class="profile-info-label">
+
+                                <span class="profile-info-icon">
+                                    🔐
+                                </span>
+
+                                <span>
+                                    Account Type
+                                </span>
+
+                            </div>
+
+                            <div
+                                class="profile-info-value"
+                                id="accountType"
+                            >
+                                Student
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     LIBRARY ACTIVITY
+                     ================================================= -->
+
+                <section class="profile-activity">
+
+
+                    <div class="profile-activity-header">
+
+                        <h3>
+                            Library Activity
+                        </h3>
+
+                        <p>
+                            A quick look at your borrowing activity.
+                        </p>
+
+                    </div>
+
+
+                    <div class="profile-activity-list">
+
+
+                        <!-- CURRENT -->
+
+                        <div class="profile-activity-item">
+
+                            <div class="profile-activity-icon">
+                                📚
+                            </div>
+
+                            <div class="profile-activity-text">
+
+                                <strong>
+                                    Currently Borrowed
+                                </strong>
+
+                                <span>
+                                    Books currently with you
+                                </span>
+
+                            </div>
+
+                            <div
+                                class="profile-activity-number"
+                                id="borrowedCount"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <!-- RETURNED -->
+
+                        <div class="profile-activity-item">
+
+                            <div class="profile-activity-icon green">
+                                ✓
+                            </div>
+
+                            <div class="profile-activity-text">
+
+                                <strong>
+                                    Returned
+                                </strong>
+
+                                <span>
+                                    Completed borrowing records
+                                </span>
+
+                            </div>
+
+                            <div
+                                class="profile-activity-number"
+                                id="returnedCount"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <!-- OVERDUE -->
+
+                        <div class="profile-activity-item">
+
+                            <div class="profile-activity-icon red">
+                                ⚠
+                            </div>
+
+                            <div class="profile-activity-text">
+
+                                <strong>
+                                    Overdue
+                                </strong>
+
+                                <span>
+                                    Books past their due date
+                                </span>
+
+                            </div>
+
+                            <div
+                                class="profile-activity-number"
+                                id="overdueCount"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <!-- TOTAL -->
+
+                        <div class="profile-activity-item">
+
+                            <div class="profile-activity-icon orange">
+                                📖
+                            </div>
+
+                            <div class="profile-activity-text">
+
+                                <strong>
+                                    Total Borrowing Records
+                                </strong>
+
+                                <span>
+                                    Your complete library history
+                                </span>
+
+                            </div>
+
+                            <div
+                                class="profile-activity-number"
+                                id="totalBorrowCount"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- ACCOUNT STATUS -->
+
+                    <div class="profile-status-box">
+
+                        <div class="profile-status-top">
+
+                            <span class="profile-status-dot"></span>
+
+                            <strong>
+                                Account Active
+                            </strong>
+
+                        </div>
+
+                        <p>
+                            Your LibTrack student account is currently
+                            signed in and ready to use.
+                        </p>
+
+                    </div>
+
+
+                </section>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 LOWER INFORMATION PANELS
+                 ================================================= -->
+
+            <div class="profile-bottom">
+
+
+                <!-- ACCOUNT DETAILS -->
+
+                <section class="profile-small-panel">
+
+                    <h3>
+                        Account Details
+                    </h3>
+
+                    <p>
+                        Your account is used to access your personal
+                        library information and borrowing records.
+                    </p>
+
+
+                    <div class="profile-account-line">
+
+                        <span>
+                            Username
+                        </span>
+
+                        <strong id="accountUsername">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-account-line">
+
+                        <span>
+                            Role
+                        </span>
+
+                        <strong id="accountRole">
+                            Student
+                        </strong>
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- LIBRARY ACCESS -->
+
+                <section class="profile-small-panel">
+
+                    <h3>
+                        Library Access
+                    </h3>
+
+                    <p>
+                        Use LibTrack to find books, check their location,
+                        manage borrowed books and keep track of deadlines.
+                    </p>
+
+
+                    <div class="profile-account-line">
+
+                        <span>
+                            Browse Library
+                        </span>
+
+                        <strong>
+                            Available
+                        </strong>
+
+                    </div>
+
+
+                    <div class="profile-account-line">
+
+                        <span>
+                            My Library
+                        </span>
+
+                        <strong>
+                            Available
+                        </strong>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 BROWSE ACTION
+                 ================================================= -->
+
+            <section class="profile-action">
+
+
+                <div class="profile-action-text">
+
+                    <h3>
+                        Looking for a book?
+                    </h3>
+
+                    <p>
+                        Explore the library catalog and find your next book.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="browse.html"
+                    class="btn btn-primary"
+                >
+                    Browse Books →
+                </a>
+
+
+            </section>
+
+
+        </div>
+
+    </main>
+
+</div>
+
+
+
+<!-- =========================================================
+     AUTH
+     ========================================================= -->
+
+<script src="auth.js"></script>
+
+
+<script>
+
+    /* =========================================================
+       PROTECT PROFILE PAGE
+       ========================================================= */
+
+    if (!requireStudent()) {
+
+        throw new Error(
+            "Student authentication required."
+        );
+
+    }
+
+
+    /* =========================================================
+       CURRENT USER
+       ========================================================= */
+
+    const currentUser =
+        getCurrentUser() || {};
+
+
+    const API =
+        typeof API_URL !== "undefined"
+            ? API_URL
+            : "http://127.0.0.1:5000";
+
+
+
+    /* =========================================================
+       HELPERS
+       ========================================================= */
+
+    function getUserName(user) {
+
+        return (
+            user.name ||
+            user.username ||
+            user.email ||
+            "Student"
+        );
+
+    }
+
+
+    function getInitials(name) {
+
+        if (!name) {
+            return "S";
+        }
+
+        const parts =
+            String(name)
+                .trim()
+                .split(/\s+/);
+
+
+        if (parts.length === 1) {
+
+            return parts[0]
+                .charAt(0)
+                .toUpperCase();
+
+        }
+
+
+        return (
+            parts[0].charAt(0) +
+            parts[parts.length - 1].charAt(0)
+        ).toUpperCase();
+
+    }
+
+
+    function safeText(value, fallback = "—") {
+
+        if (
+            value === null ||
+            value === undefined ||
+            String(value).trim() === ""
+        ) {
+
+            return fallback;
+
+        }
+
+        return String(value);
+
+    }
+
+
+    function normalize(value) {
+
+        return String(
+            value ?? ""
+        )
+        .trim()
+        .toLowerCase();
+
+    }
+
+
+    function isValidDate(value) {
+
+        if (!value) {
+            return false;
+        }
+
+        const date =
+            new Date(value);
+
+        return !Number.isNaN(
+            date.getTime()
+        );
+
+    }
+
+
+    function getDaysRemaining(value) {
+
+        if (!isValidDate(value)) {
+            return null;
+        }
+
+
+        const dueDate =
+            new Date(value);
+
+        const today =
+            new Date();
+
+
+        dueDate.setHours(
+            0, 0, 0, 0
+        );
+
+        today.setHours(
+            0, 0, 0, 0
+        );
+
+
+        return Math.ceil(
+            (
+                dueDate.getTime() -
+                today.getTime()
+            ) /
+            (
+                1000 *
+                60 *
+                60 *
+                24
+            )
+        );
+
+    }
+
+
+
+    /* =========================================================
+       DISPLAY USER INFORMATION
+       ========================================================= */
+
+    const userName =
+        getUserName(
+            currentUser
+        );
+
+
+    const userEmail =
+        currentUser.email ||
+        "No email provided";
+
+
+    const userRole =
+        currentUser.role ||
+        "student";
+
+
+    const initials =
+        getInitials(
+            userName
+        );
+
+
+    document.getElementById(
+        "sidebarUserName"
+    ).textContent =
+        userName;
+
+
+    document.getElementById(
+        "sidebarAvatar"
+    ).textContent =
+        initials;
+
+
+    document.getElementById(
+        "topbarAvatar"
+    ).textContent =
+        initials;
+
+
+    document.getElementById(
+        "profileAvatar"
+    ).textContent =
+        initials;
+
+
+    document.getElementById(
+        "profileName"
+    ).textContent =
+        userName;
+
+
+    document.getElementById(
+        "profileEmail"
+    ).textContent =
+        userEmail;
+
+
+    document.getElementById(
+        "profileRole"
+    ).textContent =
+        String(userRole);
+
+
+    document.getElementById(
+        "username"
+    ).textContent =
+        safeText(
+            currentUser.username
+        );
+
+
+    document.getElementById(
+        "email"
+    ).textContent =
+        safeText(
+            currentUser.email
+        );
+
+
+    document.getElementById(
+        "accountType"
+    ).textContent =
+        String(userRole);
+
+
+    document.getElementById(
+        "accountUsername"
+    ).textContent =
+        safeText(
+            currentUser.username
+        );
+
+
+    document.getElementById(
+        "accountRole"
+    ).textContent =
+        String(userRole);
+
+
+
+    /* =========================================================
+       SIDEBAR TOGGLE
+       ========================================================= */
+
+    const sidebarToggle =
+        document.getElementById(
+            "sidebarToggle"
+        );
+
+
+    if (sidebarToggle) {
+
+        sidebarToggle.addEventListener(
+            "click",
+            function () {
+
+                const sidebar =
+                    document.querySelector(
+                        ".sidebar"
+                    );
+
+                const main =
+                    document.querySelector(
+                        ".main-content"
+                    );
+
+
+                if (!sidebar) {
+                    return;
+                }
+
+
+                if (
+                    window.innerWidth <= 650
+                ) {
+
+                    sidebar.classList.toggle(
+                        "mobile-open"
+                    );
+
+                } else {
+
+                    sidebar.classList.toggle(
+                        "collapsed"
+                    );
+
+
+                    if (main) {
+
+                        main.classList.toggle(
+                            "sidebar-collapsed"
+                        );
+
+                    }
+
+                }
+
+            }
+        );
+
+    }
+
+
+
+    /* =========================================================
+       LOGOUT
+       ========================================================= */
+
+    const logoutLink =
+        document.getElementById(
+            "logoutLink"
+        );
+
+
+    if (logoutLink) {
+
+        logoutLink.addEventListener(
+            "click",
+            function (event) {
+
+                event.preventDefault();
+
+                logout();
+
+            }
+        );
+
+    }
+
+
+
+    /* =========================================================
+       FIND STUDENT RECORD
+       ========================================================= */
+
+    async function findStudentRecord() {
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API}/students`
+                );
+
+
+            if (!response.ok) {
+
+                return null;
+
+            }
+
+
+            const students =
+                await response.json();
+
+
+            if (
+                !Array.isArray(students)
+            ) {
+
+                return null;
+
+            }
+
+
+            const possibleValues = [
+
+                currentUser.studentId,
+
+                currentUser.username,
+
+                currentUser.email,
+
+                currentUser.id,
+
+                currentUser._id
+
+            ]
+            .filter(Boolean)
+            .map(normalize);
+
+
+            return students.find(
+                function (student) {
+
+                    const studentValues = [
+
+                        student.studentId,
+
+                        student.username,
+
+                        student.email,
+
+                        student.id,
+
+                        student._id
+
+                    ]
+                    .filter(Boolean)
+                    .map(normalize);
+
+
+                    return possibleValues.some(
+                        value =>
+                            studentValues.includes(
+                                value
+                            )
+                    );
+
+                }
+            ) || null;
+
+
+        } catch (error) {
+
+            console.warn(
+                "Student lookup unavailable:",
+                error
+            );
+
+            return null;
+
+        }
+
+    }
+
+
+
+    /* =========================================================
+       LOAD BORROWING ACTIVITY
+       ========================================================= */
+
+    async function loadProfileActivity(
+        studentRecord
+    ) {
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API}/borrow`
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Borrow records unavailable"
+                );
+
+            }
+
+
+            const records =
+                await response.json();
+
+
+            const allRecords =
+                Array.isArray(records)
+                    ? records
+                    : [];
+
+
+            /*
+               Build identifiers without
+               hard-coding a student ID.
+            */
+
+            const identifiers = [
+
+                currentUser.studentId,
+
+                currentUser.username,
+
+                currentUser.email,
+
+                currentUser.id,
+
+                currentUser._id,
+
+                studentRecord?.studentId,
+
+                studentRecord?.username,
+
+                studentRecord?.email,
+
+                studentRecord?.id,
+
+                studentRecord?._id
+
+            ]
+            .filter(Boolean)
+            .map(normalize);
+
+
+            const studentRecords =
+                allRecords.filter(
+                    function (record) {
+
+                        const recordValues = [
+
+                            record.studentId,
+
+                            record.username,
+
+                            record.email,
+
+                            record.userId,
+
+                            record.userEmail
+
+                        ]
+                        .filter(Boolean)
+                        .map(normalize);
+
+
+                        return identifiers.some(
+                            value =>
+                                recordValues.includes(
+                                    value
+                                )
+                        );
+
+                    }
+                );
+
+
+            const activeRecords =
+                studentRecords.filter(
+                    record =>
+                        normalize(
+                            record.status
+                        ) === "borrowed"
+                );
+
+
+            const returnedRecords =
+                studentRecords.filter(
+                    record =>
+                        normalize(
+                            record.status
+                        ) === "returned"
+                );
+
+
+            const overdueRecords =
+                activeRecords.filter(
+                    record => {
+
+                        const days =
+                            getDaysRemaining(
+                                record.dueDate
+                            );
+
+                        return (
+                            days !== null &&
+                            days < 0
+                        );
+
+                    }
+                );
+
+
+            document.getElementById(
+                "borrowedCount"
+            ).textContent =
+                activeRecords.length;
+
+
+            document.getElementById(
+                "returnedCount"
+            ).textContent =
+                returnedRecords.length;
+
+
+            document.getElementById(
+                "overdueCount"
+            ).textContent =
+                overdueRecords.length;
+
+
+            document.getElementById(
+                "totalBorrowCount"
+            ).textContent =
+                studentRecords.length;
+
+
+        } catch (error) {
+
+            console.error(
+                "Profile activity error:",
+                error
+            );
+
+
+            document.getElementById(
+                "borrowedCount"
+            ).textContent =
+                "—";
+
+
+            document.getElementById(
+                "returnedCount"
+            ).textContent =
+                "—";
+
+
+            document.getElementById(
+                "overdueCount"
+            ).textContent =
+                "—";
+
+
+            document.getElementById(
+                "totalBorrowCount"
+            ).textContent =
+                "—";
+
+        }
+
+    }
+
+
+
+    /* =========================================================
+       LOAD STUDENT INFORMATION
+       ========================================================= */
+
+    async function loadProfile() {
+
+        const student =
+            await findStudentRecord();
+
+
+        /*
+           If a matching student record
+           exists, use its actual data.
+        */
+
+        if (student) {
+
+            document.getElementById(
+                "studentId"
+            ).textContent =
+                safeText(
+                    student.studentId,
+                    "Not provided"
+                );
+
+
+            document.getElementById(
+                "course"
+            ).textContent =
+                safeText(
+                    student.course,
+                    "Not provided"
+                );
+
+
+            /*
+               If the student database has a
+               better name/email, use it.
+            */
+
+            if (
+                student.name &&
+                !currentUser.username
+            ) {
+
+                document.getElementById(
+                    "profileName"
+                ).textContent =
+                    student.name;
+
+            }
+
+
+            if (
+                student.email &&
+                !currentUser.email
+            ) {
+
+                document.getElementById(
+                    "profileEmail"
+                ).textContent =
+                    student.email;
+
+                document.getElementById(
+                    "email"
+                ).textContent =
+                    student.email;
+
+            }
+
+        }
+
+
+        /*
+           If current user itself contains
+           these fields, prefer them.
+        */
+
+        if (currentUser.studentId) {
+
+            document.getElementById(
+                "studentId"
+            ).textContent =
+                currentUser.studentId;
+
+        }
+
+
+        if (currentUser.course) {
+
+            document.getElementById(
+                "course"
+            ).textContent =
+                currentUser.course;
+
+        }
+
+
+        await loadProfileActivity(
+            student
+        );
+
+    }
+
+
+
+    /* =========================================================
+       START
+       ========================================================= */
+
+    loadProfile();
+
+</script>
+
+
+</body>
+
+</html>

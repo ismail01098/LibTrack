@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | LibTrack</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --navy: #0b2d52;
+            --navy-dark: #071f39;
+            --blue: #1769e0;
+            --blue-dark: #1057bd;
+            --blue-soft: #eaf2ff;
+            --text: #18324d;
+            --muted: #71839a;
+            --border: #dce5ef;
+            --background: #f5f8fc;
+            --white: #ffffff;
+            --green: #087443;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--background);
+            color: var(--text);
+        }
+
+
+        /* ================================
+           MAIN LAYOUT
+        ================================= */
+
+        .auth-page {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+        }
+
+
+        /* ================================
+           LEFT LIBRARY VISUAL
+        ================================= */
+
+        .library-panel {
+            position: relative;
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #092744 0%,
+                    #0b3157 55%,
+                    #103f6d 100%
+                );
+
+            color: white;
+
+            padding: 55px 7vw;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+
+        .library-panel::after {
+            content: "";
+
+            position: absolute;
+
+            width: 420px;
+            height: 420px;
+
+            right: -180px;
+            bottom: -180px;
+
+            border: 1px solid rgba(255,255,255,0.08);
+
+            border-radius: 50%;
+        }
+
+
+        /* Brand */
+
+        .brand {
+            position: relative;
+            z-index: 2;
+
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .brand-mark {
+
+            width: 43px;
+            height: 43px;
+
+            border: 1px solid rgba(255,255,255,0.25);
+
+            border-radius: 10px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: rgba(255,255,255,0.07);
+
+            font-size: 20px;
+        }
+
+        .brand-name {
+            font-size: 23px;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+        }
+
+
+        /* Main message */
+
+        .library-content {
+            position: relative;
+            z-index: 2;
+
+            max-width: 510px;
+        }
+
+        .eyebrow {
+
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            color: #bcd6f7;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            letter-spacing: 1.5px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 18px;
+        }
+
+        .eyebrow-dot {
+
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: #7db5ff;
+        }
+
+        .library-content h1 {
+
+            font-size: clamp(38px, 4vw, 58px);
+
+            line-height: 1.05;
+
+            letter-spacing: -2px;
+
+            margin-bottom: 22px;
+        }
+
+        .library-content h1 span {
+            color: #8ebeff;
+        }
+
+        .library-description {
+
+            color: #c4d4e6;
+
+            font-size: 16px;
+
+            line-height: 1.75;
+
+            max-width: 470px;
+        }
+
+
+        /* ================================
+           MEANINGFUL BOOK SHELF
+        ================================= */
+
+        .shelf-system {
+
+            position: relative;
+
+            z-index: 2;
+
+            margin-top: 50px;
+
+            max-width: 480px;
+        }
+
+        .book-row {
+
+            height: 150px;
+
+            display: flex;
+
+            align-items: flex-end;
+
+            gap: 8px;
+
+            padding-left: 18px;
+        }
+
+        .book {
+
+            position: relative;
+
+            height: 115px;
+
+            width: 38px;
+
+            border-radius: 5px 5px 2px 2px;
+
+            border: 1px solid rgba(255,255,255,0.12);
+
+            background: rgba(255,255,255,0.08);
+
+            transition: 0.3s ease;
+        }
+
+        .book:nth-child(2) {
+            height: 132px;
+            width: 43px;
+        }
+
+        .book:nth-child(3) {
+            height: 105px;
+            width: 35px;
+        }
+
+        .book:nth-child(4) {
+            height: 140px;
+            width: 42px;
+        }
+
+        .book:nth-child(5) {
+            height: 120px;
+            width: 38px;
+        }
+
+        .book:nth-child(6) {
+            height: 136px;
+            width: 40px;
+        }
+
+        .book:nth-child(7) {
+            height: 112px;
+            width: 36px;
+        }
+
+        .book.highlight {
+
+            background: #1769e0;
+
+            border-color: #75aaff;
+
+            box-shadow:
+                0 12px 30px rgba(23,105,224,0.35);
+        }
+
+        .book.highlight::before {
+
+            content: "";
+
+            position: absolute;
+
+            left: 8px;
+            right: 8px;
+
+            top: 18px;
+
+            height: 2px;
+
+            background: rgba(255,255,255,0.7);
+        }
+
+        .book.highlight::after {
+
+            content: "";
+
+            position: absolute;
+
+            left: 8px;
+            right: 8px;
+
+            top: 27px;
+
+            height: 2px;
+
+            background: rgba(255,255,255,0.4);
+        }
+
+        .shelf-line {
+
+            height: 7px;
+
+            width: 100%;
+
+            background: #071f39;
+
+            border-top: 1px solid rgba(255,255,255,0.12);
+
+            border-radius: 2px;
+        }
+
+
+        /* Connection */
+
+        .library-connection {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin-top: 18px;
+
+            color: #a9c3df;
+
+            font-size: 12px;
+        }
+
+        .connection-line {
+
+            width: 70px;
+
+            height: 1px;
+
+            background: #6da6ef;
+
+            position: relative;
+        }
+
+        .connection-line::after {
+
+            content: "";
+
+            position: absolute;
+
+            right: 0;
+
+            top: -3px;
+
+            width: 6px;
+            height: 6px;
+
+            background: #8ebeff;
+
+            border-radius: 50%;
+        }
+
+
+        /* Bottom */
+
+        .library-footer {
+
+            position: relative;
+            z-index: 2;
+
+            color: #89a4c1;
+
+            font-size: 12px;
+        }
+
+
+        /* ================================
+           RIGHT AUTH AREA
+        ================================= */
+
+        .auth-panel {
+
+            min-height: 100vh;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 45px;
+        }
+
+        .auth-container {
+
+            width: 100%;
+
+            max-width: 460px;
+        }
+
+
+        .mobile-brand {
+            display: none;
+        }
+
+
+        .auth-heading {
+
+            margin-bottom: 30px;
+        }
+
+        .auth-heading h2 {
+
+            color: var(--navy);
+
+            font-size: 31px;
+
+            letter-spacing: -0.8px;
+
+            margin-bottom: 9px;
+        }
+
+        .auth-heading p {
+
+            color: var(--muted);
+
+            font-size: 15px;
+
+            line-height: 1.6;
+        }
+
+
+        /* ================================
+           CARD
+        ================================= */
+
+        .auth-card {
+
+            background: var(--white);
+
+            border: 1px solid var(--border);
+
+            border-radius: 18px;
+
+            padding: 32px;
+
+            box-shadow:
+                0 18px 45px rgba(16,42,67,0.07);
+        }
+
+
+        /* Form */
+
+        .form-group {
+
+            margin-bottom: 21px;
+        }
+
+        .form-group label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            color: #29445e;
+        }
+
+        .input-wrapper {
+
+            position: relative;
+        }
+
+        .input-icon {
+
+            position: absolute;
+
+            left: 16px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            color: #7e93aa;
+
+            font-size: 16px;
+
+            pointer-events: none;
+        }
+
+        .form-group input {
+
+            width: 100%;
+
+            height: 54px;
+
+            padding: 0 16px 0 45px;
+
+            border: 1px solid #ccd9e7;
+
+            border-radius: 10px;
+
+            background: #fbfdff;
+
+            color: var(--text);
+
+            font-size: 15px;
+
+            outline: none;
+
+            transition: 0.2s ease;
+        }
+
+        .form-group input::placeholder {
+            color: #9aabbd;
+        }
+
+        .form-group input:focus {
+
+            border-color: var(--blue);
+
+            background: white;
+
+            box-shadow:
+                0 0 0 3px rgba(23,105,224,0.09);
+        }
+
+
+        /* Password */
+
+        .password-toggle {
+
+            position: absolute;
+
+            right: 14px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            border: none;
+
+            background: transparent;
+
+            color: #6e8298;
+
+            cursor: pointer;
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+        .password-toggle:hover {
+            color: var(--blue);
+        }
+
+
+        /* Options */
+
+        .form-options {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin: 2px 0 24px;
+        }
+
+        .remember {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            color: #687d94;
+
+            font-size: 13px;
+        }
+
+        .remember input {
+
+            accent-color: var(--blue);
+        }
+
+        .forgot {
+
+            color: var(--blue);
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            text-decoration: none;
+        }
+
+
+        /* Button */
+
+        .login-button {
+
+            width: 100%;
+
+            height: 55px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: var(--blue);
+
+            color: white;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+        .login-button:hover {
+            background: var(--blue-dark);
+            transform: translateY(-1px);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+        .login-button:disabled {
+
+            opacity: 0.7;
+
+            cursor: not-allowed;
+
+            transform: none;
+        }
+
+
+        /* Meaningful button arrow */
+
+        .button-arrow {
+
+            margin-left: 8px;
+
+            font-size: 17px;
+        }
+
+
+        /* Message */
+
+        .message {
+
+            display: none;
+
+            margin-top: 17px;
+
+            padding: 13px 15px;
+
+            border-radius: 9px;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+        }
+
+        .message.error {
+
+            display: block;
+
+            background: #fff1f2;
+
+            border: 1px solid #fecdd3;
+
+            color: #be123c;
+        }
+
+        .message.success {
+
+            display: block;
+
+            background: #ecfdf5;
+
+            border: 1px solid #a7f3d0;
+
+            color: var(--green);
+        }
+
+
+        /* Register */
+
+        .register-text {
+
+            text-align: center;
+
+            margin-top: 24px;
+
+            color: var(--muted);
+
+            font-size: 13px;
+        }
+
+        .register-text a {
+
+            color: var(--blue);
+
+            font-weight: 700;
+
+            text-decoration: none;
+        }
+
+        .register-text a:hover {
+            text-decoration: underline;
+        }
+
+
+        .security-note {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 7px;
+
+            margin-top: 23px;
+
+            color: #92a2b3;
+
+            font-size: 11px;
+        }
+
+
+        /* ================================
+           RESPONSIVE
+        ================================= */
+
+        @media (max-width: 900px) {
+
+            .auth-page {
+                grid-template-columns: 1fr;
+            }
+
+            .library-panel {
+                display: none;
+            }
+
+            .auth-panel {
+                min-height: 100vh;
+                padding: 30px 20px;
+            }
+
+            .mobile-brand {
+                display: flex;
+
+                align-items: center;
+                justify-content: center;
+
+                gap: 10px;
+
+                margin-bottom: 35px;
+            }
+
+            .mobile-brand-mark {
+
+                width: 40px;
+                height: 40px;
+
+                background: var(--navy);
+
+                color: white;
+
+                border-radius: 9px;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .mobile-brand-name {
+
+                font-size: 23px;
+                font-weight: 700;
+                color: var(--navy);
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .auth-panel {
+                padding: 25px 15px;
+            }
+
+            .auth-card {
+                padding: 25px 21px;
+            }
+
+            .auth-heading h2 {
+                font-size: 27px;
+            }
+
+            .form-options {
+                align-items: flex-start;
+                gap: 12px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="auth-page">
+
+
+    <!-- ==========================================
+         LEFT — LIBRARY STORY
+    =========================================== -->
+
+    <section class="library-panel">
+
+
+        <div class="brand">
+
+            <div class="brand-mark">
+                ▤
+            </div>
+
+            <div class="brand-name">
+                LibTrack
+            </div>
+
+        </div>
+
+
+        <div class="library-content">
+
+            <div class="eyebrow">
+
+                <span class="eyebrow-dot"></span>
+
+                YOUR DIGITAL LIBRARY
+
+            </div>
+
+
+            <h1>
+                Find the book.<br>
+                <span>Know where it is.</span>
+            </h1>
+
+
+            <p class="library-description">
+
+                LibTrack connects your college library's physical
+                collection with a simple digital experience —
+                helping you search, locate and borrow books
+                without the unnecessary wait.
+
+            </p>
+
+
+            <div class="shelf-system">
+
+                <div class="book-row">
+
+                    <div class="book"></div>
+
+                    <div class="book"></div>
+
+                    <div class="book"></div>
+
+                    <div class="book highlight"></div>
+
+                    <div class="book"></div>
+
+                    <div class="book"></div>
+
+                    <div class="book"></div>
+
+                </div>
+
+
+                <div class="shelf-line"></div>
+
+
+                <div class="library-connection">
+
+                    <span>
+                        Physical library
+                    </span>
+
+                    <span class="connection-line"></span>
+
+                    <span>
+                        LibTrack
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="library-footer">
+
+            College Library Management System
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ==========================================
+         RIGHT — LOGIN
+    =========================================== -->
+
+    <main class="auth-panel">
+
+
+        <div class="auth-container">
+
+
+            <div class="mobile-brand">
+
+                <div class="mobile-brand-mark">
+                    ▤
+                </div>
+
+                <div class="mobile-brand-name">
+                    LibTrack
+                </div>
+
+            </div>
+
+
+            <div class="auth-heading">
+
+                <h2>
+                    Enter your library
+                </h2>
+
+                <p>
+                    Sign in to search the collection,
+                    manage your books and keep track of
+                    your library activity.
+                </p>
+
+            </div>
+
+
+            <div class="auth-card">
+
+
+                <form id="loginForm">
+
+
+                    <div class="form-group">
+
+                        <label for="username">
+                            Username
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                ◉
+                            </span>
+
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                placeholder="Enter your username"
+                                autocomplete="username"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="form-group">
+
+                        <label for="password">
+                            Password
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <span class="input-icon">
+                                ▣
+                            </span>
+
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Enter your password"
+                                autocomplete="current-password"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                id="passwordToggle"
+                            >
+                                SHOW
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="form-options">
+
+                        <label class="remember">
+
+                            <input
+                                type="checkbox"
+                                id="rememberMe"
+                            >
+
+                            Remember me
+
+                        </label>
+
+
+                        <a
+                            href="#"
+                            class="forgot"
+                            onclick="return false;"
+                        >
+                            Forgot password?
+                        </a>
+
+                    </div>
+
+
+
+                    <button
+                        type="submit"
+                        class="login-button"
+                        id="loginButton"
+                    >
+
+                        Enter LibTrack
+
+                        <span class="button-arrow">
+                            →
+                        </span>
+
+                    </button>
+
+
+                </form>
+
+
+
+                <div
+                    class="message"
+                    id="loginMessage"
+                ></div>
+
+
+
+                <div class="register-text">
+
+                    New to LibTrack?
+
+                    <a href="register.html">
+                        Create your library account
+                    </a>
+
+                </div>
+
+
+                <div class="security-note">
+
+                    <span>▣</span>
+
+                    Your account is protected by secure authentication
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </main>
+
+</div>
+
+
+
+<script src="auth.js"></script>
+
+
+<script>
+
+    const loginForm =
+        document.getElementById("loginForm");
+
+    const loginButton =
+        document.getElementById("loginButton");
+
+    const loginMessage =
+        document.getElementById("loginMessage");
+
+    const passwordInput =
+        document.getElementById("password");
+
+    const passwordToggle =
+        document.getElementById("passwordToggle");
+
+
+    function showMessage(message, type = "error") {
+
+        loginMessage.textContent = message;
+
+        loginMessage.className =
+            "message " + type;
+
+    }
+
+
+    /* Password visibility */
+
+    passwordToggle.addEventListener(
+        "click",
+        function () {
+
+            if (passwordInput.type === "password") {
+
+                passwordInput.type = "text";
+
+                passwordToggle.textContent = "HIDE";
+
+            } else {
+
+                passwordInput.type = "password";
+
+                passwordToggle.textContent = "SHOW";
+
+            }
+
+        }
+    );
+
+
+    /* Login */
+
+    loginForm.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            const username =
+                document
+                    .getElementById("username")
+                    .value
+                    .trim();
+
+
+            const password =
+                passwordInput.value;
+
+
+            if (!username || !password) {
+
+                showMessage(
+                    "Please enter your username and password."
+                );
+
+                return;
+
+            }
+
+
+            loginButton.disabled = true;
+
+            loginButton.innerHTML =
+                "Checking your library access...";
+
+
+            try {
+
+                const response =
+                    await fetch(`${API_URL}/login`, {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+
+                            username: username,
+
+                            password: password
+
+                        })
+
+                    });
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+
+                        data.message ||
+                        "Invalid username or password."
+
+                    );
+
+                }
+
+
+                saveAuth(
+                    data.token,
+                    data.user
+                );
+
+
+                showMessage(
+                    "Access verified. Opening your library...",
+                    "success"
+                );
+
+
+                const role =
+                    String(
+                        data.user?.role ||
+                        "student"
+                    ).toLowerCase();
+
+
+                setTimeout(
+                    function () {
+
+                        if (role === "admin") {
+
+                            window.location.href =
+                                "admin.html";
+
+                        } else {
+
+                            window.location.href =
+                                "index.html";
+
+                        }
+
+                    },
+                    700
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Login error:",
+                    error
+                );
+
+
+                showMessage(
+
+                    error.message ||
+                    "Unable to login. Please try again."
+
+                );
+
+
+                loginButton.disabled = false;
+
+                loginButton.innerHTML =
+                    'Enter LibTrack <span class="button-arrow">→</span>';
+
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>
