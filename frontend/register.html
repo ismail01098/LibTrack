@@ -1262,7 +1262,7 @@
                             <input
                                 type="email"
                                 id="email"
-                                placeholder="Enter your college email"
+                                placeholder="Enter your email"
                                 autocomplete="email"
                                 required
                             >
@@ -1445,7 +1445,7 @@
 <script>
 
     const API_URL =
-        "http://127.0.0.1:5000";
+        "https://libtrack-nvh6.onrender.com";
 
 
     const form =
@@ -1710,6 +1710,32 @@
 
                 message.textContent =
                     "Please enter your course.";
+
+                return;
+
+            }
+
+
+            if (!email) {
+
+                message.className =
+                    "message error";
+
+                message.textContent =
+                    "Please enter your email.";
+
+                return;
+
+            }
+
+
+            if (!username) {
+
+                message.className =
+                    "message error";
+
+                message.textContent =
+                    "Please choose a username.";
 
                 return;
 
