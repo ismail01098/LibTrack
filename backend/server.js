@@ -18,31 +18,51 @@ dotenv.config();
 
 const app = express();
 
-const PORT = 5000;
+/*
+=====================================================
+PORT
+=====================================================
+Render provides its own PORT through environment
+variables.
 
-/* ==========================================
-   DATABASE
-   ========================================== */
+When running locally, it will use port 5000.
+=====================================================
+*/
+
+const PORT = process.env.PORT || 5000;
+
+
+/*
+=====================================================
+DATABASE
+=====================================================
+*/
 
 connectDB();
 
 
-/* ==========================================
-   MIDDLEWARE
-   ========================================== */
+/*
+=====================================================
+MIDDLEWARE
+=====================================================
+*/
 
 app.use(cors());
 
 app.use(express.json());
 
-app.use(express.urlencoded({
-    extended: true
-}));
+app.use(
+    express.urlencoded({
+        extended: true
+    })
+);
 
 
-/* ==========================================
-   REQUEST LOGGER
-   ========================================== */
+/*
+=====================================================
+REQUEST LOGGER
+=====================================================
+*/
 
 app.use((req, res, next) => {
 
@@ -55,9 +75,11 @@ app.use((req, res, next) => {
 });
 
 
-/* ==========================================
-   JWT AUTHENTICATION
-   ========================================== */
+/*
+=====================================================
+JWT AUTHENTICATION
+=====================================================
+*/
 
 function protect(req, res, next) {
 
@@ -66,16 +88,22 @@ function protect(req, res, next) {
         const authHeader =
             req.headers.authorization;
 
+
         if (!authHeader) {
 
             return res.status(401).json({
-                message: "Authentication required"
+
+                message:
+                    "Authentication required"
+
             });
 
         }
 
+
         const parts =
             authHeader.split(" ");
+
 
         if (
             parts.length !== 2 ||
@@ -83,12 +111,18 @@ function protect(req, res, next) {
         ) {
 
             return res.status(401).json({
-                message: "Invalid authorization format"
+
+                message:
+                    "Invalid authorization format"
+
             });
 
         }
 
-        const token = parts[1];
+
+        const token =
+            parts[1];
+
 
         const decoded =
             jwt.verify(
@@ -96,14 +130,20 @@ function protect(req, res, next) {
                 process.env.JWT_SECRET
             );
 
-        req.user = decoded;
+
+        req.user =
+            decoded;
+
 
         next();
 
     } catch (error) {
 
         return res.status(401).json({
-            message: "Invalid or expired token"
+
+            message:
+                "Invalid or expired token"
+
         });
 
     }
@@ -111,9 +151,11 @@ function protect(req, res, next) {
 }
 
 
-/* ==========================================
-   ADMIN AUTHORIZATION
-   ========================================== */
+/*
+=====================================================
+ADMIN AUTHORIZATION
+=====================================================
+*/
 
 function adminOnly(req, res, next) {
 
@@ -123,7 +165,10 @@ function adminOnly(req, res, next) {
     ) {
 
         return res.status(403).json({
-            message: "Admin access required"
+
+            message:
+                "Admin access required"
+
         });
 
     }
@@ -133,9 +178,11 @@ function adminOnly(req, res, next) {
 }
 
 
-/* ==========================================
-   UPLOAD DIRECTORY
-   ========================================== */
+/*
+=====================================================
+UPLOAD DIRECTORY
+=====================================================
+*/
 
 const uploadsDirectory =
     path.join(
@@ -144,7 +191,11 @@ const uploadsDirectory =
     );
 
 
-if (!fs.existsSync(uploadsDirectory)) {
+if (
+    !fs.existsSync(
+        uploadsDirectory
+    )
+) {
 
     fs.mkdirSync(
         uploadsDirectory,
@@ -156,48 +207,55 @@ if (!fs.existsSync(uploadsDirectory)) {
 }
 
 
-/* ==========================================
-   MULTER STORAGE
-   ========================================== */
+/*
+=====================================================
+MULTER STORAGE
+=====================================================
+*/
 
 const storage =
     multer.diskStorage({
 
-        destination: function (
-            req,
-            file,
-            cb
-        ) {
+        destination:
+            function (
+                req,
+                file,
+                cb
+            ) {
 
-            cb(
-                null,
-                uploadsDirectory
-            );
-
-        },
-
-        filename: function (
-            req,
-            file,
-            cb
-        ) {
-
-            const extension =
-                path.extname(
-                    file.originalname
+                cb(
+                    null,
+                    uploadsDirectory
                 );
 
-            const filename =
-                `${Date.now()}-${Math.round(
-                    Math.random() * 1E9
-                )}${extension}`;
+            },
 
-            cb(
-                null,
-                filename
-            );
 
-        }
+        filename:
+            function (
+                req,
+                file,
+                cb
+            ) {
+
+                const extension =
+                    path.extname(
+                        file.originalname
+                    );
+
+
+                const filename =
+                    `${Date.now()}-${Math.round(
+                        Math.random() * 1E9
+                    )}${extension}`;
+
+
+                cb(
+                    null,
+                    filename
+                );
+
+            }
 
     });
 
@@ -208,48 +266,61 @@ const upload =
         storage,
 
         limits: {
-            fileSize: 5 * 1024 * 1024
+
+            fileSize:
+                5 * 1024 * 1024
+
         },
 
-        fileFilter: function (
-            req,
-            file,
-            cb
-        ) {
 
-            const allowedTypes = [
-                "image/jpeg",
-                "image/jpg",
-                "image/png",
-                "image/webp"
-            ];
-
-            if (
-                allowedTypes.includes(
-                    file.mimetype
-                )
+        fileFilter:
+            function (
+                req,
+                file,
+                cb
             ) {
 
-                cb(null, true);
+                const allowedTypes = [
 
-            } else {
+                    "image/jpeg",
+                    "image/jpg",
+                    "image/png",
+                    "image/webp"
 
-                cb(
-                    new Error(
-                        "Only JPG, PNG and WEBP images are allowed."
+                ];
+
+
+                if (
+                    allowedTypes.includes(
+                        file.mimetype
                     )
-                );
+                ) {
+
+                    cb(
+                        null,
+                        true
+                    );
+
+                } else {
+
+                    cb(
+                        new Error(
+                            "Only JPG, PNG and WEBP images are allowed."
+                        )
+                    );
+
+                }
 
             }
-
-        }
 
     });
 
 
-/* ==========================================
-   STATIC UPLOADS
-   ========================================== */
+/*
+=====================================================
+STATIC UPLOADS
+=====================================================
+*/
 
 app.use(
     "/uploads",
@@ -259,31 +330,47 @@ app.use(
 );
 
 
-/* ==========================================
-   HELPER
-   REMOVE UPLOADED FILE
-   ========================================== */
+/*
+=====================================================
+REMOVE UPLOADED FILE
+=====================================================
+*/
 
 function removeUploadedFile(
     coverImage
 ) {
 
     if (!coverImage) {
+
         return;
+
     }
+
 
     let filename =
-        String(coverImage)
-            .trim();
+        String(
+            coverImage
+        ).trim();
+
 
     if (!filename) {
+
         return;
+
     }
+
 
     filename =
         filename
-            .replace(/^\/uploads\//, "")
-            .replace(/^uploads\//, "");
+            .replace(
+                /^\/uploads\//,
+                ""
+            )
+            .replace(
+                /^uploads\//,
+                ""
+            );
+
 
     const filePath =
         path.join(
@@ -291,8 +378,11 @@ function removeUploadedFile(
             filename
         );
 
+
     if (
-        fs.existsSync(filePath)
+        fs.existsSync(
+            filePath
+        )
     ) {
 
         try {
@@ -315,9 +405,11 @@ function removeUploadedFile(
 }
 
 
-/* ==========================================
-   NUMBER HELPER
-   ========================================== */
+/*
+=====================================================
+NUMBER HELPER
+=====================================================
+*/
 
 function parseNumber(
     value,
@@ -327,16 +419,21 @@ function parseNumber(
     const number =
         Number(value);
 
-    return Number.isFinite(number)
+
+    return Number.isFinite(
+        number
+    )
         ? number
         : fallback;
 
 }
 
 
-/* ==========================================
-   BOOK DATA FROM REQUEST
-   ========================================== */
+/*
+=====================================================
+BOOK DATA FROM REQUEST
+=====================================================
+*/
 
 function getBookDataFromRequest(
     req
@@ -345,6 +442,7 @@ function getBookDataFromRequest(
     const body =
         req.body || {};
 
+
     return {
 
         title:
@@ -352,30 +450,36 @@ function getBookDataFromRequest(
                 body.title || ""
             ).trim(),
 
+
         author:
             String(
                 body.author || ""
             ).trim(),
+
 
         isbn:
             String(
                 body.isbn || ""
             ).trim(),
 
+
         category:
             String(
                 body.category || ""
             ).trim(),
+
 
         rack:
             String(
                 body.rack || ""
             ).trim(),
 
+
         shelf:
             String(
                 body.shelf || ""
             ).trim(),
+
 
         totalCopies:
             parseNumber(
@@ -388,29 +492,43 @@ function getBookDataFromRequest(
 }
 
 
-/* ==========================================
-   VALIDATE BOOK
-   ========================================== */
+/*
+=====================================================
+VALIDATE BOOK
+=====================================================
+*/
 
 function validateBookData(
     data
 ) {
 
     if (!data.title) {
+
         return "Book title is required";
+
     }
+
 
     if (!data.author) {
+
         return "Author is required";
+
     }
+
 
     if (!data.isbn) {
+
         return "ISBN is required";
+
     }
 
+
     if (!data.category) {
+
         return "Category is required";
+
     }
+
 
     if (
         !Number.isInteger(
@@ -423,14 +541,17 @@ function validateBookData(
 
     }
 
+
     return null;
 
 }
 
 
-/* ==========================================
-   HOME
-   ========================================== */
+/*
+=====================================================
+HOME
+=====================================================
+*/
 
 app.get(
     "/",
@@ -444,9 +565,11 @@ app.get(
 );
 
 
-/* ==========================================
-   GET ALL BOOKS
-   ========================================== */
+/*
+=====================================================
+GET ALL BOOKS
+=====================================================
+*/
 
 app.get(
     "/books",
@@ -457,6 +580,7 @@ app.get(
             const books =
                 await Book.find();
 
+
             res.json(
                 books
             );
@@ -464,7 +588,10 @@ app.get(
         } catch (error) {
 
             res.status(500).json({
-                message: error.message
+
+                message:
+                    error.message
+
             });
 
         }
@@ -473,9 +600,11 @@ app.get(
 );
 
 
-/* ==========================================
-   SEARCH BOOKS
-   ========================================== */
+/*
+=====================================================
+SEARCH BOOKS
+=====================================================
+*/
 
 app.get(
     "/books/search",
@@ -488,11 +617,13 @@ app.get(
                     req.query.query || ""
                 ).trim();
 
+
             if (!query) {
 
                 return res.json([]);
 
             }
+
 
             const regex =
                 new RegExp(
@@ -500,30 +631,36 @@ app.get(
                     "i"
                 );
 
+
             const books =
                 await Book.find({
 
                     $or: [
 
                         {
-                            title: regex
+                            title:
+                                regex
                         },
 
                         {
-                            author: regex
+                            author:
+                                regex
                         },
 
                         {
-                            category: regex
+                            category:
+                                regex
                         },
 
                         {
-                            isbn: regex
+                            isbn:
+                                regex
                         }
 
                     ]
 
                 });
+
 
             res.json(
                 books
@@ -532,7 +669,10 @@ app.get(
         } catch (error) {
 
             res.status(500).json({
-                message: error.message
+
+                message:
+                    error.message
+
             });
 
         }
@@ -541,9 +681,11 @@ app.get(
 );
 
 
-/* ==========================================
-   ADD BOOK
-   ========================================== */
+/*
+=====================================================
+ADD BOOK
+=====================================================
+*/
 
 app.post(
     "/books",
@@ -560,10 +702,12 @@ app.post(
                     req
                 );
 
+
             const validationError =
                 validateBookData(
                     data
                 );
+
 
             if (validationError) {
 
@@ -575,9 +719,12 @@ app.post(
 
                 }
 
+
                 return res.status(400).json({
+
                     message:
                         validationError
+
                 });
 
             }
@@ -585,7 +732,10 @@ app.post(
 
             const existingBook =
                 await Book.findOne({
-                    isbn: data.isbn
+
+                    isbn:
+                        data.isbn
+
                 });
 
 
@@ -599,9 +749,12 @@ app.post(
 
                 }
 
+
                 return res.status(400).json({
+
                     message:
                         "A book with this ISBN already exists"
+
                 });
 
             }
@@ -661,9 +814,12 @@ app.post(
 
             }
 
+
             res.status(500).json({
+
                 message:
                     error.message
+
             });
 
         }
@@ -672,9 +828,11 @@ app.post(
 );
 
 
-/* ==========================================
-   UPDATE BOOK
-   ========================================== */
+/*
+=====================================================
+UPDATE BOOK
+=====================================================
+*/
 
 app.put(
     "/books/:isbn",
@@ -687,12 +845,17 @@ app.put(
         try {
 
             const oldIsbn =
-                req.params.isbn;
+                String(
+                    req.params.isbn
+                ).trim();
 
 
             const book =
                 await Book.findOne({
-                    isbn: oldIsbn
+
+                    isbn:
+                        oldIsbn
+
                 });
 
 
@@ -706,9 +869,12 @@ app.put(
 
                 }
 
+
                 return res.status(404).json({
+
                     message:
                         "Book not found"
+
                 });
 
             }
@@ -736,9 +902,12 @@ app.put(
 
                 }
 
+
                 return res.status(400).json({
+
                     message:
                         validationError
+
                 });
 
             }
@@ -747,8 +916,12 @@ app.put(
             const activeBorrowedCopies =
                 Math.max(
                     0,
-                    Number(book.totalCopies || 0) -
-                    Number(book.availableCopies || 0)
+                    Number(
+                        book.totalCopies || 0
+                    ) -
+                    Number(
+                        book.availableCopies || 0
+                    )
                 );
 
 
@@ -765,6 +938,7 @@ app.put(
 
                 }
 
+
                 return res.status(400).json({
 
                     message:
@@ -776,17 +950,23 @@ app.put(
 
 
             if (
-                data.isbn !== oldIsbn
+                data.isbn !==
+                oldIsbn
             ) {
 
                 const isbnExists =
                     await Book.findOne({
+
                         isbn:
                             data.isbn,
+
                         _id: {
+
                             $ne:
                                 book._id
+
                         }
+
                     });
 
 
@@ -800,16 +980,20 @@ app.put(
 
                     }
 
+
                     return res.status(400).json({
+
                         message:
                             "Another book already uses this ISBN"
+
                     });
 
                 }
 
 
                 if (
-                    activeBorrowedCopies > 0
+                    activeBorrowedCopies >
+                    0
                 ) {
 
                     if (req.file) {
@@ -819,6 +1003,7 @@ app.put(
                         );
 
                     }
+
 
                     return res.status(400).json({
 
@@ -905,9 +1090,12 @@ app.put(
 
             }
 
+
             res.status(500).json({
+
                 message:
                     error.message
+
             });
 
         }
@@ -916,9 +1104,11 @@ app.put(
 );
 
 
-/* ==========================================
-   DELETE BOOK
-   ========================================== */
+/*
+=====================================================
+DELETE BOOK
+=====================================================
+*/
 
 app.delete(
     "/books/:isbn",
@@ -931,16 +1121,20 @@ app.delete(
 
             const book =
                 await Book.findOne({
+
                     isbn:
                         req.params.isbn
+
                 });
 
 
             if (!book) {
 
                 return res.status(404).json({
+
                     message:
                         "Book not found"
+
                 });
 
             }
@@ -975,8 +1169,10 @@ app.delete(
 
 
             await Book.deleteOne({
+
                 _id:
                     book._id
+
             });
 
 
@@ -999,8 +1195,10 @@ app.delete(
         } catch (error) {
 
             res.status(500).json({
+
                 message:
                     error.message
+
             });
 
         }
@@ -1009,9 +1207,11 @@ app.delete(
 );
 
 
-/* ==========================================
-   ADD STUDENT
-   ========================================== */
+/*
+=====================================================
+ADD STUDENT
+=====================================================
+*/
 
 app.post(
     "/students",
@@ -1045,6 +1245,30 @@ app.post(
             }
 
 
+            const cleanStudentId =
+                String(
+                    studentId
+                ).trim();
+
+
+            const cleanName =
+                String(
+                    name
+                ).trim();
+
+
+            const cleanEmail =
+                String(
+                    email
+                ).trim().toLowerCase();
+
+
+            const cleanCourse =
+                String(
+                    course
+                ).trim();
+
+
             const existingStudent =
                 await Student.findOne({
 
@@ -1052,17 +1276,12 @@ app.post(
 
                         {
                             studentId:
-                                String(
-                                    studentId
-                                ).trim()
+                                cleanStudentId
                         },
 
                         {
                             email:
-                                String(
-                                    email
-                                ).trim()
-                                    .toLowerCase()
+                                cleanEmail
                         }
 
                     ]
@@ -1086,25 +1305,16 @@ app.post(
                 await Student.create({
 
                     studentId:
-                        String(
-                            studentId
-                        ).trim(),
+                        cleanStudentId,
 
                     name:
-                        String(
-                            name
-                        ).trim(),
+                        cleanName,
 
                     email:
-                        String(
-                            email
-                        ).trim()
-                            .toLowerCase(),
+                        cleanEmail,
 
                     course:
-                        String(
-                            course
-                        ).trim()
+                        cleanCourse
 
                 });
 
@@ -1121,8 +1331,10 @@ app.post(
         } catch (error) {
 
             res.status(500).json({
+
                 message:
                     error.message
+
             });
 
         }
@@ -1131,9 +1343,11 @@ app.post(
 );
 
 
-/* ==========================================
-   GET STUDENTS
-   ========================================== */
+/*
+=====================================================
+GET STUDENTS
+=====================================================
+*/
 
 app.get(
     "/students",
@@ -1146,6 +1360,7 @@ app.get(
             const students =
                 await Student.find();
 
+
             res.json(
                 students
             );
@@ -1153,8 +1368,10 @@ app.get(
         } catch (error) {
 
             res.status(500).json({
+
                 message:
                     error.message
+
             });
 
         }
@@ -1163,9 +1380,11 @@ app.get(
 );
 
 
-/* ==========================================
-   BORROW BOOK
-   ========================================== */
+/*
+=====================================================
+BORROW BOOK
+=====================================================
+*/
 
 app.post(
     "/borrow",
@@ -1183,7 +1402,9 @@ app.post(
 
             const student =
                 await Student.findOne({
+
                     studentId
+
                 });
 
 
@@ -1201,8 +1422,10 @@ app.post(
 
             const book =
                 await Book.findOne({
+
                     isbn:
                         bookId
+
                 });
 
 
@@ -1219,13 +1442,39 @@ app.post(
 
 
             if (
-                book.availableCopies <= 0
+                book.availableCopies <=
+                0
             ) {
 
                 return res.status(400).json({
 
                     message:
                         "Book is currently unavailable"
+
+                });
+
+            }
+
+
+            const existingBorrow =
+                await Borrow.findOne({
+
+                    studentId,
+
+                    bookId,
+
+                    status:
+                        "Borrowed"
+
+                });
+
+
+            if (existingBorrow) {
+
+                return res.status(400).json({
+
+                    message:
+                        "This student already has this book borrowed."
 
                 });
 
@@ -1245,6 +1494,7 @@ app.post(
 
 
             book.availableCopies -= 1;
+
 
             await book.save();
 
@@ -1273,9 +1523,11 @@ app.post(
 );
 
 
-/* ==========================================
-   RETURN BOOK
-   ========================================== */
+/*
+=====================================================
+RETURN BOOK
+=====================================================
+*/
 
 app.put(
     "/borrow/return/:id",
@@ -1340,11 +1592,24 @@ app.put(
 
             book.availableCopies += 1;
 
+
+            if (
+                book.availableCopies >
+                book.totalCopies
+            ) {
+
+                book.availableCopies =
+                    book.totalCopies;
+
+            }
+
+
             await book.save();
 
 
             borrow.returnDate =
                 new Date();
+
 
             borrow.status =
                 "Returned";
@@ -1377,9 +1642,11 @@ app.put(
 );
 
 
-/* ==========================================
-   GET ALL BORROW RECORDS
-   ========================================== */
+/*
+=====================================================
+GET ALL BORROW RECORDS
+=====================================================
+*/
 
 app.get(
     "/borrow",
@@ -1390,6 +1657,7 @@ app.get(
 
             const borrows =
                 await Borrow.find();
+
 
             res.json(
                 borrows
@@ -1410,9 +1678,11 @@ app.get(
 );
 
 
-/* ==========================================
-   GET CURRENT STUDENT BORROWS
-   ========================================== */
+/*
+=====================================================
+GET CURRENT STUDENT BORROWS
+=====================================================
+*/
 
 app.get(
     "/borrow/student/:studentId",
@@ -1452,9 +1722,11 @@ app.get(
 );
 
 
-/* ==========================================
-   GET OVERDUE BORROWS
-   ========================================== */
+/*
+=====================================================
+GET OVERDUE BORROWS
+=====================================================
+*/
 
 app.get(
     "/borrow/overdue",
@@ -1478,10 +1750,24 @@ app.get(
 
             const overdueBooks =
                 borrows.filter(
-                    borrow =>
-                        new Date(
-                            borrow.dueDate
-                        ) < today
+                    borrow => {
+
+                        if (
+                            !borrow.dueDate
+                        ) {
+
+                            return false;
+
+                        }
+
+
+                        return (
+                            new Date(
+                                borrow.dueDate
+                            ) < today
+                        );
+
+                    }
                 );
 
 
@@ -1504,9 +1790,11 @@ app.get(
 );
 
 
-/* ==========================================
-   UPLOAD COVER
-   ========================================== */
+/*
+=====================================================
+UPLOAD COVER
+=====================================================
+*/
 
 app.post(
     "/upload-cover",
@@ -1555,6 +1843,7 @@ app.post(
 
             }
 
+
             res.status(500).json({
 
                 message:
@@ -1568,9 +1857,11 @@ app.post(
 );
 
 
-/* ==========================================
-   REGISTER STUDENT
-   ========================================== */
+/*
+=====================================================
+REGISTER STUDENT
+=====================================================
+*/
 
 app.post(
     "/register",
@@ -1588,10 +1879,6 @@ app.post(
                 password
             } = req.body;
 
-
-            /* ==============================
-               VALIDATION
-               ============================== */
 
             if (
                 !name ||
@@ -1613,34 +1900,34 @@ app.post(
 
 
             const cleanName =
-                String(name)
-                    .trim();
+                String(
+                    name
+                ).trim();
 
 
             const cleanStudentId =
-                String(studentId)
-                    .trim();
+                String(
+                    studentId
+                ).trim();
 
 
             const cleanCourse =
-                String(course)
-                    .trim();
+                String(
+                    course
+                ).trim();
 
 
             const cleanEmail =
-                String(email)
-                    .trim()
-                    .toLowerCase();
+                String(
+                    email
+                ).trim().toLowerCase();
 
 
             const cleanUsername =
-                String(username)
-                    .trim();
+                String(
+                    username
+                ).trim();
 
-
-            /* ==============================
-               CHECK USERNAME
-               ============================== */
 
             const existingUsername =
                 await User.findOne({
@@ -1663,10 +1950,6 @@ app.post(
             }
 
 
-            /* ==============================
-               CHECK USER EMAIL
-               ============================== */
-
             const existingEmail =
                 await User.findOne({
 
@@ -1687,10 +1970,6 @@ app.post(
 
             }
 
-
-            /* ==============================
-               CHECK STUDENT ID
-               ============================== */
 
             const existingStudentId =
                 await Student.findOne({
@@ -1713,10 +1992,6 @@ app.post(
             }
 
 
-            /* ==============================
-               CHECK STUDENT EMAIL
-               ============================== */
-
             const existingStudentEmail =
                 await Student.findOne({
 
@@ -1738,20 +2013,12 @@ app.post(
             }
 
 
-            /* ==============================
-               HASH PASSWORD
-               ============================== */
-
             const hashedPassword =
                 await bcrypt.hash(
                     password,
                     10
                 );
 
-
-            /* ==============================
-               CREATE USER
-               ============================== */
 
             const user =
                 await User.create({
@@ -1771,11 +2038,8 @@ app.post(
                 });
 
 
-            /* ==============================
-               CREATE LINKED STUDENT
-               ============================== */
-
             let student;
+
 
             try {
 
@@ -1798,13 +2062,6 @@ app.post(
 
             } catch (studentError) {
 
-                /*
-                   If Student creation fails,
-                   remove the User we just created
-                   so we don't leave an incomplete
-                   account behind.
-                */
-
                 await User.deleteOne({
 
                     _id:
@@ -1812,14 +2069,11 @@ app.post(
 
                 });
 
+
                 throw studentError;
 
             }
 
-
-            /* ==============================
-               SUCCESS
-               ============================== */
 
             res.status(201).json({
 
@@ -1871,13 +2125,9 @@ app.post(
             );
 
 
-            /*
-               Handle MongoDB duplicate
-               key errors cleanly.
-            */
-
             if (
-                error.code === 11000
+                error.code ===
+                11000
             ) {
 
                 const duplicateField =
@@ -1939,9 +2189,11 @@ app.post(
 );
 
 
-/* ==========================================
-   LOGIN
-   ========================================== */
+/*
+=====================================================
+LOGIN
+=====================================================
+*/
 
 app.post(
     "/login",
@@ -2016,10 +2268,6 @@ app.post(
             }
 
 
-            /* ==============================
-               FIND LINKED STUDENT
-               ============================== */
-
             let linkedStudent =
                 null;
 
@@ -2039,10 +2287,6 @@ app.post(
 
             }
 
-
-            /* ==============================
-               JWT
-               ============================== */
 
             const token =
                 jwt.sign(
@@ -2068,10 +2312,6 @@ app.post(
 
                 );
 
-
-            /* ==============================
-               LOGIN RESPONSE
-               ============================== */
 
             res.json({
 
@@ -2134,9 +2374,11 @@ app.post(
 );
 
 
-/* ==========================================
-   CREATE ADMIN
-   ========================================== */
+/*
+=====================================================
+CREATE ADMIN
+=====================================================
+*/
 
 app.post(
     "/create-admin",
@@ -2150,6 +2392,22 @@ app.post(
                 email,
                 password
             } = req.body;
+
+
+            if (
+                !username ||
+                !email ||
+                !password
+            ) {
+
+                return res.status(400).json({
+
+                    message:
+                        "Username, email and password are required"
+
+                });
+
+            }
 
 
             const existingUser =
@@ -2243,9 +2501,11 @@ app.post(
 );
 
 
-/* ==========================================
-   ADMIN TEST
-   ========================================== */
+/*
+=====================================================
+ADMIN TEST
+=====================================================
+*/
 
 app.get(
     "/admin-test",
@@ -2269,9 +2529,11 @@ app.get(
 );
 
 
-/* ==========================================
-   404
-   ========================================== */
+/*
+=====================================================
+404 HANDLER
+=====================================================
+*/
 
 app.use(
     (req, res) => {
@@ -2287,9 +2549,11 @@ app.use(
 );
 
 
-/* ==========================================
-   ERROR HANDLER
-   ========================================== */
+/*
+=====================================================
+ERROR HANDLER
+=====================================================
+*/
 
 app.use(
     (error, req, res, next) => {
@@ -2312,12 +2576,25 @@ app.use(
 );
 
 
-/* ==========================================
-   START SERVER
-   ========================================== */
+/*
+=====================================================
+START SERVER
+=====================================================
+
+IMPORTANT:
+"0.0.0.0" allows Render to access the server.
+
+Locally it will still work at:
+
+http://127.0.0.1:5000
+
+Render will automatically provide its own PORT.
+=====================================================
+*/
 
 app.listen(
     PORT,
+    "0.0.0.0",
 
     () => {
 
@@ -2326,7 +2603,7 @@ app.listen(
         );
 
         console.log(
-            `Server running at http://localhost:${PORT}`
+            `Server running on port ${PORT}`
         );
 
         console.log(
