@@ -2,7 +2,7 @@
 // LIBTRACK - AUTHENTICATION HELPER
 // ==========================================
 
-const API_URL = "http://127.0.0.1:5000";
+const API_URL = "https://libtrack-nvh6.onrender.com";
 
 // Get saved JWT token
 function getToken() {
